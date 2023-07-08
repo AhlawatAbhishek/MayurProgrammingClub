@@ -1,0 +1,62 @@
+---------------------java------------------------
+class Solution {
+    public long putMarbles(int[] weights, int k) {
+        long ans = 0;   
+        int wLen = weights.length, pLen = wLen-1, pIndx = 0;
+        int part[] = new int[pLen]; 
+        for(int indx = 0; indx<wLen-1; indx++){
+           part[pIndx++] = weights[indx] + weights[indx+1];
+        }
+        Arrays.sort(part);
+        // for(var sum : part){
+        //     System.out.print(sum + " ");
+        // }
+        // System.out.println();
+        long maxPartSum = 0, times = k - 1, minPartSum = 0;
+        // System.out.println("times: "+times+ " pLen: " + pLen + " wlen: "+ wLen);
+        pIndx = pLen - 1;
+        while(times-->0){
+          maxPartSum += part[pIndx--];     
+        }
+        pIndx = 0;
+        times = k - 1;
+        //  System.out.println("times: "+times+ " pLen: " + pLen + " wlen: "+ wLen);
+        while(times -- > 0){
+            minPartSum += part[pIndx++]; 
+        }
+        // System.out.println(maxPartSum +" " + minPartSum);
+        return maxPartSum - minPartSum;
+    }
+}
+
+
+-------------c++----------------------------
+class Solution {
+public:
+    long long putMarbles(vector<int>& weights, int k) {
+        long long ans = 0;   
+        int wLen = weights.size(), pLen = wLen-1, pIndx = 0;
+        vector<int> part(pLen); 
+        for(int indx = 0; indx<wLen-1; indx++){
+           part[pIndx++] = weights[indx] + weights[indx+1];
+        }
+
+        sort(part.begin(), part.end());
+        
+
+        long long maxPartSum = 0, times = k - 1, minPartSum = 0;
+       
+        pIndx = pLen - 1;
+        while(times-->0){
+          maxPartSum += part[pIndx--];     
+        }
+        pIndx = 0;
+        times = k - 1;
+        
+        while(times -- > 0){
+            minPartSum += part[pIndx++]; 
+        }
+        
+        return maxPartSum - minPartSum;
+    }
+};
