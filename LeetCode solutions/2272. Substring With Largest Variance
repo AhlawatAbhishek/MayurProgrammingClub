@@ -1,0 +1,85 @@
+-------------------------java-----------------------------
+class Solution {
+    public int largestVariance(String s) {
+        int sz = s.length(), maxDiff = 0;//max Variance
+        int charFreq[]  = new int[26];
+        char []str = s.toCharArray();
+        for(var c : str){
+            charFreq[c - 'a']++;
+        }
+        // hF - high frequency character, lF = low frequency character
+        for(int hF = 0; hF < 26; hF++){
+            for(int lF = 0; lF < 26; lF++){
+            int hVal = charFreq[hF], lVal = charFreq[lF];
+            if(hF == lF || hVal == 0 || lVal == 0)
+                continue;
+                int times = 2;
+                while(times-->0){
+                    hVal = 0; lVal = 0;
+                    for(int indx = 0; indx<sz; indx++){
+                       if(str[indx]-'a' == hF){
+                           hVal++;    
+                       }
+                       if(str[indx] - 'a' == lF)lVal++;
+                       //negative differece as diff = hVal - lVal
+                       if(lVal > hVal){
+                           hVal = lVal = 0;
+                       }//for test case like "aabbbbaa" high char is 'b' and low char is 'a'
+                       if(hVal > 0 && lVal > 0)//since we require a pair
+                        maxDiff = Math.max(maxDiff, hVal - lVal);
+                                                               
+                    }
+                    reverseString(str);// "lripaa", when high is 'a' and low is 'p' then cnt1<cnt2 condition wont allow correct result and also we cant remove it since it is necessary for "aabbbbaa" like test cases
+                }
+            }
+        }
+        return maxDiff;
+    }
+    private void reverseString(char []str){
+        int left = 0, right = str.length-1;
+        while(left < right){
+            char temp = str[left];
+            str[left] = str[right];
+            str[right] = temp;
+            left++; right--;
+        }
+    }
+}
+------------------------------c++------------------------------------------
+class Solution {
+public:
+    int largestVariance(string str) {
+        int sz = str.size(), maxDiff = 0;
+        vector<int> charFreq(26, 0);
+        for(auto c : str){
+            charFreq[c - 'a']++;
+        }
+        // hF - high frequency character, lF = low frequency character
+        for(int hF = 0; hF < 26; hF++){
+            for(int lF = 0; lF < 26; lF++){
+            int hVal = charFreq[hF], lVal = charFreq[lF];
+            if(hF == lF || hVal == 0 || lVal == 0)
+                continue;
+                int times = 2;
+                while(times-->0){
+                    hVal = 0; lVal = 0;
+                    for(int indx = 0; indx<sz; indx++){
+                       if(str[indx]-'a' == hF){
+                           hVal++;    
+                       }
+                       if(str[indx] - 'a' == lF)lVal++;
+                       //negative differece as diff = hVal - lVal
+                       if(lVal > hVal){
+                           hVal = lVal = 0;
+                       }//for test case like "aabbbbaa" high char is 'b' and low char is 'a'
+                       if(hVal > 0 && lVal > 0)//since we require a pair
+                        maxDiff = max(maxDiff, hVal - lVal);
+                                                               
+                    }
+                    reverse(str.begin(), str.end());// "lripaa", when high is 'a' and low is 'p' then cnt1<cnt2 condition wont allow correct result and also we cant remove it since it is necessary for "aabbbbaa" like test cases
+                }
+            }
+        }
+        return maxDiff;
+    }
+};
