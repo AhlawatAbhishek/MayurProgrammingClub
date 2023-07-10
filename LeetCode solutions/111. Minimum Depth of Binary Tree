@@ -1,0 +1,89 @@
+--------------------------------------BFS----------------------------------------------------
+--------java-----------
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root == null)return 0;
+        Deque<TreeNode> dq =  new ArrayDeque<>();
+        dq.offerLast(root);
+        int depth = 1;
+        while(!dq.isEmpty()){
+            int sz = dq.size();//currSize of the queue
+            while(sz-->0){
+               var currNode = dq.pollFirst();
+               if(currNode.left == null && currNode.right == null)return depth;
+               if(currNode.left != null){
+                   dq.offerLast(currNode.left);
+               }
+               if(currNode.right != null){
+                   dq.offerLast(currNode.right);
+               }
+            }
+            depth++;
+        }
+        return -1;
+    }
+}
+-------c++--------------
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if(root == NULL)return 0;
+        queue<TreeNode*> que;
+        que.push(root);
+        int depth = 1;
+        while(!que.empty()){
+            int sz = que.size();
+            while(sz-->0){
+               auto currNode = que.front();
+               que.pop();
+               if(currNode->left == NULL && currNode->right == NULL)return depth;
+               if(currNode->left != NULL){
+                   que.push(currNode->left);
+               }
+               if(currNode->right != NULL){
+                   que.push(currNode->right);
+               }
+            }
+            depth++;
+        }
+        return depth;
+    }
+};
+-----------------------------DFS----------------------------
+------------java--------------------
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        if(root.left == null && root.right == null){
+            return 1;
+        }
+        if(root.left == null){
+            return 1 + minDepth(root.right);
+        }
+        if(root.right == null){
+            return 1 + minDepth(root.left);
+        }
+        return 1 + Math.min(minDepth(root.left), minDepth(root.right)); 
+    }
+}
+------------c++---------------------
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if(root == NULL){
+            return 0;
+        }
+        if(root->left == NULL && root->right == NULL){
+            return 1;
+        }
+        if(root->left == NULL){
+            return 1 + minDepth(root->right);
+        }
+        if(root->right == NULL){
+            return 1 + minDepth(root->left);
+        }
+        return 1 + min(minDepth(root->left), minDepth(root->right)); 
+    }
+};
