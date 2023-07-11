@@ -1,0 +1,124 @@
+----------------------------------------------------------java------------------------------------------------------
+class Solution {
+    private TreeNode newRoot = null; 
+    private void dfs(TreeNode currNode, TreeNode target, HashMap<TreeNode, List<TreeNode>> graph){
+        if(currNode == target)newRoot = currNode;
+        graph.putIfAbsent(currNode, new ArrayList<>());
+        if(currNode.left != null){
+            graph.putIfAbsent(currNode.left, new ArrayList<>()); 
+            graph.get(currNode).add(currNode.left);
+            graph.get(currNode.left).add(currNode);
+            dfs(currNode.left, target, graph);
+        }
+        if(currNode.right != null){
+            graph.putIfAbsent(currNode.right, new ArrayList<>()); 
+            graph.get(currNode).add(currNode.right);
+            graph.get(currNode.right).add(currNode);
+            dfs(currNode.right, target, graph);
+        }
+    }
+    //BFS , for a tree the is also called level order traversal
+    private void findRes(TreeNode root, int dist, List<Integer> res, HashMap<TreeNode, List<TreeNode>> graph){
+        Deque<TreeNode> que = new ArrayDeque<>();
+        que.offerLast(root);
+        int currDist = 0;
+        HashSet<TreeNode> visited = new HashSet<>();
+        while(!que.isEmpty()){
+           int sz = que.size();
+       
+           while(sz-->0){
+               var currNode = que.pollFirst();
+               visited.add(currNode);
+            
+               if(currDist == dist){
+                
+                   res.add(currNode.val);
+               }else{
+
+                   for(var neigh : graph.get(currNode)){
+                       if(!visited.contains(neigh)){
+                           que.offerLast(neigh);
+                       }
+                   }
+               }
+           }
+     
+           currDist++;
+        }
+    }
+    
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        HashMap<TreeNode, List<TreeNode>>graph = new HashMap<>();
+        dfs(root, target, graph);//making tree a bidireactional graph
+        List<Integer> res = new ArrayList<>();
+        //BFS
+        findRes(newRoot, k, res, graph);
+        return res;
+    }
+}
+
+
+----------------------------------------------------------C++-------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    TreeNode* newRoot = NULL; 
+    void dfs(TreeNode* currNode, TreeNode* target, unordered_map<TreeNode*, vector<TreeNode*>> & graph){
+        if(currNode == target)newRoot = currNode;
+        if(currNode->left != NULL){
+            graph[currNode].push_back(currNode->left);
+            graph[currNode->left].push_back(currNode);
+            dfs(currNode->left, target, graph);
+        }
+        if(currNode->right != NULL){
+            graph[currNode].push_back(currNode->right);
+            graph[currNode->right].push_back(currNode);
+            dfs(currNode->right, target, graph);
+        }
+    }
+    void findRes(TreeNode *root, int dist, vector<int> & res, unordered_map<TreeNode*, vector<TreeNode*>> & graph){
+        queue<TreeNode*> que;
+        que.push(root);
+        int currDist = 0;
+        unordered_set<TreeNode*> visited;
+        visited.insert(root);
+        while(!que.empty()){
+           int sz = que.size();
+           while(sz-->0){
+               auto currNode = que.front();
+               que.pop();
+               visited.insert(currNode);
+               if(currDist == dist){
+                   res.push_back(currNode->val);
+               }else{
+                   for(auto neigh : graph[currNode]){
+                       if(visited.find(neigh) == visited.end()){
+                           que.push(neigh);
+                       }
+                   }
+               }
+           }
+           currDist++;
+        }
+    }
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+        unordered_map<TreeNode*, vector<TreeNode*>>graph;
+        dfs(root, target, graph);
+        vector<int> res;
+        //BFS
+        findRes(newRoot, k, res, graph);
+        return res;
+    }
+
+    
+
+};
