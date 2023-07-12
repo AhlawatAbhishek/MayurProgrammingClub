@@ -1,0 +1,82 @@
+---------------------------------java-----------------------------------------
+class Solution {
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+     int sz = graph.length;
+        boolean memo[] = new boolean[sz];
+        List<Integer> res = new ArrayList<>();
+        HashSet<Integer> visited = new HashSet<>();
+        for(int vert = 0; vert < sz; vert++){
+            if(graph[vert].length == 0){
+                memo[vert] = true;
+                visited.add(vert);
+                res.add(vert);
+            }
+        }
+        for(int vrt = 0; vrt<sz; vrt++){
+            if(!visited.contains(vrt)){
+                // cout<<"visited vert "<<vrt<<endl;
+                findSafes(vrt, graph, res, memo, visited);//DFS with memoization
+            }
+        }
+        Collections.sort(res);
+        return res;
+    }
+private boolean findSafes(int src, int[][] graph, List<Integer> res, boolean memo[], HashSet<Integer> visited){
+        if(visited.contains(src))return memo[src];//preventing loops
+        visited.add(src);
+        // cout<<src<<" ";
+        boolean isPos = true;
+        if(graph[src].length == 0){
+          res.add(src);
+          return memo[src] = true;
+        }
+        for(var neigh : graph[src]){
+             isPos &= findSafes(neigh, graph, res, memo, visited);
+        }   
+        if(isPos)res.add(src);
+        // cout<<endl;
+        return memo[src] = isPos;   
+    }
+};
+----------------------------------------------c++---------------------------------------------
+class Solution {
+public:
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int sz = graph.size();
+        vector<bool>memo(sz, false);//the node is safe or not
+        vector<int> res;
+        unordered_set<int>visited;
+        for(int vert = 0; vert < sz; vert++){
+            if(graph[vert].size() == 0){
+                memo[vert] = true;
+                visited.insert(vert);
+                res.push_back(vert);
+            }
+        }
+        for(int vrt = 0; vrt<sz; vrt++){
+            if(visited.find(vrt) == visited.end()){
+                // cout<<"visited vert "<<vrt<<endl;
+                findSafes(vrt, graph, res, memo, visited);//DFS with memoization
+            }
+        }
+        sort(res.begin(), res.end());
+        return res;
+    }
+private: 
+    bool findSafes(int src, vector<vector<int>>& graph, vector<int>& res, vector<bool>& memo, unordered_set<int> & visited){
+        if(visited.find(src) != visited.end())return memo[src];
+        visited.insert(src);
+        // cout<<src<<" ";
+        bool isPos = true;
+        if(graph[src].size() == 0){
+          res.push_back(src);
+          return memo[src] = true;
+        }
+        for(auto neigh : graph[src]){
+             isPos &= findSafes(neigh, graph, res, memo, visited);
+        }   
+        if(isPos)res.push_back(src);
+        // cout<<endl;
+        return memo[src] = isPos;   
+    }
+};
