@@ -1,0 +1,83 @@
+----------------------------------java------------------------------------------------
+class Solution {
+public:
+    bool canFinish(int nCrs, vector<vector<int>>& preq) {
+      int sz = preq.size();
+        if(sz == 0)return true;
+        vector<int>deg(nCrs, 0);
+        unordered_map<int, vector<int>> graph;
+        for(auto prq : preq){
+            graph[prq[1]].push_back(prq[0]);
+            deg[prq[0]]--;
+        }
+        return tryFinish(graph, nCrs, deg);
+    }
+private:
+     bool tryFinish(unordered_map<int, vector<int>> & graph, int nCrs, vector<int> & deg){
+        queue<int> order;
+        int crsFin = 0;
+        for(int crs = 0; crs<nCrs; crs++){
+            // System.out.println("crs: " + deg[crs]);
+            if(deg[crs] == 0){
+                order.push(crs);
+            }
+        }
+
+        while(!order.empty()){
+            int sz = order.size();
+            while(sz-->0){
+               int curCr = order.front();
+               order.pop();
+            //    System.out.println(curCr);
+               crsFin++;
+               for(auto depCr : graph[curCr]){
+                   if(++deg[depCr] == 0){
+                       order.push(depCr);
+                   }
+               }
+            }
+        }
+        return crsFin == nCrs;
+    }
+};
+-----------------------------------------------------c++--------------------------------------------------
+class Solution {
+    public boolean canFinish(int nCrs/*numCourses*/, int[][] preq/*prerequisites*/) {
+        int sz = preq.length;
+        if(sz == 0)return true;
+        int deg[] = new int[nCrs];
+        HashMap<Integer, List<Integer>> graph = new HashMap<>();
+        for(var prq : preq){
+            graph.putIfAbsent(prq[1], new ArrayList<>());
+            graph.get(prq[1]).add(prq[0]);
+            deg[prq[0]]--;
+        }
+        return tryFinish(graph, nCrs, deg);
+    }
+    private boolean tryFinish(HashMap<Integer, List<Integer>>graph, int nCrs, int deg[]){//BFS traversal
+        Deque<Integer> order = new ArrayDeque<>();
+        int crsFin = 0;
+        for(int crs = 0; crs<nCrs; crs++){
+            // System.out.println("crs: " + deg[crs]);
+            if(deg[crs] == 0){//courses which are not having dependency
+                order.offerLast(crs);
+            }
+        }
+
+        while(!order.isEmpty()){
+            int sz = order.size();
+            while(sz-->0){
+               int curCr = order.pollFirst();
+            //    System.out.println(curCr);
+               crsFin++;
+              if(graph.containsKey(curCr)) 
+               for(var depCr : graph.get(curCr)){
+                   if(++deg[depCr] == 0){//relaxing neighbours
+                       order.offerLast(depCr);
+                   }
+               }
+            }
+        }
+        return crsFin == nCrs;
+    }
+}
