@@ -1,0 +1,31 @@
+----------------------------------------------java-----------------------------------------------------------
+class Solution {
+    public int longestSubsequence(int[] arr, int difference) {
+        int lngSub = 0;
+        HashMap<Integer, Integer> prevEle = new HashMap<>();
+        for(int indx = 0; indx < arr.length; indx++){
+            int currEle = arr[indx];
+            int lookFor = currEle - difference;
+            // System.out.println(currEle+" " +lookFor);
+            prevEle.put(currEle, 1 + prevEle.getOrDefault(lookFor, 0));
+            lngSub = Math.max(lngSub, prevEle.get(currEle)); 
+        }
+        return lngSub;
+    }
+}
+-------------------------------------------c++------------------------------------------------------------------
+class Solution {
+public:
+    int longestSubsequence(vector<int>& arr, int difference) {
+        int lngSub = 0; //returing it at end
+        unordered_map<int, int> prevEle;
+        for(int indx = 0; indx < arr.size(); indx++){
+            int currEle = arr[indx];
+            int lookFor = currEle - difference;
+            // System.out.println(currEle+" " +lookFor);
+            prevEle[currEle] =  1 + prevEle[lookFor];
+            lngSub = max(lngSub, prevEle[currEle]); 
+        }
+        return lngSub;
+    }
+};
