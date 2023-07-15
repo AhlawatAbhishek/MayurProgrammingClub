@@ -1,0 +1,126 @@
+---------------------------------java-----------------------------------------------
+class Solution {
+    public int maxValue(int[][] events, int k) {
+        int sz = events.length;
+        // lastday in increasin order
+        Arrays.sort(events,(a, b)->{
+             if(a[1]==b[1])return a[0]-b[0];
+            else return a[1] - b[1];
+        });
+        //storing meet ends int array
+        int meetEnds[] = new int[sz];
+        //nearest non overlapping neighbour
+        for(int indx = 0; indx<sz; indx++){
+            int meet[] = events[indx];
+            int meetEnd = meet[1];
+            meetEnds[indx] = meetEnd;
+        }
+        List<Integer> nonOlapMeet = new ArrayList<>();
+		// get the nearest event which is not overlapping
+        for(var meet : events){
+            int meetStart = meet[0];
+            //return the index of the samllest end not smaller than the start of current event
+            var pos = binarySearch(meetEnds,meetStart);
+            //dry run
+            // System.out.println(meet[0]+" " + meet[1] + "-->"+pos + "-->" + events[pos][1]);
+            nonOlapMeet.add(pos);
+        }
+        // for(var p : nonOlapMeet){
+        //     System.out.print(p + " ");
+        // }
+        // System.out.println();
+        
+        int [][]meetContri = new int[sz+1][k+1];
+        for(int indx=1;indx<=sz;indx++){
+            //position at which the current meeting would appear in k meetings allowed
+            for(int pos=1;pos<=k;pos++){
+                //index of non overlapping meet with the current meeting
+                int nOlpMeet =nonOlapMeet.get(indx-1);
+                int contriOfPrevNOlap = meetContri[nOlpMeet][pos-1];
+                //dry run
+				// System.out.println("meet " + (indx-1)+" pos "+pos+  " nOlpMeet " + nOlpMeet + " ContriOfPrevNOlap " + contriOfPrevNOlap);
+                // contri of current meeting
+                int contriOfCurrMeet = events[indx-1][2];
+
+                 /*contri of previous meet at this pos*/
+                int prevMeetContri = meetContri[indx-1][pos];
+                
+                // Either consider curr meeting at this position in k meetings allowed or continue with its predecessor being at this position
+                meetContri[indx][pos] = Math.max(contriOfPrevNOlap + contriOfCurrMeet, prevMeetContri);
+            }
+        }
+        //Dry run------------------
+        // for(var ev : meetContri){
+        //     for(var cont : ev){
+        //         System.out.print(cont + " ");
+        //     }
+        //     System.out.println();
+        // }
+        return meetContri[sz][k];
+    }
+    private int binarySearch(int meetEnds[], int meetStart){
+        int sz = meetEnds.length;
+        int low = 0;
+        int high = sz;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (meetStart <= meetEnds[mid]) {
+                high = mid;
+            }else {
+                low = mid + 1;
+            }
+        }
+        if(low < sz && meetEnds[low] < meetStart) {
+            low++;
+        }
+        return low;
+    }
+}
+
+------------------------c++------------------------------
+
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& events, int k) {
+        int sz = events.size();
+
+        sort(events.begin(),events.end(),[](vector<int> &a,vector<int>&b)->bool{
+            if(a[1]==b[1])return a[0]<b[0];
+            else return a[1] < b[1];
+        });
+        
+        vector<int> meetEnds;
+        for(auto meet:events){
+            int meetEnd = meet[1];
+            meetEnds.push_back(meetEnd);
+        }
+        vector<int> nonOlapMeet;
+		// get the nearest event which is not overlapping
+        for(auto meet:events){
+            int meetStart = meet[0];
+            //lower bound return iterator to the value in meetEnds that is not less than meetStart i.e. we would be getting pos of nearest non overlapping meeting with current meet under consideration
+            auto pos = lower_bound(meetEnds.begin(),meetEnds.end(),meetStart) - meetEnds.begin();
+            nonOlapMeet.push_back(pos);
+        }
+        
+        vector<vector<int>> meetContri(sz+1,vector<int>(k+1,0));
+        for(int indx=1;indx<=sz;indx++){
+            //position at which the current meeting would appear in k meetings allowed
+            for(int pos=1;pos<=k;pos++){
+                //index of non overlapping meet with the current meeting
+                int nOlpMeet =nonOlapMeet[indx-1];
+				
+                int contriOfPrevNOlap = meetContri[nOlpMeet][pos-1];
+                // contri of current meeting
+                int contriOfCurrMeet = events[indx-1][2];
+
+                 /*contri of previous meet at this pos*/
+                int prevMeetContri = meetContri[indx-1][pos];
+                
+                // Either consider curr meeting at this position in k meetings allowed or continue with its predecessor being at this position
+                meetContri[indx][pos] = max(contriOfPrevNOlap + contriOfCurrMeet, prevMeetContri);
+            }
+        }
+        return meetContri[sz][k];
+    }
+};
