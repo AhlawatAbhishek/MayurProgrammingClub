@@ -1,0 +1,209 @@
+---------------------------1---------------------------------
+----------------------C++--------------------------------
+class Solution {
+public:
+    int sumOfSquares(vector<int>& nums) {
+        long long sum = 0;
+        for(int indx = 1; indx<=nums.size(); indx++){
+            if(nums.size() % indx == 0){
+                // cout<<nums[indx-1]<<endl;
+                sum += nums[indx-1] * nums[indx-1];
+            }
+        }
+        return sum;        
+    }
+};
+---------------------Java--------------------------------
+class Solution {
+    public int sumOfSquares(int[] nums) {
+        long sum = 0;
+        for(int indx = 1; indx<=nums.length; indx++){
+            if(nums.length % indx == 0){
+                // cout<<nums[indx-1]<<endl;
+                sum += nums[indx-1] * nums[indx-1];
+            }
+        }
+        return (int)sum; 
+    }
+}
+
+---------------------------2---------------------------------
+----------------------C++--------------------------------
+class Solution {
+public:
+    int maximumBeauty(vector<int>& nums, int k) {
+        vector<int> pref(300007, 0);
+        for(auto num : nums){
+            int minValue = num - k + 100000;
+            int maxValue = num + k + 100000+1;
+            pref[minValue] += 1;
+            pref[maxValue] += -1;
+        }
+        for(int indx = 0; indx<pref.size(); indx++){
+            if(indx != 0)pref[indx] += pref[indx-1];
+        }
+        return *max_element(pref.begin(), pref.end());
+    }
+};
+---------------------Java--------------------------------
+class Solution {
+    public int maximumBeauty(int[] nums, int k) {
+        int pref[] = new int[300007];
+        for(var num : nums){
+            int minValue = num - k + 100000;
+            int maxValue = num + k + 100000+1;
+            pref[minValue] += 1;
+            pref[maxValue] += -1;
+        }
+        for(int indx = 0; indx<pref.length; indx++){
+            if(indx != 0)pref[indx] += pref[indx-1];
+        }
+        int maxEle = 0;
+        for(var ele : pref)maxEle = Math.max(ele, maxEle);
+        return maxEle;
+    }
+}
+---------------------------3---------------------------------
+----------------------C++--------------------------------
+
+class Solution {
+public:
+    int minimumIndex(vector<int>& nums) {
+        unordered_map<long long, int> freq;
+        for(auto num : nums)freq[num]++;
+        int maxFreqEle = -1, maxFreq = 0;
+        for(auto pr : freq){
+            if(pr.second > maxFreq){
+                maxFreq = pr.second;
+                maxFreqEle = pr.first;
+            }
+        }
+        int sz = nums.size();
+        vector<int> pref(sz, 0);
+        for(int indx = 0; indx<sz; indx++){
+            if(nums[indx] == maxFreqEle){
+                pref[indx] = 1;
+            }
+            if(indx != 0)
+                 pref[indx] += pref[indx-1];
+        }
+        // for(auto p : pref)cout<<" "<<p;
+        // cout<<endl;
+        for(int indx =0; indx<sz-1; indx++){
+            if(pref[indx] * 2 > (indx+1) && (pref[sz-1] - pref[indx]) * 2 > (sz-1-indx))return indx;
+        }
+        return -1;
+    }
+};
+---------------------Java--------------------------------
+
+class Solution {
+public:
+    int minimumIndex(vector<int>& nums) {
+        unordered_map<long long, int> freq;
+        for(auto num : nums)freq[num]++;
+        int maxFreqEle = -1, maxFreq = 0;
+        for(auto pr : freq){
+            if(pr.second > maxFreq){
+                maxFreq = pr.second;
+                maxFreqEle = pr.first;
+            }
+        }
+        int sz = nums.size();
+        vector<int> pref(sz, 0);
+        for(int indx = 0; indx<sz; indx++){
+            if(nums[indx] == maxFreqEle){
+                pref[indx] = 1;
+            }
+            if(indx != 0)
+                 pref[indx] += pref[indx-1];
+        }
+        // for(auto p : pref)cout<<" "<<p;
+        // cout<<endl;
+        for(int indx =0; indx<sz-1; indx++){
+            if(pref[indx] * 2 > (indx+1) && (pref[sz-1] - pref[indx]) * 2 > (sz-1-indx))return indx;
+        }
+        return -1;
+    }
+};
+
+---------------------------4---------------------------------
+----------------------C++--------------------------------
+class Solution {
+public:
+    int longestValidSubstring(string word, vector<string>& forbidden) {
+        unordered_set<string> forb;
+        for(auto str : forbidden){
+            forb.insert(str);
+        }
+        int sz = word.size();
+        vector<int>mLenFrCurChr(sz, sz); //safe array for each substring starting from each index 
+        for(int left = 0; left<sz; left++){
+            for(int right = left; right < sz; right++){
+                if(right - left + 1  > 10)break;
+                string subS = word.substr(left, right - left + 1);
+                // cout<<subS;
+                if(forb.find(subS) != forb.end()){
+                    // cout<<"--fnd"<<"\n";
+                    mLenFrCurChr[left] = right - 1;
+                    break;
+                }else{
+                    // cout<<"--not fnd"<<"\n";
+                }
+            }
+        }
+        // for(auto mLen : mLenFrCurChr){
+        //     // cout<<mLen<<" ";
+        // }
+        // cout<<"\n";
+        
+        int left = sz-1, res = 0;
+        for(int right = sz-1; right >=0; right--){
+             while(left >= 0 && mLenFrCurChr[left] >= right)left--;
+            //  cout<<(left) << " "<<right<<"\n";
+             res = max(res, right - left);//checking for max len valid substring
+        }
+        return res;
+        
+    }
+};
+---------------------Java--------------------------------
+class Solution {
+    public int longestValidSubstring(String word, List<String> forbidden) {
+        HashSet<String> forb = new HashSet<>();
+        for(var str : forbidden){
+            forb.add(str);
+        }
+        int sz = word.length();
+        int []mLenFrCurChr = new int[sz];
+        Arrays.fill(mLenFrCurChr, sz); 
+        for(int left = 0; left<sz; left++){
+            for(int right = left; right < sz; right++){
+                if(right - left + 1  > 10)break;
+                String subS = word.substring(left, right + 1);
+                // cout<<subS;
+                if(forb.contains(subS)){
+                    // cout<<"--fnd"<<"\n";
+                    mLenFrCurChr[left] = right - 1;
+                    break;
+                }else{
+                    // cout<<"--not fnd"<<"\n";
+                }
+            }
+        }
+        // for(auto mLen : mLenFrCurChr){
+        //     // cout<<mLen<<" ";
+        // }
+        // cout<<"\n";
+        
+        int left = sz-1, res = 0;
+        for(int right = sz-1; right >=0; right--){
+             while(left >= 0 && mLenFrCurChr[left] >= right)left--;
+            //  cout<<(left) << " "<<right<<"\n";
+             res = Math.max(res, right - left);
+        }
+        return res;
+    }
+}
+
+
