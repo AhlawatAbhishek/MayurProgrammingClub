@@ -1,0 +1,82 @@
+--------------------c++------------------
+class Solution {
+public:
+    vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
+        int sz = req_skills.size();
+       
+//storing index of required skill in order to make bit mask of the skills of each person
+        unordered_map<string,int> skMp;
+        for(int indx=0;indx< req_skills.size();indx++){
+            skMp[req_skills[indx]]=indx;
+        }
+    
+//to memorize different people contributing a required skill combination
+		unordered_map<int,vector<int>> skillCombs;  
+        skillCombs.reserve(1 << sz);  // to prevent rehashing 
+        skillCombs[0]={};
+
+        for(int indx=0;indx<people.size();indx++)
+        {
+//storing skill of person in pSkill using bit manipulation & creating a bit mask
+            int pSkill = 0;
+            for(auto skls : people[indx])
+                pSkill |= 1<<skMp[skls];
+            
+            for(auto it = skillCombs.begin();it!=skillCombs.end();it++)
+            {
+                int updtSkill = it->first | pSkill;// adding current persons contribution to skills of current team
+                // cout<<it->first<<"\n";
+                if(skillCombs.find(updtSkill)==skillCombs.end() || skillCombs[updtSkill].size()>1+skillCombs[it->first].size())
+                {// groups size is smaller if we include current skill combination and 
+                //the persons skill
+                    skillCombs[updtSkill]=it->second;// of group people the we present earlier
+                    skillCombs[updtSkill].push_back(indx);
+                }       
+            }
+        }
+        return skillCombs[(1<<sz) -1];
+    }
+};
+-----------------------------------java--------------------------------------------
+class Solution {
+    public int[] smallestSufficientTeam(String[] req_skills, List<List<String>> people) {
+
+        HashMap<String, Integer> rqSklMp = new HashMap<>();
+        for (int indx = 0; indx < req_skills.length; indx++) {
+            rqSklMp.put(req_skills[indx], indx);
+        }
+
+        int skillCombs = 1 << req_skills.length;
+        List<Integer>[] currTeam = new ArrayList[skillCombs];
+        currTeam[0] = new ArrayList<>();
+        for (int i = 0; i < people.size(); i++) {
+            int pSkill = 0;
+            for (String s : people.get(i)) {
+                pSkill |= (1 << rqSklMp.get(s));
+            }
+
+            List<Integer>[] newTeam = new ArrayList[skillCombs];
+            for (int currSkillComb = 0; currSkillComb < skillCombs; currSkillComb++) {
+                if (currTeam[currSkillComb] != null)
+                    newTeam[currSkillComb] = new ArrayList<>(currTeam[currSkillComb]);
+            }
+
+            for (int currSkillComb = 0; currSkillComb < skillCombs; currSkillComb++) {
+                // if curr skill comb is not set or if it's size is even greater than the combination of all the skills then continue
+                if (currTeam[currSkillComb] == null
+                        || currTeam[skillCombs - 1] != null && currTeam[currSkillComb].size() >= currTeam[skillCombs - 1].size())
+                    continue;
+                int updtSKillComb = currSkillComb | pSkill;
+
+                if (newTeam[updtSKillComb] == null || currTeam[currSkillComb].size() + 1 < newTeam[updtSKillComb].size()) {
+                    newTeam[updtSKillComb] = new ArrayList<>(currTeam[currSkillComb]);
+                    newTeam[updtSKillComb].add(i);
+                }
+            }
+            currTeam = newTeam;
+        }
+
+        return currTeam[skillCombs - 1].stream().mapToInt(Integer::intValue).toArray();
+
+    }
+}
