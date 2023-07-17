@@ -1,0 +1,239 @@
+-------------------------------------------------------------------------------------------approach 1-------------------------------------------------------------------------
+class Solution {
+private:
+ListNode* reverse(ListNode* head){
+    ListNode * prev =  NULL, *curr = head, *next = NULL;
+    while(curr != NULL){
+       next = curr->next;
+       curr->next = prev;
+       prev = curr;
+       curr = next;
+    }
+    return prev;
+}
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        //reversing both list and summing them while taking carry forward and at last returning the reversed result
+        l1 = reverse(l1);
+        l2 = reverse(l2);
+        // cout<<l1->val<<"\n";
+        // cout<<l2->val<<"\n";
+        ListNode *dummyHead = new ListNode(0), *curr = 
+        dummyHead;
+        int carry = 0;
+        while(l1 != NULL && l2 != NULL){
+            int sum = l1->val + l2->val + carry;
+            carry = sum / 10;
+            ListNode *newNode = new ListNode();
+            newNode->val = sum % 10;
+            l1 = l1->next;
+            l2 = l2->next;
+            curr->next = newNode;
+            curr = newNode;  
+        }
+        //this checks the case if two list are not of same length
+        if(l1 != NULL){
+            while(l1 != NULL){
+                int sum = l1->val + carry;
+                carry = sum / 10;
+                ListNode *newNode = new ListNode(sum % 10);
+                curr->next = newNode;
+                curr = newNode;
+                l1 = l1->next;
+            }
+        }else if(l2 != NULL){
+           while(l2 != NULL){
+                int sum = l2->val + carry;
+                carry = sum / 10;
+                ListNode *newNode = new ListNode(sum % 10);
+                curr->next = newNode;
+                curr = newNode;
+                l2 = l2->next;
+            }
+        }
+//if the carry is not still zero
+        if(carry > 0){
+                ListNode *newNode = new ListNode(carry);
+                curr->next = newNode;
+        }
+        return reverse(dummyHead->next);
+    }
+};
+----------------------------------java-------------------------------------------
+class Solution {
+    private ListNode reverse(ListNode head){
+        ListNode prev =  null, curr = head, next = null;
+        while(curr != null){
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        //reversing both list and summing them while taking carry forward and at last returning the reversed result
+        l1 = reverse(l1);
+        l2 = reverse(l2);
+        // cout<<l1->val<<"\n";
+        // cout<<l2->val<<"\n";
+        ListNode dummyHead = new ListNode(0), curr = 
+        dummyHead;
+        int carry = 0;
+        while(l1 != null && l2 != null){
+            int sum = l1.val + l2.val + carry;
+            carry = sum / 10;
+            ListNode newNode = new ListNode();
+            newNode.val = sum % 10;
+            l1 = l1.next;
+            l2 = l2.next;
+            curr.next = newNode;
+            curr = newNode;  
+        }
+        //this checks the case if two list are not of same length
+        if(l1 != null){
+            while(l1 != null){
+                int sum = l1.val + carry;
+                carry = sum / 10;
+                ListNode newNode = new ListNode(sum % 10);
+                curr.next = newNode;
+                curr = newNode;
+                l1 = l1.next;
+            }
+        }else if(l2 != null){
+           while(l2 != null){
+                int sum = l2.val + carry;
+                carry = sum / 10;
+                ListNode newNode = new ListNode(sum % 10);
+                curr.next = newNode;
+                curr = newNode;
+                l2 = l2.next;
+            }
+        }
+//if the carry is not still zero
+        if(carry > 0){
+                ListNode newNode = new ListNode(carry);
+                curr.next = newNode;
+        }
+        return reverse(dummyHead.next);
+    }
+}
+-------------------------------------------------------------------------------------------approach 2-------------------------------------------------------------------------
+------------------------------------C++----------------------------------------
+
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        //checking length of two linked lists and make sure l1 is greater, then if there is as len difference then moving l1 that diff first and then start moving both together
+        int len1 = 0, len2 = 0;
+        for(ListNode * curr = l1; curr != NULL; curr= curr->next){
+            len1++;
+        }
+        for(ListNode * curr = l2; curr != NULL; curr= curr->next){
+            len2++;
+        }
+        if(len1 < len2){
+            swap(l1, l2);
+            swap(len1, len2);
+        }
+        int diff = len1 - len2;
+        ListNode *next = NULL , *prev = NULL;
+        while(diff-->0){
+           next = l1->next;
+           l1->next = prev;
+           prev = l1;
+           l1 = next;
+        }
+//traversing both list left to right while making currNode point to it's left neighbour and as of now writing carry as it is with each node
+        while(l1 != NULL){
+            l1->val += l2->val;
+            next = l1->next;
+            l1->next = prev;
+            prev = l1;
+            l1 = next;
+            l2 = l2->next;
+        }
+ //traversing right to left and taking carry forward making each node point to it's right neighbour       
+        ListNode *curr = prev;
+        prev = NULL;
+        int carry = 0;
+        while(curr != NULL){
+            int val = curr->val + carry;
+            curr->val = val % 10;
+            carry = val / 10;
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+// in case carry is not zero        
+        if(carry > 0){
+            ListNode *newHead = new ListNode(carry);
+            newHead->next = prev;
+            return newHead;
+        }
+// in case it is zero        
+        return prev;
+    }  
+};
+------------------------------------java---------------------------------------
+
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        //checking length of two linked lists and make sure l1 is greater, then if there is as len difference then moving l1 that diff first and then start moving both together
+        int len1 = 0, len2 = 0;
+        for(ListNode curr = l1; curr != null; curr= curr.next){
+            len1++;
+        }
+        for(ListNode curr = l2; curr != null; curr= curr.next){
+            len2++;
+        }
+        if(len1 < len2){
+            int tempLen = len1;
+            len1 = len2;
+            len2 = tempLen;
+            
+            ListNode tempList = l1;
+            l1 = l2;
+            l2 = tempList;
+        }
+        int diff = len1 - len2;
+        ListNode next = null , prev = null;
+        while(diff-->0){
+           next = l1.next;
+           l1.next = prev;
+           prev = l1;
+           l1 = next;
+        }
+//traversing both list left to right while making currNode point to it's left neighbour and as of now writing carry as it is with each node
+        while(l1 != null){
+            l1.val += l2.val;
+            next = l1.next;
+            l1.next = prev;
+            prev = l1;
+            l1 = next;
+            l2 = l2.next;
+        }
+ //traversing right to left and taking carry forward making each node point to it's right neighbour       
+        ListNode curr = prev;
+        prev = null;
+        int carry = 0;
+        while(curr != null){
+            int val = curr.val + carry;
+            curr.val = val % 10;
+            carry = val / 10;
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+// in case carry is not zero        
+        if(carry > 0){
+            ListNode newHead = new ListNode(carry);
+            newHead.next = prev;
+            return newHead;
+        }
+// in case it is zero        
+        return prev;
+    }  
+}
