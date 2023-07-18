@@ -1,0 +1,151 @@
+--------------------------------------------------------------java-----------------------------------------------------------------------
+class LRUCache {
+    final Node head = new Node();
+    final Node tail = new Node();
+    //key and corresponding address of node in LRU cache
+    Map<Integer, Node> node_map;// key value entry in cache // quick retrival of value corresponding to a key
+    int cache_capacity;
+    public LRUCache(int capacity) {
+        node_map = new HashMap<>(capacity);
+        this.cache_capacity = capacity;
+        head.next = tail;
+        tail.prev = head;
+    }
+    
+    public int get(int key) {
+        int result = -1;
+        //get the node's address in LRU cache(that is doubly linked list)
+        Node node = node_map.get(key);
+        if(node != null){
+            result = node.val;
+            //make the node in LRU most recently used node
+            remove(node);//from current position in LRU cache
+            //add it to most recently used position
+            add(node);
+        }
+        return result;
+    }
+    
+    public void put(int key, int value) {
+        //address of the node in LRU cache
+        Node node = node_map.get(key);
+        if(node != null){
+            remove(node);
+            node.val = value;
+            add(node);
+        }else{
+            //extending the size limit of cache by adding this node
+            if(node_map.size() == cache_capacity){
+                //least recently used node from LRU cache
+                node_map.remove(tail.prev.key);
+                remove(tail.prev);
+            }
+            Node new_node = new Node();
+            new_node.key = key;
+            new_node.val = value;
+            
+            node_map.put(key, new_node);
+            add(new_node);
+        }
+    }
+    // LRU cache
+    public void add(Node node)
+    {
+        Node head_next = head.next;
+        node.next = head.next;
+        head_next.prev = node;
+        head.next = node;
+        node.prev = head;
+    }
+    public void remove(Node node){
+        Node next_node = node.next;
+        Node prev_node = node.prev;
+        
+        next_node.prev = prev_node;
+        prev_node.next = next_node;
+    }
+    //Node in doubly linked list // make a node at the middle in LRU cache the most recently used node---(k, v)pair
+    class Node{
+        int key; 
+        int val;
+        Node prev;
+        Node next;
+    }
+}
+
+-----------------------------------------------------c++-----------------------------------------------------------
+class LRUCache
+{
+public:
+    int capacity, size;
+    class Node
+    {
+    public:
+        int key, value;
+        Node *prev, *next;
+        Node() : key(0), value(0), prev(NULL), next(NULL) {}
+        Node(int k, int v) : key(k), value(v), prev(NULL), next(NULL) {}
+    };
+    Node *head = new Node(), *tail = new Node();
+    unordered_map<int, Node *> nodes;
+    void add(Node *node)
+    {
+        Node *next = head->next;
+        head->next = node;
+        node->next = next;
+        node->prev = head;
+        next->prev = node;
+    }
+
+    void remove(Node *node)
+    {
+        Node *prev = node->prev, *next = node->next;
+        prev->next = next;
+        next->prev = prev;
+    }
+    LRUCache(int capacity)
+    {
+        this->capacity = capacity;
+        this->size = 0;
+        head->next = tail;
+        tail->prev = head;
+    }
+
+    int get(int key)
+    {
+        if (nodes.find(key) == nodes.end())
+        {
+            return -1;
+        }
+        remove(nodes[key]);
+        add(nodes[key]);
+        return nodes[key]->value;
+    }
+
+    void put(int key, int value)
+    {
+        if (nodes.find(key) != nodes.end())
+        {
+            nodes[key]->value = value;
+            remove(nodes[key]);
+            add(nodes[key]);
+        }
+        else
+        {
+            Node *node = new Node(key, value);
+            nodes[key] = node;
+            add(node);
+            if (size == capacity)
+            {
+                Node *node = tail->prev;
+                remove(node);
+                nodes.erase(node->key);
+                delete node;
+            }
+            else
+            {
+                size++;
+            }
+        }
+    }
+};
