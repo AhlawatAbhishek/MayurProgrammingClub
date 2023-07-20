@@ -1,0 +1,87 @@
+---------------------------------------------C++------------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        int sz = asteroids.size();
+        stack<int> moonBase; // moonBase as a stack 
+        for(int indx = 0; indx <sz; indx++){
+            int currAst = asteroids[indx];// incoming asteroid
+            if(moonBase.empty()){
+                moonBase.push(indx);
+            }else{// asteroids present on moonbase // stack
+
+                while(!moonBase.empty() && ((currAst < 0) && (asteroids[moonBase.top()] >= 0)) && abs(asteroids[moonBase.top()]) < abs(currAst)){
+                    moonBase.pop();
+                }
+                if(moonBase.empty()){
+                    moonBase.push(indx);
+                }else if(((currAst < 0) && (asteroids[moonBase.top()] >= 0)))
+                {
+                    if(abs(currAst) < abs(asteroids[moonBase.top()])){
+                        // cout<<"currAst destroyed \n";
+                        
+                    }else{//same size
+                       // both destroyed
+                    //    cout<<"both destroyed \n";
+                       moonBase.pop();
+                    }
+                }else if(!((currAst < 0) && (asteroids[moonBase.top()] >= 0))){
+                   moonBase.push(indx);
+                }
+            }
+        }
+        // for(auto base : moonBase){
+        //     cout<<base<<" ";
+        // }
+        vector<int>res;
+        while(!moonBase.empty()){
+            res.push_back(asteroids[moonBase.top()]);
+            moonBase.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+------------------------------------------------------------------Java------------------------------------------------------------------
+class Solution {
+    public int[] asteroidCollision(int[] asteroids) {
+       int sz = asteroids.length;
+        Deque<Integer> moonBase = new ArrayDeque<>();
+        for(int indx = 0; indx <sz; indx++){
+            int currAst = asteroids[indx];
+            if(moonBase.isEmpty()){
+                moonBase.offerLast(indx);
+            }else{
+
+                while(!moonBase.isEmpty() && ((currAst < 0) && (asteroids[moonBase.peekLast()] >= 0)) && Math.abs(asteroids[moonBase.peekLast()]) < Math.abs(currAst)){
+                    moonBase.pollLast();
+                }
+                if(moonBase.isEmpty()){
+                    moonBase.offerLast(indx);
+                }else if(((currAst < 0) && (asteroids[moonBase.peekLast()] >= 0)))
+                {
+                    if(Math.abs(currAst) < Math.abs(asteroids[moonBase.peekLast()])){
+                        // cout<<"currAst destroyed \n";
+                        
+                    }else{//same size
+                       // both destroyed
+                    //    cout<<"both destroyed \n";
+                       moonBase.pollLast();
+                    }
+                }else if(!((currAst < 0) && (asteroids[moonBase.peekLast()] >= 0))){
+                   moonBase.offerLast(indx);
+                }
+            }
+        }
+        // for(auto base : moonBase){
+        //     cout<<base<<" ";
+        // }
+        int indx = 0;
+        List<Integer> res = new ArrayList<>();
+        while(!moonBase.isEmpty()){
+            res.add(asteroids[moonBase.pollLast()]);
+        }
+        Collections.reverse(res);
+        return res.stream().mapToInt(Integer :: intValue).toArray();   
+    }
+}
