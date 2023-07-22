@@ -1,0 +1,87 @@
+-------------------------------------------Java-----------------------------------------------------
+class Solution {
+    public double knightProbability(int n, int k, int row, int column) {
+       return findProbab(row, column, n, n, k);// helper function to return prob that knight will stay in board after k moves
+    }
+    private double findProbab(int cR, int cC, int row, int column, int k){
+         //possible choices of direction a knight can make to move in 
+         int [][]dirs = {{1, 2}, {-1, 2}, {2, -1}, {-2, -1}, {2, 1}, {-2, 1}, {-1, -2}, {1, -2}};
+         //board state
+         double [][]boardProb = new double[row][column];//prev borad state
+         //initial pos of knight
+         boardProb[cR][cC] = 1;
+         while(k -- > 0){
+             //for every board in k boards we will iterate and find that board's cells probab
+            double [][]currBoardProb = new double[row][column];//curr board state
+            //populating the current board state according to prev board state result
+            for(int r = 0; r<row; r++){
+                for(int c = 0; c<column; c++){
+                    for(var dir : dirs){//considering each of 8 possible choices that would have been made in prev board state and landed the knight in r,c cell at the current board state
+                        int pR = r - dir[0], pC = c - dir[1];//prev row and prev col
+                        //so we are checking whether we are in boundaries of board
+                        if(isSafe(pR, pC, row, column)){
+                            currBoardProb[r][c] += boardProb[pR][pC]/8.0;
+                        }
+                    }
+                }
+            }
+            // curren board state our prev board state
+            boardProb =  currBoardProb;
+            // for(var roww : currBoardProb){
+            //  for(var col : roww){
+            //     System.out.print(col + " ");
+            //  }
+            //  System.out.println();
+            // }
+         }  
+         double safeProb = 0.0;
+         //this board state will represent prob that the knight will end in one of the boards cells after k moves
+         for(var roww : boardProb){
+             for(var col : roww){
+                safeProb += col;
+             }
+         } 
+         return safeProb;      
+    }
+    private boolean isSafe(int r, int c, int rows, int cols){
+        return (r > - 1 && c >-1 && r < rows && c < cols);//check for board boundries
+    }
+}
+-----------------------------------------------------------------C++--------------------------------------------------------------------
+class Solution {
+public:
+    double knightProbability(int n, int k, int row, int column) {
+        return findProbab(row, column, n, n, k);
+    }
+private:     
+    
+    double findProbab(int cR, int cC, int row, int column, int k){
+         vector<vector<int>> dirs = {{1, 2}, {-1, 2}, {2, -1}, {-2, -1}, {2, 1}, {-2, 1}, {-1, -2}, {1, -2}};
+         vector<vector<double>> boardProb(row, vector<double>(column, 0));
+         boardProb[cR][cC] = 1;
+         while(k -- > 0){
+            vector<vector<double>> currBoardProb(row, vector<double>(column, 0));
+            for(int r = 0; r<row; r++){
+                for(int c = 0; c<column; c++){
+                    for(auto dir : dirs){
+                        int pR = r - dir[0], pC = c - dir[1];
+                        if(isSafe(pR, pC, row, column)){
+                            currBoardProb[r][c] += boardProb[pR][pC]/8.0;
+                        }
+                    }
+                }
+            }
+            boardProb =  currBoardProb;
+         }  
+         double safeProb = 0.0;
+         for(auto & row: boardProb){
+             for(auto col : row){
+                safeProb += col;
+             }
+         } 
+         return safeProb;      
+    }
+    bool isSafe(int r, int c, int rows, int cols){
+        return (r > - 1 && c >-1 && r < rows && c < cols);
+    }
+};
