@@ -1,0 +1,122 @@
+--------------------------------------1-------------------------------------------
+class Solution {
+public:
+    vector<string> splitWordsBySeparator(vector<string>& words, char sep) {
+        vector<string> res;
+        // iterating over the words array
+        for(auto arr : words){
+            string strr = "";
+            //for the current string, we will make splits
+            for(int indx = 0; indx<arr.size(); indx++){
+                if(arr[indx] == sep){
+                    //if size of string formed before sep is encountered is > 0
+                    if(strr.size() > 0) 
+                        res.push_back(strr);
+                    strr = "";
+                    
+                }else{//if the sep is not encountered 
+                    strr += (arr[indx]);
+                }
+                
+            }
+            if(strr.size() > 0) 
+                res.push_back(strr);
+        }    
+        return res;
+    }
+};
+----------------------------------------------2------------------------------------------
+class Solution {
+public:
+    long long maxArrayValue(vector<int>& arr) {
+        vector<long long> nums, bums; // for handling left to right and right to left traversals
+        //populating the two list with inital values of given array // in case the operation is not performed on an element it's value will remain same as that was in inital array
+        for(auto num : arr){nums.push_back(num), bums.push_back(num);}
+        
+        //updating value of nums in left to right direction
+        for(int indx = 0; indx < nums.size(); indx++){
+            if(indx != 0){
+                if(nums[indx-1] <= nums[indx]){// if prev is smaller or equal to curr val
+                    nums[indx] += nums[indx-1];
+                }else{
+                    if(arr[indx-1] <= nums[indx]){
+                        nums[indx] += arr[indx-1];
+                    }
+                }
+            }
+        }
+        // repeating whole procedure above for bums arrays in right to left direction
+        for(int indx = bums.size()-1; indx > -1; indx--){
+            if(indx != bums.size()-1){
+                if(bums[indx] <= bums[indx+1]){
+                    bums[indx] += bums[indx+1];
+                }else{
+                    if(arr[indx+1] >= bums[indx]){
+                        bums[indx] += arr[indx+1];
+                    }
+                }
+            }
+        }
+        return max(*max_element(nums.begin(), nums.end()), *max_element(bums.begin(), bums.end()));
+    }
+};
+------------------------------------3-------------------------------------------------------
+class Solution {
+public:
+    int maxIncreasingGroups(vector<int>& usageLimits) {
+        sort(usageLimits.begin(), usageLimits.end());// to get minimum limit numbers first to greedly increase the number of groups that can be formed
+        long long sz = usageLimits.size(), grps = 0/*maximum no of grps that can be made*/, eleAvl = 0/*total available number of elements*/;
+        
+        
+        for(int indx = 0; indx<sz; indx++){
+            eleAvl += usageLimits[indx];//adding current limit number of elements or say numbers to current available elements or say numbers
+            int reqEle = (grps + 1) * (grps + 2) / 2;//req number of elements require to form current grpsth + 1 group
+            if(eleAvl >= reqEle){// if the available number of elements exceeds or is equal to req number of elements -> form the group
+                grps++;
+            }
+        }
+        return grps;
+        
+    }
+};
+---------------------------------------4--------------------------------------------------------
+class Solution {
+    
+public:
+    long long countPalindromePaths(vector<int>& parent, string s) {
+        //size of the given string
+        int sz = s.size();
+        
+        //here we are store how many no of times a mask or path from root to given node occurs
+        unordered_map<int, int> maskFreq;
+        maskFreq[0] = 1;
+        
+        //parent child directed graph
+        unordered_map<int, vector<int>> graph;
+        for (int node = 1; node < sz; ++node) {
+            graph[parent[node]].push_back(node);
+        }
+        
+        return countPals(0, 0, s, graph, maskFreq);
+    }
+ private:
+    long long countPals(int src, int mask, string &str, unordered_map<int, vector<int>>& graph, unordered_map<int, int>& maskFreq) { 
+        long long res = 0;
+        //if the current node is not root node
+        if(src != 0){
+             mask ^= (1 << (str[src] - 'a');// storing odd freq characters in the current path being followed by recursion
+             res += maskFreq[mask]++;// no of paths with same number of odd freq charcter-> 0 difference case
+             for (int  prevMask = (1 << 25); prevMask > 0; prevMask >>= 1) {//for checking 1 diffrence path with current
+                if (maskFreq.find(mask ^ prevMask) != maskFreq.end()) {
+                    res += maskFreq[mask ^ prevMask]; // adding number of occurences of such path
+             }
+             }
+        }
+        
+        //visiting the neighbours of current node    
+        for (int neigh : graph[src]) {
+            res += countPals(neigh, mask, str, graph, maskFreq);
+        }
+        return res;
+    }
+}; 
