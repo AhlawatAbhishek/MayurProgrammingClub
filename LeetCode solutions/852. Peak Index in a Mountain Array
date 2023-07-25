@@ -1,0 +1,37 @@
+----------------------------------------C++--------------------------------------------------
+class Solution {
+public:
+    int peakIndexInMountainArray(vector<int>& arr) {
+        int left = 0, right = arr.size() - 1;
+        int peek = -1;
+        while(left <= right){
+            int mid = left + (right - left) / 2;// prevent int overflow 
+            // cout<<"left: "<<left<<" right: "<<right<<" mid: "<<mid<<"\n";
+            if(arr[mid+1] < arr[mid]){// if we are in decreasing part
+                  peek = mid;// mid will be current peak
+                  right = mid - 1;//decrease upper limit of the range
+            }else if(arr[mid + 1] > arr[mid]){//if we are in increasing part
+                  left = mid + 1;// increase the lower limit of the range(search space or indicies)
+            }
+        }
+        return peek;
+    }
+};
+----------------------------------------Java--------------------------------------------------
+class Solution {
+    public int peakIndexInMountainArray(int[] arr) {
+        int left = 0, right = arr.length - 1;
+        int peek = -1;
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            // cout<<"left: "<<left<<" right: "<<right<<" mid: "<<mid<<"\n";
+            if(arr[mid+1] < arr[mid]){
+                  peek = mid;
+                  right = mid - 1;
+            }else if(arr[mid + 1] > arr[mid]){
+                  left = mid + 1;
+            }
+        }
+        return peek;
+    }
+}
