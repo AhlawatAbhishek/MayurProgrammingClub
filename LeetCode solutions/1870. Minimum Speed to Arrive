@@ -1,0 +1,71 @@
+------------------------------------C++------------------------------------------------
+class Solution {
+public:
+    int minSpeedOnTime(vector<int>& dist, double hour) {
+        return findMinS(dist, hour);
+    }
+private:
+  //Binary Search
+    int findMinS(vector<int> &dist, double hour){
+        int minS = -1, left = 0, right = 1e7 + 1;
+        while(left <= right){
+            //mid is current choice of speed's value
+            int mid = left + (right - left)/2;
+            // cout<<mid<<"\n";
+            //is the current choice of speed is sufficient to make us reach the office in given time limit--- hour
+            if(isEnough(dist, hour, mid)){
+                minS = mid;//min speed enough
+                right = mid -1;
+            }else{
+                left = mid + 1;
+            }
+        }
+        return minS;
+    }
+    bool isEnough(vector<int> &dist, double hour, int speed){
+         int sz = dist.size();
+         double timeTkn = 0.0;
+         for(int indx = 0; indx<sz; indx++){
+              double crTimeTkn = (dist[indx] * 1.0) / speed;
+              if(indx != sz - 1){// if we are having another train took take
+                  crTimeTkn = ceil(crTimeTkn);
+              }
+              timeTkn += (crTimeTkn);
+         }
+        //  cout<<"timeTkn "<<timeTkn<<"\n";
+         return timeTkn <= hour;
+    }
+};
+-------------------------------------------------------------Java---------------------------------------------------
+class Solution {
+    public int minSpeedOnTime(int[] dist, double hour) {
+          return findMinS(dist, hour);
+    }
+    private int findMinS(int []dist, double hour){
+        int minS = -1, left = 0, right = 10000007 + 1;
+        while(left <= right){
+            int mid = left + (right - left)/2;
+            // cout<<mid<<"\n";
+            if(isEnough(dist, hour, mid)){
+                minS = mid;
+                right = mid -1;
+            }else{
+                left = mid + 1;
+            }
+        }
+        return minS;
+    }
+    private boolean isEnough(int []dist, double hour, int speed){
+         int sz = dist.length;
+         double timeTkn = 0.0;
+         for(int indx = 0; indx<sz; indx++){
+              double crTimeTkn = (dist[indx] * 1.0) / speed;
+              if(indx != sz - 1){
+                  crTimeTkn = Math.ceil(crTimeTkn);
+              }
+              timeTkn += (crTimeTkn);
+         }
+        //  cout<<"timeTkn "<<timeTkn<<"\n";
+         return timeTkn <= hour;
+    }
+}
