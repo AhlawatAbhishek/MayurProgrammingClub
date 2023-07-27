@@ -1,0 +1,79 @@
+-----------------------------------------------------C++------------------------------------------------------------
+class Solution {
+public:
+    long long maxRunTime(int n, vector<int>& batteries) {
+        sort(batteries.begin(), batteries.end());//this is to get the optimal number of computers we can run together for 't' minutes.
+        return findMxRt(n, batteries);//binary search for the value of 't' in range 0 to max rT(runtime) for each computer ran simul.
+    }
+
+private:  
+    long long findMxRt(int computr, vector<int>& bat){
+        long long left = 0LL/*least value of time possible for running simul.*/,
+         right = accumulate(bat.begin(), bat.end(), 0LL)/computr, maxRt = 0;//the max value of time possible for simul running
+        while(left <= right){
+            long long mid = left + (right - left)/2;//mid is current selected value in the range computed above
+            // cout<<"left "<<left<<" right "<<right<<" mid: "<<mid<<" maxRt "<<maxRt<<"\n";
+            //tickier part ->how we will reduce our search space ?
+            if(testRun(bat, mid, computr)){//if cond true you can run these computers 'mid' minutes together
+               maxRt = mid;
+               left = mid + 1;
+            }else{
+                right = mid - 1; 
+            }
+        }
+        return maxRt;
+    }
+
+    bool testRun(vector<int>& bat, int purpRt/*curr choice of runtime*/, int computr){
+        int computrCnt = 0;
+        long long currRt = 0LL;
+        //iterate battery array once
+        for(auto rT : bat){
+            currRt += rT;
+            if(currRt >= purpRt){
+                currRt -= purpRt;//because we can reuse unfinished batteries
+                computrCnt++;
+            }
+        }
+        return computr <= computrCnt;
+    }
+};
+-----------------------------------------------------Java------------------------------------------------------------
+class Solution {
+    public long maxRunTime(int n, int[] batteries) {
+        Arrays.sort(batteries);
+        return findMxRt(n, batteries);
+    }
+
+    private long findMxRt(int computr, int[] bat){
+        long left = 0L, right = 0L, maxRt = 0;
+        for(var rT : bat){
+            right += rT;
+        }
+        right /= computr;
+        while(left <= right){
+            long mid = left + (right - left)/2;
+            // cout<<"left "<<left<<" right "<<right<<" mid: "<<mid<<" maxRt "<<maxRt<<"\n";
+            if(testRun(bat, mid, computr)){
+               maxRt = mid;
+               left = mid + 1;
+            }else{
+                right = mid - 1; 
+            }
+        }
+        return maxRt;
+    }
+
+    private boolean testRun(int [] bat, long purpRt, int computr){
+        int computrCnt = 0;
+        long currRt = 0L;
+        for(var rT : bat){
+            currRt += rT;
+            if(currRt >= purpRt){
+                currRt -= purpRt;
+                computrCnt++;
+            }
+        }
+        return computr <= computrCnt;
+    }
+}
