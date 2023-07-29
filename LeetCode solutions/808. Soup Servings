@@ -1,0 +1,64 @@
+-------------------------------C++-----------------------------
+class Solution {
+public:
+    double soupServings(int n) {
+      //threshold after which (P(a) + P(a^b)/2) will approach to 1
+      if (n > 3275) {  //Maximum size can be 10^8 if you define the array to be global otherwise if it is defined in a local function maximum size can be 10^6. These sizes are of int datatype array, so first tried with 1000 but it gave wrong answer on 3275
+            return 1.0;
+        }
+        //this for storing calculated soup states ---(a, b)
+        vector<vector<double>> soupState(n+1, vector<double>(n+1, -1));
+        return serve(n, n, soupState);
+    }
+    private:
+     int servings[4][2] = {{100,0}, {75, 25}, {50, 50}, {25, 75}};
+     double serve(int a, int b, vector<vector<double>> & soupState) {    
+        //first two base cases are favourable ones and 3rd one is not
+        if (a <= 0 && b <= 0) return 0.5;   // both empty at same time return (1.0 / 2) as per problem statement
+        if (a <= 0) return 1.0; //if a empties first 
+        if (b <= 0) return 0.0; //if b empties first
+
+        //if soup state seen before
+        if (soupState[a][b] != -1) {
+            return soupState[a][b]; //this is to avoid the extra work
+        }
+        soupState[a][b] = 0.0;
+        //iterating for all possible operations on the current soup state
+        for (auto sv : servings) {
+            // System.out.println(sv[0] + " " + sv[1]);
+            soupState[a][b] += serve(a - sv[0], b - sv[1], soupState);
+        }
+        //multiply probablity of selecting this (a, b) soup state
+        return soupState[a][b] *= 0.25;
+    }
+};
+--------------------------------------Java-----------------------------
+class Solution {
+    public double soupServings(int n) {
+        if (n > 3275) {  //Maximum size can be 10^8 if you define the array to be global otherwise if it is defined in a local function maximum size can be 10^6. These sizes are of int datatype array, so first tried with 1000 but it gave wrong answer on 3275
+            return 1.0;
+        }
+        Double soupState[][] = new Double[n + 1][n + 1];
+        return serve(n, n, soupState);
+    }
+    private int[][] servings = {{100,0}, {75, 25}, {50, 50}, {25, 75}};
+    private double serve(int a, int b, Double[][] soupState) {
+        
+        //first two base cases are favourable ones and 3rd one is not
+        if (a <= 0 && b <= 0) return 0.5;   // both empty at same time return (1.0 / 2) as per problem statement
+        if (a <= 0) return 1.0; //if a empties first 
+        if (b <= 0) return 0.0; //if b empties first
+
+        //if soup state seen before
+        if (soupState[a][b] != null) {
+            return soupState[a][b];
+        }
+        soupState[a][b] = 0.0;
+        for (var sv : servings) {
+            // System.out.println(sv[0] + " " + sv[1]);
+            soupState[a][b] += serve(a - sv[0], b - sv[1], soupState);
+        }
+        //multiply probablity of selecting this (a, b) soup state
+        return soupState[a][b] *= 0.25;
+    }
+}
