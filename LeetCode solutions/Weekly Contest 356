@@ -1,0 +1,265 @@
+--------------1--------------------------------------------------------------------------------------------------------------
+---------------C++-----------------
+class Solution {
+public:
+    int numberOfEmployeesWhoMetTarget(vector<int>& hours, int target) {
+         int cnt = 0; 
+        for(auto h : hours){
+            if(h >= target)cnt++;
+        }
+        return cnt;
+    }
+};
+---------------Java----------------
+class Solution {
+    public int numberOfEmployeesWhoMetTarget(int[] hours, int target) {
+        int cnt = 0; 
+        for(var h : hours){
+            if(h >= target)cnt++;
+        }
+        return cnt;
+    }
+}
+
+--------------2--------------------------------------------------------------------------------------------------------------
+---------------C++-----------------
+class Solution {
+public:
+    int countCompleteSubarrays(vector<int>& nums) {
+        unordered_set<int> unqE;//the size of this set will be the number of unqiue elements in the whole array
+        int sz = nums.size(), res = 0;
+        for(auto num : nums){unqE.insert(num);}
+        for(int left = 0; left < sz; left++){
+            unordered_set<int>curUnq;
+            for(int right = left; right < sz ; right++){
+                curUnq.insert(nums[right]);
+                //we are adding the contribution of subarray between left and right indicies both of them included to our final result or say answer
+                res += curUnq.size() / unqE.size();
+            }
+        }
+        return res;
+    }
+};
+---------------Java----------------
+class Solution {
+    public int countCompleteSubarrays(int[] nums) {
+        Set<Integer> unqE = new HashSet<>();
+        int sz = nums.length, res = 0;
+        for(var num : nums){unqE.add(num);}
+        for(int left = 0; left < sz; left++){
+            Set<Integer>curUnq = new HashSet();
+            for(int right = left; right < sz ; right++){
+                curUnq.add(nums[right]);
+                res += curUnq.size() / unqE.size();
+            }
+        }
+        return res;
+    }
+}
+--------------3--------------------------------------------------------------------------------------------------------------
+---------------C++-----------------
+class Solution {
+public:
+    string minimumString(string a, string b, string c) {
+        vector<string> list = {a, b, c};
+    return minStr("", 0, 0, list);
+	}
+
+private:
+    string minStr(string curr, int index, int mask, vector<string> & list) {
+		if (index == 3) {
+			return curr;
+		}
+        //lexicographically smallest string which will have all three as substrings
+		string currShortest = "";
+		for (int lIndx = 0; lIndx < 3; lIndx++) {
+            string undrConsd = list[lIndx];
+            //checking for a string already present in curr as a substring is of no use
+            if((mask & 1 << lIndx) != 0)continue;
+            //if current string under consideration is not previously considered in curr and still it is present in curr as a substring then simply mark it as considered in current 
+			if(curr.find(undrConsd) != string::npos){
+                    string newShortest = minStr(curr, index + 1, (mask | 1 << lIndx), list);
+					currShortest = isReplaceable(currShortest, newShortest) ? newShortest : currShortest;
+            }else{
+              for (int sIndx = undrConsd.size(); sIndx >= 0; sIndx--) {
+				//either ends with some non empty part from starting of the current string  under consideration or ends with the empty string in case no starting part of current string under consideration matches with curr's end part 
+                if (endsWith(curr, undrConsd.substr(0, sIndx))){
+					string newShortest = minStr(curr + undrConsd.substr(sIndx), index + 1, (mask | 1 << lIndx), list);
+					currShortest = isReplaceable(currShortest, newShortest) ? newShortest : currShortest;
+					//break becuase we want maximum front part of the current string under considereation to match with the end of curr, so that minimum string is to be append with curr
+                    break;
+				}
+			  }
+            }    
+		}
+		return currShortest;
+	}
+    static bool endsWith(const std::string& str, const std::string& suffix)
+{
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
+    bool isReplaceable(string currShortest, string newShortest){
+        return currShortest == "" ||//in case current string is null or empty
+            currShortest.length() > newShortest.length() || //in case the curr String length is larger than the new string
+            currShortest.length() == newShortest.length() &&//in case it is equal in lenght but lexicographically smaller
+            currShortest.compare(newShortest) > 0;
+    }
+    
+};    
+---------------Java----------------
+class Solution {
+
+	public String minimumString(String a, String b, String c) {
+		return minStr("", 0, 0, List.of(a, b, c));
+	}
+
+	private String minStr(String curr, int index, int mask, List<String> list) {
+		if (index == 3) {
+			return curr;
+		}
+        //lexicographically smallest string which will have all three as substrings
+		String currShortest = null;
+		for (int lIndx = 0; lIndx < 3; lIndx++) {
+            String undrConsd = list.get(lIndx);
+            //checking for a string already present in curr as a substring is of no use
+            if((mask & 1 << lIndx) != 0)continue;
+            //if current string under consideration is not previously considered in curr and still it is present in curr as a substring then simply mark it as considered in current 
+			if(curr.indexOf(undrConsd) != -1){
+                    String newShortest = minStr(curr, index + 1, (mask | 1 << lIndx), list);
+					currShortest = isReplaceable(currShortest, newShortest) ? newShortest : currShortest;
+            }else{
+              for (int sIndx = undrConsd.length(); sIndx >= 0; sIndx--) {
+				//either ends with some non empty part from starting of the current string  under consideration or ends with the empty string in case no starting part of current string under consideration matches with curr's end part 
+                if (curr.endsWith(undrConsd.substring(0, sIndx))){
+					String newShortest = minStr(curr + undrConsd.substring(sIndx), index + 1, (mask | 1 << lIndx), list);
+					currShortest = isReplaceable(currShortest, newShortest) ? newShortest : currShortest;
+					//break becuase we want maximum front part of the current string under considereation to match with the end of curr, so that minimum string is to be append with curr
+                    break;
+				}
+			  }
+            }    
+		}
+		return currShortest;
+	}
+    private boolean isReplaceable(String currShortest, String newShortest){
+        return currShortest == null ||//in case current string is null or empty
+            currShortest.length() > newShortest.length() || //in case the curr String length is larger than the new string
+            currShortest.length() == newShortest.length() &&//in case it is equal in lenght but lexicographically smaller
+            currShortest.compareTo(newShortest) > 0;
+    }
+}
+
+--------------4--------------------------------------------------------------------------------------------------------------
+---------------C++-----------------
+class Solution {
+public:    
+    int countSteppingNumbers(string low, string high) { 
+        //first we are checking for the range 0 to low -->count of stepping numbers
+        memset(stepCount, -1, sizeof(stepCount));
+        long long left = countStepNums(low, 0, 1, 1, 0);
+        
+        //checking for the count of stepping numbers in the range 0 to high
+        memset(stepCount, -1, sizeof(stepCount));
+        long long right = countStepNums(high, 0, 1, 1, 0);
+        
+        long long answer = (right % mod - left % mod + mod) % mod;
+        
+        //since the answer is not checking for the number at the low in the range then we will check for it seperately
+        bool incLow = true;
+        for (long long indx = 0; indx < (long long) low.size(); indx++){
+            if (indx != 0 && abs(low[indx] - low[indx - 1]) != 1) incLow = false;
+        }
+        if (incLow) answer = (answer + 1) % mod;
+
+        return answer;
+    }
+private:
+    long long mod = 1e9 + 7;
+    //100 digits in a number 10 ^ 100
+
+    // 2nd dimesion is for whether you passed a digit equal to the digit in the same index upper bound of range which is numStr->> if yes -- then you are bounded other wise you can take any digit after it as per your choice
+    
+    //3rd dimension is for whether the previous digits include before current digit to be considered to be included are zero or not ? if yes then you can take any digit of your choice, if no then you can only take those digits whose absoulte difference with previous digit included is one
+    
+    //4th dimesnion is for how many options are you having to fill the current position-- if there are no constraints there are 0 to 9 i.e. 10 options available only  
+    long long stepCount[101][2][2][10];
+    //numStr is upper end of the range ->> o to upperend
+    long long countStepNums(string & numStr, long long numIndx, long long isBounded,
+     long long arePrevZeroes, long long prevDigs) {
+        if (numIndx == (long long) numStr.size()) {
+            return (arePrevZeroes == 1) ? 0 : 1;//not considering the case in which the number is having leading zeroes then in such case as soon as we have formed the number of digits equal to number of digits in the upper end of the range 
+        }
+
+        if (stepCount[numIndx][isBounded][arePrevZeroes][prevDigs] != -1) return stepCount[numIndx][isBounded][arePrevZeroes][prevDigs];
+
+        long long answer = 0, willBeZero = -1, newisBounded = -1;
+        long long limit =(isBounded) ? (numStr[numIndx] - '0') :  9;
+
+        for (long long dig = 0; dig <= limit; dig++) {
+            willBeZero = (arePrevZeroes && dig == 0) ? 1 :  0;
+            newisBounded = (isBounded && dig == limit) ? 1 : 0;
+            //either the pervious digits were zero or the abs diff with prev digit is 1
+            if (arePrevZeroes || abs(dig - prevDigs) == 1) {
+                answer = (answer % mod + countStepNums(numStr, numIndx + 1, newisBounded, willBeZero, dig) % mod)%mod;
+            }
+        }
+
+        stepCount[numIndx][isBounded][arePrevZeroes][prevDigs] = answer;
+        return answer;
+    }
+    
+};
+---------------Java----------------
+class Solution {
+	private int mod = 1000000007;
+    //100 digits in a number 10 ^ 100
+
+    // 2nd dimesion is for whether you passed a digit equal to the digit in the same index upper bound of range which is numStr->> if yes -- then you are bounded other wise you can take any digit after it as per your choice
+    
+    //3rd dimension is for whether the previous digits include before current digit to be considered to be included are zero or not ? if yes then you can take any digit of your choice, if no then you can only take those digits whose absoulte difference with previous digit included is one
+    
+    //4th dimesnion is for how many options are you having to fill the current position-- if there are no constraints there are 0 to 9 i.e. 10 options available only  
+    private Integer stepCount[][][][] = null;
+    public int countSteppingNumbers(String low, String high) {
+     	stepCount = new Integer[101][2][2][10];
+        int left = countStepNums(low, 0, 1, 1, 0);
+        
+     	stepCount = new Integer[101][2][2][10];
+        int right = countStepNums(high, 0, 1, 1, 0);
+        
+        int answer = (right % mod - left % mod + mod) % mod;
+        
+        boolean incLow = true;
+        for (int indx = 0; indx < low.length(); indx++){
+            if (indx != 0 && Math.abs(low.charAt(indx) - low.charAt(indx - 1)) != 1) incLow = false;
+        }
+        if (incLow) answer = (answer + 1) % mod;
+
+        return (int)answer;
+    }
+    private int countStepNums(String numStr, int numIndx, int isBounded,
+     int arePrevZeroes, int prevDigs) {
+        if (numIndx == (int) numStr.length()) {
+            return (arePrevZeroes == 1) ? 0 : 1;
+        }
+
+        if (stepCount[numIndx][isBounded][arePrevZeroes][prevDigs] != null) return stepCount[numIndx][isBounded][arePrevZeroes][prevDigs];
+
+        int answer = 0, willBeZero = -1, newisBounded = -1;
+        int limit =(isBounded == 1) ? (numStr.charAt(numIndx) - '0') :  9;
+
+        for (int dig = 0; dig <= limit; dig++) {
+            willBeZero = (arePrevZeroes == 1 && dig == 0) ? 1 :  0;
+            newisBounded = (isBounded == 1 && dig == limit) ? 1 : 0;
+            
+            if (arePrevZeroes == 1 || Math.abs(dig - prevDigs) == 1) {
+                answer = (answer % mod + countStepNums(numStr, numIndx + 1, newisBounded, willBeZero, dig) % mod)%mod;
+            }
+        }
+
+        stepCount[numIndx][isBounded][arePrevZeroes][prevDigs] = answer;
+        return answer;
+    }
+    
+}
