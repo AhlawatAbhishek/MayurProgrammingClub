@@ -1,0 +1,59 @@
+---------------------------------------------C++--------------------------------------------------
+class Solution {
+public:
+    int minimumDeleteSum(string str1, string str2) {
+        int sz1 = str1.size(), sz2 = str2.size();
+        //it states of the two strings -->> states ? the index combinations of the two string eg (indx1, indx2) is a state indx1 is of str1 and indx2 is of str2, indx1 = 1, indx2 = 3
+        //we will be storing the result of each such state in this vector or say array, so that we need no to recalculate the same state again and prevent the solution from reaching exponential time complexity or say higher time complexity
+        vector<vector<int>> indxChoice(sz1+1, vector<int>(sz2+1, 0));
+        //sum of ascii values of all the chars in both string into this variable
+        int asciSum = 0;
+        for(auto c : str1){
+           asciSum += c - 'a' + 97;
+        }
+        for(auto c : str2){
+           asciSum += c - 'a' + 97;
+        }
+        //for each index in first string we will iterate over complete 2nd string
+        for(int indx1 = 1; indx1 <= sz1; indx1++){
+            for(int indx2 = 1; indx2 <= sz2; indx2++){
+                //if there is a match
+                if(str1[indx1-1] == str2[indx2-1]){
+                    //the current state will depened on the previous indicies of both of the strings
+                    indxChoice[indx1][indx2] = str1[indx1-1]-'a' + 97 + indxChoice[indx1-1][indx2-1];
+                }else{//there is a unmatch
+                //two options either to delete the char at str1 or to delete the char at str2 and we will take maximum of the choice
+                     indxChoice[indx1][indx2] = max(indxChoice[indx1-1][indx2], indxChoice[indx1][indx2-1]); 
+                }
+            }
+        }
+        return asciSum - 2 * indxChoice[sz1][sz2];
+    }
+};
+-----------------------------Java-------------------------------------------------------------------------------
+class Solution {
+    public int minimumDeleteSum(String s1, String s2) {
+        int sz1 = s1.length(), sz2 = s2.length();
+        int indxChoice[][] = new int[sz1+1][sz2+1];
+        char str1[] = s1.toCharArray();
+        char str2[] = s2.toCharArray();
+        int asciSum = 0;
+        for(var c : str1){
+           asciSum += c - 'a' + 97;
+        }
+        for(var c : str2){
+           asciSum += c - 'a' + 97;
+        }
+        for(int indx1 = 1; indx1 <= sz1; indx1++){
+            for(int indx2 = 1; indx2 <= sz2; indx2++){
+                if(str1[indx1-1] == str2[indx2-1]){
+                    indxChoice[indx1][indx2] = str1[indx1-1]-'a' + 97 + indxChoice[indx1-1][indx2-1];
+                }else{
+                     indxChoice[indx1][indx2] = Math.max(indxChoice[indx1-1][indx2], indxChoice[indx1][indx2-1]); 
+                }
+            }
+        }
+        return asciSum - 2 * indxChoice[sz1][sz2];
+    }
+}
+
