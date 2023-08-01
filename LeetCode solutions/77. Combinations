@@ -1,0 +1,53 @@
+------------------------------------C++------------------------------------
+class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> ans;
+        // 1 to 2^20 
+        for(int state = 1; state < (1<<n); state++){
+            //state is a combination of digits, if this combination is representing a k digit combination
+            if(__builtin_popcount(state) == k){//no of set bits check
+               ans.push_back(make_list(state, n)); 
+            }
+        }
+        return ans;
+    }
+ private:
+ //convert the state into a combination in form of list
+    vector<int> make_list(int state, int n){
+        vector<int> comb;
+        int num = 1;
+        //right to left 
+        for(int bit = 0; bit<n; bit++){
+             if((state & (1<<bit))){
+                 comb.push_back(num);
+             }
+             num++;
+        }
+        return comb;
+    }   
+};
+------------------------------------Java------------------------------------
+class Solution {
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> ans = new ArrayList<>();
+        for(int state = 1; state < (1<<n); state++){
+            if(Integer.bitCount(state) == k){
+               ans.add(make_list(state, n)); 
+            }
+        }
+        return ans;
+    }
+   private List<Integer> make_list(int state, int n){
+        List<Integer> comb = new ArrayList<>();
+        int num = 1;
+        for(int bit = 0; bit<n; bit++){
+             if((state & (1<<bit)) != 0){
+                 comb.add(num);
+             }
+             num++;
+        }
+        return comb;
+    }   
+    
+}
