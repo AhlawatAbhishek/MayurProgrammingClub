@@ -1,0 +1,107 @@
+-----------------------------Approach 1----------------------------------
+---------------------------------Java------------------------------
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        finPermu(nums, 0, res);
+        return res;
+    }
+    private void finPermu(int nums[], int startIndx, List<List<Integer>> res){
+        int sz = nums.length;
+        if(startIndx == sz){
+            List<Integer> currPer = new ArrayList<>();
+            for(var num : nums)currPer.add(num);
+            res.add(currPer);
+            return;
+        }
+        for(int leftPtr = startIndx ; leftPtr < sz; leftPtr++){
+                swap(nums, startIndx, leftPtr);
+                finPermu(nums, startIndx+1, res);
+                swap(nums, startIndx, leftPtr);
+        }
+    }
+    private void swap(int nums[], int indx1, int indx2){
+        int tempNum = nums[indx1];
+        nums[indx1] = nums[indx2];
+        nums[indx2] = tempNum;
+    }
+
+}
+--------------------------------C++------------------------------------
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        findPermu(nums, 0, res);
+        return res;
+    }
+    //dfs -- > Link
+private:
+    void findPermu(vector<int>& nums, int startIndx, vector<vector<int>> & res){
+        int sz = nums.size();
+        if(startIndx == sz){
+           vector<int> currPer;
+            for(auto num : nums)currPer.push_back(num);
+            res.push_back(currPer);
+            return;
+        }
+        for(int leftPtr = startIndx ; leftPtr < sz; leftPtr++){
+                swap(nums[startIndx], nums[leftPtr]);
+                findPermu(nums, startIndx+1, res);//num array will be changed because of the swap operation
+                //make the state of nums array same again again for further valuse of leftPtr we will again swap the value
+                swap(nums[startIndx], nums[leftPtr]);
+        }
+    }
+};
+---------------------------------------------------Approach 2-----------------------
+----------------------------------------Java-------------------------------
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        findPermu(nums, res, 0, new ArrayList<>());
+        return res;
+    }
+    private void findPermu(int nums[], List<List<Integer>> res,  int inCkMsk, List<Integer> currPermu){
+        int sz = nums.length;
+        if(inCkMsk == (1<<sz)-1){
+            res.add(new ArrayList<>(currPermu));
+            return;
+        }
+        for(int indx = 0; indx < sz;  indx++){
+                if((inCkMsk & (1<<indx)) == 0){
+                   currPermu.add(nums[indx]);
+                   findPermu(nums, res, (inCkMsk | (1<<indx)), currPermu);
+                   currPermu.remove(currPermu.size()-1);
+                }
+        } 
+    }
+}
+----------------------------------C++-----------------------------------
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> currPermu;
+        findPermu(nums, res, 0, currPermu);
+        return res;
+    }
+private:
+    void findPermu(vector<int>& nums, vector<vector<int>>& res,  int inCkMsk/*checking which indicies are previously included in the permuation being formed currently*/ , vector<int>& currPermu){
+        int sz = nums.size();
+        //if all the bits representing the indicies of the nums array are set then we can say that we have formed a permutation and we will return
+        if(inCkMsk == (1<<sz)-1){
+            vector<int> newPermu = currPermu;
+            res.push_back(newPermu);
+            return;
+        }
+        for(int indx = 0; indx < sz;  indx++){
+            //filter of exculding those choice which are perviously made while making currPermu
+                if((inCkMsk & (1<<indx)) == 0){//the current index is not exploited as choice for the current permu being formed
+                   currPermu.push_back(nums[indx]);
+                   findPermu(nums, res, (inCkMsk | (1<<indx)), currPermu);
+                   //making the state of currPermu list same as before so that you can explore other choice that will lead to seperate brances in the recursion tree
+                   currPermu.pop_back();
+                }
+        } 
+    }
+};
