@@ -1,0 +1,148 @@
+---------------------------------------DFS + Backtracking----------------------------
+-----------------------Java-----------------------------
+class Solution {
+    public List<String> letterCombinations(String digits) {
+       List<String> res = new ArrayList<>();
+       List<Character> curChrSeq = new ArrayList<>();
+       findCombs(digits, 0, res, curChrSeq);
+       return res;     
+    }
+    private String []dToLMap = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    private void findCombs(String digits, int startIndx, List<String> res, List<Character>  curChrSeq){
+        int sz = digits.length();
+        if(startIndx == sz){
+            StringBuilder comb = new StringBuilder();
+            for(var chr : curChrSeq){
+                comb.append(chr);
+            }
+            if(comb.length() > 0)
+             res.add(comb.toString());
+            return;
+        }
+        String optns = dToLMap[digits.charAt(startIndx) - '2'];
+        sz = optns.length();
+        for(int indx = 0; indx<sz; indx++){
+            curChrSeq.add(optns.charAt(indx));
+            findCombs(digits, startIndx+1, res, curChrSeq);
+            curChrSeq.remove(curChrSeq.size()-1);
+        }
+    }
+}
+-----------------------C++-------------------------------
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+       vector<string> res;
+       vector<char> curChrSeq;//this to store the choices of current branch of recursion tree being explored in dfs --- bag
+       //this is nothing but a dfs search for the letter combinations
+       findCombs(digits, 0, res, curChrSeq);
+       return res;     
+    }
+ private:
+    //mapping of letters and digits
+    vector<string> dToLMap = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+     //DFS
+    void findCombs(string digits, int startIndx, vector<string> & res, vector<char> & curChrSeq){
+        int sz = digits.size();
+        if(startIndx == sz){
+            string comb = "";
+            for(auto chr : curChrSeq){
+                comb += chr;
+            }
+            if(comb.size() > 0)
+             res.push_back(comb);
+            return;
+        }
+        //accomodate the mapping in a zero-based index vector or say array
+        //options of letters for the current digit in digits string
+        string optns = dToLMap[digits[startIndx] - '2'];
+        sz = optns.size();
+        //explore all the options in depth wise manner
+        for(int indx = 0; indx<sz; indx++){
+            //this is you enqueing the current choices in the bag
+            curChrSeq.push_back(optns[indx]);
+            findCombs(digits, startIndx+1, res, curChrSeq);
+            //this you emptying the bag so that you can explore other braches of the recursion tree
+            curChrSeq.pop_back();
+        }
+    }
+};
+
+
+-------------------------------BFS--------------------------------------------------
+--------------------------------Java-----------------------------------
+class Solution {
+    public List<String> letterCombinations(String digits) {
+       List<String> res = new ArrayList<>();
+       Deque<String> combs = new ArrayDeque<>();
+       findCombs(digits, res, combs);
+       return res;     
+    }
+    private String []dToLMap = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    private void findCombs(String digits, List<String> res, Deque<String> combs){
+        int sz = digits.length(), combSize = 1, dIndx = 0;
+        if(sz == 0)return;
+        String curOptn = dToLMap[digits.charAt(dIndx++)-'2'];
+        for(char chr : curOptn.toCharArray()){
+            combs.offerLast("" + chr);
+        }
+        while(combSize < sz){
+            int nCombs = combs.size();
+            while(nCombs-->0){
+               var comb = combs.pollFirst();
+               curOptn = dToLMap[digits.charAt(dIndx)-'2'];
+               for(var chr : curOptn.toCharArray()){
+                 combs.offerLast(comb + chr);
+               }
+            }
+            dIndx++;
+            combSize++;
+        }
+        while(!combs.isEmpty()){
+           res.add(combs.pollFirst());
+        }
+    }
+}
+-----------------------------------C++---------------------------------
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+       vector<string> res;
+       //que to storing the choice options in FIFO manner
+       queue<string> combs;
+       findCombs(digits, res, combs);
+       return res;     
+    }
+ private:
+    vector<string> dToLMap = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    void findCombs(string digits, vector<string> & res, queue<string> & combs){
+        int sz = digits.size(), combSize = 1, dIndx = 0;
+        if(sz == 0)return;
+        //enqueing all the choices of the current digit
+        string curOptn = dToLMap[digits[dIndx++]-'2'];
+        for(char chr : curOptn){
+            string s(1, chr);
+            combs.push(s);
+        }
+        //you will consider the number levels in bfs equal to the size of the digits string--at this point you will be having all the possible letter combination in the tree
+        while(combSize < sz){
+            //exploring all the combinations inside queue at a particular level one by one
+            int nCombs = combs.size();//width of currrent level
+            while(nCombs-->0){
+               auto comb = combs.front();
+               combs.pop();
+               string curOptn = dToLMap[digits[dIndx]-'2'];
+               for(auto chr : curOptn){//no of options for current digit
+                 combs.push(comb + chr);
+               }
+            }
+            dIndx++;//moving to the next digit in the digits string
+            combSize++;//this representing the level of bfs
+        }
+        //at last add all the combinations stored in the queue to the final result
+        while(!combs.empty()){
+           res.push_back(combs.front());
+           combs.pop();
+        }
+    }
+};
