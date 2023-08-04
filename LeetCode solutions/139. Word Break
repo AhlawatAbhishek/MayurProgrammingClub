@@ -1,0 +1,51 @@
+---------------------------C++--------------------------------------------
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int sSz = s.size();
+        //for look up in dict in O(1) 
+        unordered_set<string> dict;
+        for(auto word : wordDict)dict.insert(word);
+        
+        //for substring of s of length say l is alteast one valid partition existing
+        vector<int> safeState(sSz+1, 0);//storing results for the overlapping sub problems and also building solution to bigger problem based on the solution to the smaller ones
+
+
+        safeState[0] = 1;
+        //these are the lengths of the substrings of s
+        for(int len = 1; len <= sSz; len++){
+            //going from right to left to check for a index where a safe state exits -> and be checking for the further indicies
+            for(int left = len-1; left > -1; left--){
+                if(safeState[left]){
+                    if(dict.find(s.substr(left, len - left)) != dict.end()){
+                        safeState[len] = 1;//if safe state found and also the substring being fromed from left to left + (len - 1 - left) then we need not to do any further work
+                        break; 
+                    }
+                }    
+            }
+        }
+        return safeState[sSz];
+    }
+};
+--------------------------------------------------Java----------------------------------------------
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int sSz = s.length();
+        Set<String> dict = new HashSet<>();
+        for(var word : wordDict)dict.add(word);
+        int []safeState = new int[sSz+1];
+        safeState[0] = 1;
+        for(int len = 1; len <= sSz; len++){
+            for(int left = len-1; left > -1; left--){
+                if(safeState[left] == 1){
+                    int right = len;
+                    if(dict.contains(s.substring(left, right))){
+                        safeState[len] = 1;
+                        break; 
+                    }
+                }    
+            }
+        }
+        return safeState[sSz] == 1;
+    }
+}
