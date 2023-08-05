@@ -1,0 +1,74 @@
+----------------------------------------Java------------------------------------------------
+class Solution {
+    public List<TreeNode> generateTrees(int n) {
+        //for the range of numbers 1 to n were are considering the choices for the root of binary search tree possible
+        //1-->start, n --> end
+        return buildBST(1, n);
+    }
+    public List<TreeNode> buildBST(int start, int end){
+        // the possible roots of the current subtree
+        List<TreeNode> li = new ArrayList<>();
+        //if you reach a null node
+        if(start > end){
+            li.add(null);
+            return li;
+        }
+        if(start == end){
+            li.add(new TreeNode(start));
+            return li;
+        }
+        //currently for the root of current subtree you are having choices from start to end
+        for(int indx = start; indx<=end; indx++){
+         List<TreeNode> leftNodeList = buildBST(start, indx-1);//the rightPart of the current choice of the root for current subtree
+         List<TreeNode> rightNodeList = buildBST(indx+1, end);// the leftPart of the current choice of the root for current subtree
+         //We will fix root, plus either leftPart or the rightPart and making combination with the part that is not fixed. Here We have fixed the rightPart of the current subtree and it's root.
+            for(TreeNode rightSide : rightNodeList){
+                for(TreeNode leftSide : leftNodeList){
+                    TreeNode root = new TreeNode(indx);
+                    //according to the combination formed you will attach the right and left parts to the current root of the subtree
+                    root.left = leftSide;
+                    root.right = rightSide;
+                    li.add(root);
+                }
+            }
+        }
+        return li;
+    }
+}
+-------------------------------------------------C++-----------------------------------------------------
+class Solution {
+    public List<TreeNode> generateTrees(int n) {
+        //for the range of numbers 1 to n were are considering the choices for the root of binary search tree possible
+        //1-->start, n --> end
+        return buildBST(1, n);
+    }
+    public List<TreeNode> buildBST(int start, int end){
+        // the possible roots of the current subtree
+        List<TreeNode> li = new ArrayList<>();
+        //if you reach a null node
+        if(start > end){
+            li.add(null);
+            return li;
+        }
+        if(start == end){
+            li.add(new TreeNode(start));
+            return li;
+        }
+        //currently for the root of current subtree you are having choices from start to end
+        for(int indx = start; indx<=end; indx++){
+         List<TreeNode> leftNodeList = buildBST(start, indx-1);//the rightPart of the current choice of the root for current subtree
+         List<TreeNode> rightNodeList = buildBST(indx+1, end);// the leftPart of the current choice of the root for current subtree
+         //We will fix root, plus either leftPart or the rightPart and making combination with the part that is not fixed. Here We have fixed the rightPart of the current subtree and it's root.
+            for(TreeNode rightSide : rightNodeList){
+                for(TreeNode leftSide : leftNodeList){
+                    TreeNode root = new TreeNode(indx);
+                    //according to the combination formed you will attach the right and left parts to the current root of the subtree
+                    root.left = leftSide;
+                    root.right = rightSide;
+                    li.add(root);
+                }
+            }
+        }
+        return li;
+    }
+}
