@@ -1,0 +1,346 @@
+---------------------------------1----------------------------------------------------------------------------------
+----------------------------C++--------------------
+class Solution {
+public:
+    string finalString(string s) {
+        //form a simulation of the process of making the string according to the problem statement
+        string res = "";
+        //traversing from left to right
+        for(auto c : s){
+            if(c == 'i'){
+                if(res.size()){
+                    reverse(res.begin(), res.end());
+                }
+                
+            }else
+             res+=c;
+        }
+        return res;
+    }
+};
+----------------------------Java-------------------
+class Solution {
+    public String finalString(String s) {
+        StringBuilder res = new StringBuilder();
+        for(var c : s.toCharArray()){
+            if(c == 'i'){
+                if(res.length() > 0){
+                    res.reverse();
+                }
+                
+            }else
+             res.append(c);
+        }
+        return res.toString();
+    }
+}
+
+---------------------------------2----------------------------------------------------------------------------------
+----------------------------C++--------------------
+class Solution {
+public:
+    bool canSplitArray(vector<int>& nums, int m) {
+        if(nums.size() == 1 || nums.size() == 2)return true;
+        int prev = 0; 
+        for(auto num : nums){
+           if(prev + num >= m)return true;
+           prev = num;
+        }
+        return false;
+    }
+};
+----------------------------Java-------------------
+class Solution {
+    public boolean canSplitArray(List<Integer> nums, int m) {
+        if(nums.size() == 1 || nums.size() == 2)return true;
+        int  prev = 0; 
+        for(var num : nums){
+           if(prev + num >= m)return true;
+           prev = num;
+        }
+        return false;
+    }
+}
+
+
+---------------------------------3----------------------------------------------------------------------------------
+----------------------------C++--------------------
+class Solution {
+public:
+    int sF = 0;
+    int maximumSafenessFactor(vector<vector<int>>& grid) {
+        int rw = grid.size(), cw = grid[0].size();
+        //generating the dG, whose each cell value represent the minimum dist of that cell to nearest theif cell.
+        vector<vector<int>> dG(rw, vector<int>(cw, INT_MAX));//initally we are considering each cell at max int dist possible away from the nearest theif
+        if(grid[0][0] == 1)dG[0][0] = 0;//if the starting point of the top to bottom filling is having a theif
+        // top to bottom
+        for(int r = 0; r < rw; r++){
+            for(int c = 0; c < cw; c++){
+                if(r == 0 && c== 0)continue;
+                if(grid[r][c] == 1){
+                    dG[r][c] = 0;
+                    continue;
+                }
+                //for present cell theif can come from top cell or left cell
+                int minD = min(r > 0 ? dG[r-1][c] : INT_MAX, c > 0 ? dG[r][c-1] : INT_MAX);
+                if(minD != INT_MAX)
+                 dG[r][c] = minD + 1; 
+            }
+        }
+        // for(auto & vc : dG){
+        //     for(auto v : vc){
+        //         cout<<v<<" ";
+        //     }
+        //     cout<<endl;
+        // }
+        // cout<<endl;
+        if(grid[rw-1][cw-1] == 1)dG[rw-1][cw - 1] = 0;
+        //down to up
+        for(int r = rw-1; r > -1; r--){
+            for(int c = cw - 1; c > -1; c--){
+                if(r == rw-1 && c == cw - 1){
+                    continue;
+                }
+                if(grid[r][c] == 1){
+                    dG[r][c] = 0;
+                    continue;
+                }
+                int minD = min((r < rw-1) ?  dG[r+1][c] : INT_MAX, (c < cw-1) ? dG[r][c+1] : INT_MAX);
+                if(minD != INT_MAX)
+                    dG[r][c] = min(dG[r][c], 1 + minD);
+            }
+        }
+        // for(auto & vc : dG){
+        //     for(auto v : vc){
+        //         cout<<v<<" ";
+        //     }
+        //     cout<<endl;
+        // }
+        // cout<<endl;
+        //binary search
+        return findSf(dG, rw, cw);      
+    }
+private:
+    int dirs[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    int findSf(vector<vector<int>> & dG, int r, int c){
+        int left = 0, right = 1e9; // the range big enough to accomodate maximum possible SF
+        int maxSafe = 0;
+        //binary search
+        while(left <= right){
+           int testSf = left + (right - left)/2;
+           if(test(dG, testSf)){//is the test SF is a valid SF for the path which will be having maximum SF
+               maxSafe = testSf;
+               left = testSf + 1;
+           }else{
+               right = testSf - 1;
+           }
+        }
+        return maxSafe; 
+    }
+    //BFS()
+    bool test(vector<vector<int>>&dG, int testSf) 
+    {
+        int sz = dG.size();
+        queue<pair<int, int>>que;
+        //to avoid looping condition
+        vector<vector<bool>>visited(sz, vector<bool>(sz, false));
+        //starting from 0,0 cell and checking for the path with max SF each cell in that path is having dist to nearest theif greater than or equal to testSF
+        if (dG[0][0] < testSf) return false;
+        que.push({0, 0});
+        visited[0][0] = true;
+        while(!que.empty())
+        {
+            auto cords = que.front();
+            que.pop();
+            int currRow = cords.first, currCol = cords.second;
+            //as soon as we hit last cell we return
+            if (currRow == sz - 1 && currCol == sz - 1) return true;
+            //for each cell you will be having 4 possible direction and you have to avoid looping condition
+            for (auto dir : dirs)
+            {
+                int newRow = currRow + dir[0];
+                int newCol = currCol + dir[1];
+                if (checkCord(visited, newRow, newCol))
+                {
+                    //dist from nearest theif cell is greater than or equal to testSF
+                    if (dG[newRow][newCol] < testSf) continue;
+                    visited[newRow][newCol] = true;
+                    que.push({newRow, newCol});
+                }
+            }
+        }
+        return false;
+    }
+
+    //WE ARE neither entering a loop nor we are going outside the boundaries of the grid
+    bool checkCord(vector<vector<bool>>&visited, int r, int c)
+    {
+        int cols = visited[0].size(), rows = cols;
+        return !(r < 0 || c < 0 || r == rows ||  c == cols || visited[r][c] == 1);
+    }
+    
+};
+----------------------------Java-------------------
+class Solution {
+    public int maximumSafenessFactor(List<List<Integer>> grd) {
+        int rw = grd.size(), cw = rw;
+        int grid[][] = new int[rw][cw];
+        for(int r  = 0; r<rw; r++){
+            List<Integer> cols = grd.get(r);
+            for(int c = 0; c<cw; c++){
+                grid[r][c] = cols.get(c);
+            }
+        }
+        int  dG[][] = new int [rw][cw];
+        for(var d : dG){
+            Arrays.fill(d, Integer.MAX_VALUE);
+        }
+        if(grid[0][0] == 1)dG[0][0] = 0;
+        // up to bottom
+        for(int r = 0; r < rw; r++){
+            for(int c = 0; c < cw; c++){
+                if(r == 0 && c== 0)continue;
+                if(grid[r][c] == 1){
+                    dG[r][c] = 0;
+                    continue;
+                }
+                int minD = Math.min(r > 0 ? dG[r-1][c] : Integer.MAX_VALUE, c > 0 ? dG[r][c-1] : Integer.MAX_VALUE);
+                if(minD != Integer.MAX_VALUE)
+                 dG[r][c] = minD + 1; 
+            }
+        }
+        if(grid[rw-1][cw-1] == 1)dG[rw-1][cw - 1] = 0;
+        //down to up
+        for(int r = rw-1; r > -1; r--){
+            for(int c = cw - 1; c > -1; c--){
+                if(r == rw-1 && c == cw - 1){
+                    continue;
+                }
+                if(grid[r][c] == 1){
+                    dG[r][c] = 0;
+                    continue;
+                }
+                int minD = Math.min((r < rw-1) ?  dG[r+1][c] : Integer.MAX_VALUE, (c < cw-1) ? dG[r][c+1] : Integer.MAX_VALUE);
+                if(minD != Integer.MAX_VALUE)
+                    dG[r][c] = Math.min(dG[r][c], 1 + minD);
+            }
+        }
+        return findSf(dG, rw, cw);      
+    }
+    private int dirs[][] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    private int findSf(int[][] dG, int r, int c){
+        int left = 0, right = 1000000000;
+        int maxSafe = 0;
+        while(left <= right){
+           int testSf = left + (right - left)/2;
+           if(test(dG, testSf)){
+               maxSafe = testSf;
+               left = testSf + 1;
+           }else{
+               right = testSf - 1;
+           }
+        }
+        return maxSafe; 
+    }
+    private boolean test(int [][]dG, int testSf) 
+    {
+        int sz = dG.length;
+        Deque<Pair<Integer, Integer>>que = new ArrayDeque<>();
+        boolean visited[][] = new boolean[sz][sz];
+        if (dG[0][0] < testSf) return false;
+        que.offerLast(new Pair<Integer, Integer>(0, 0));
+        visited[0][0] = true;
+        while(!que.isEmpty())
+        {
+            var cords = que.pollFirst();
+            int currRow = cords.getKey(), currCol = cords.getValue();
+            if (currRow == sz - 1 && currCol == sz - 1) return true;
+            for (var dir : dirs)
+            {
+                int newRow = currRow + dir[0];
+                int newCol = currCol + dir[1];
+                if (checkCord(visited, newRow, newCol))
+                {
+                    if (dG[newRow][newCol] < testSf) continue;
+                    visited[newRow][newCol] = true;
+                    que.offerLast(new Pair<Integer, Integer>(newRow, newCol));
+                }
+            }
+        }
+        return false;
+    }
+    private boolean checkCord(boolean [][]visited, int r, int c)
+    {
+        int cols = visited[0].length, rows = cols;
+        return !(r < 0 || c < 0 || r == rows ||  c == cols || visited[r][c] == true);
+    }
+    
+}
+
+
+---------------------------------4----------------------------------------------------------------------------------
+----------------------------C++--------------------
+class Solution {
+public:
+    long long findMaximumElegance(vector<vector<int>>& items, int k) {
+        //sorted items acc. to descen order of profits
+        sort(items.begin(), items.end(), [](const vector<int>&a, const vector<int> & b)->bool{
+            return a[0] > b[0];
+        });
+        //check the catg present  in the bag current
+        unordered_set<int> unqCat;
+        vector<int> dupl;//this array is storing the duplicate cat items whose profit is minimum
+        long long eleg = 0;
+        long long netProf = 0;
+        for(int indx = 0; indx<items.size(); indx++){
+             int curProf = items[indx][0], curCat = items[indx][1];
+             if(indx < k){//if the bag is having less than k number of items
+                if(unqCat.find(curCat) != unqCat.end()){//if the current item is not the only item of its categ present in bag
+                    dupl.push_back(curProf);
+                }
+                netProf += curProf;
+             }else if(unqCat.find(curCat) == unqCat.end()){//if the bag is full (capacity reached which is k) and you have encountered a new category
+                   if(dupl.size() == 0)break; //if there are no duplicate category items in the bag, then you will return, you are already having max eleg
+                  //although the k items are already int the bag but increasing the uniquness of the bag will have more positive impact on the eleg of the subseq as compared to decrease in profit by replacing the duplicate item with least profit in the bag which will be present at the end of the bag since we sorted the items accroding to ascending order of the profit.
+                   int profDec = curProf - dupl[dupl.size()-1];
+                   dupl.pop_back();
+                   cout<<profDec<<endl;
+                   netProf += profDec;
+             }
+             unqCat.insert(curCat);
+             int unqCats = unqCat.size();
+             //for each of the subseq possible you will be checking for elegance
+             eleg = max(eleg, netProf + 1L * unqCats * unqCats);
+        }
+        return eleg;      
+    }
+};
+----------------------------Java-------------------
+class Solution {
+    public long findMaximumElegance(int[][] items, int k) {
+        Arrays.sort(items, (a, b)->b[0]-a[0]);
+        Set<Integer> unqCat = new HashSet<>();
+        List<Integer> dupl = new ArrayList<>();
+        long eleg = 0;
+        long netProf = 0;
+        for(int indx = 0; indx<items.length; indx++){
+             int curProf = items[indx][0], curCat = items[indx][1];
+             if(indx < k){
+                if(unqCat.contains(curCat)){
+                    dupl.add(curProf);
+                }
+                netProf += curProf;
+             }else if(!unqCat.contains(curCat)){
+                   if(dupl.size() == 0)break; 
+                  //although the k items are already int the bag but increasing the uniquness of the bag will have more positive impact on the eleg of the subseq as compared to decrease in profit by replacing the duplicate item with least profit in the bag which will be present at the end of the bag since we sorted the items accroding to ascending order of the profit.
+                   int profDec = curProf - dupl.remove(dupl.size()-1);
+                //    cout<<profDec<<endl;
+                   netProf += profDec;
+             }
+             unqCat.add(curCat);
+             int unqCats = unqCat.size();
+             eleg = Math.max(eleg, netProf + 1L * unqCats * unqCats);
+        }
+        return eleg;      
+    }
+}
