@@ -1,0 +1,59 @@
+-------------------------------------C++--------------------------------------------------
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int sz = nums.size();
+        //the search space for applying binary search which nothing but the indicies of the given input array
+        int left = 0, right = sz-1;
+        while(left <= right){
+            //generating a middle value / position in the search space
+            int midPos = left + (right - left) / 2;
+            //the number at the midPos in input array is equal to target, then we will return midPos
+            if(nums[midPos] == target)return midPos;
+            //if the number at midPos is not equal to target then we will check for the two different part of array individually.
+            else if(nums[midPos] >  nums[right]){ //we are in rotatedPart
+              if(nums[midPos] > target && nums[left] <= target){
+                  right = midPos - 1;
+              }else{
+                  left = midPos + 1;
+              }
+            }else{//we are in non-rotated part
+                if(nums[midPos] < target && nums[right] >= target){
+                     left = midPos + 1;
+                }else{
+                     right = midPos - 1;
+                }
+            }
+        }
+        return -1;
+    }
+};
+----------------------------------------------------------Java------------------------------------------
+class Solution {
+    public int search(int[] nums, int target) {
+        int sz = nums.length;
+        //the search space for applying binary search which nothing but the indicies of the given input array
+        int left = 0, right = sz-1;
+        while(left <= right){
+            //generating a middle value / position in the search space
+            int midPos = left + (right - left) / 2;
+            //the number at the midPos in input array is equal to target, then we will return midPos
+            if(nums[midPos] == target)return midPos;
+            //if the number at midPos is not equal to target then we will check for the two different part of array individually.
+            else if(nums[midPos] >  nums[right]){ //we are in rotatedPart
+              if(nums[midPos] > target && nums[left] <= target){
+                  right = midPos - 1;
+              }else{
+                  left = midPos + 1;
+              }
+            }else{//we are in non-rotated part
+                if(nums[midPos] < target && nums[right] >= target){
+                     left = midPos + 1;
+                }else{
+                     right = midPos - 1;
+                }
+            }
+        }
+        return -1;
+    }
+}
