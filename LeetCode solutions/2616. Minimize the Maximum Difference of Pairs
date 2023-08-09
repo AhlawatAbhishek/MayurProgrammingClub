@@ -1,0 +1,64 @@
+-------------------------------------------------Java------------------------------------------------
+class Solution {
+    public int minimizeMax(int[] nums, int p) {
+         return findMinMax(nums, p);
+    }
+    private int findMinMax(int []nums, int p){
+        Arrays.sort(nums);//to greedly reduce max diff possible among 'p' pairs to some extent
+        int left = 0, right = 1000000000; //this range will be the range to pick curr Max diff possible among 'p' pairs
+        int minMaxD = Integer.MAX_VALUE;       
+        while(left <= right){
+            int maxDiff = left + (right - left) /2;//checking for the feasibility of curr Max Diff proposed
+            if(isDiffPoss(nums, p, maxDiff)){//with this difference as the maxDiff among pairs is it possible to form no. of pairs greater than or equal to p
+                minMaxD = maxDiff;
+                right = maxDiff-1;//reduce your range to half
+            }else{
+                left = maxDiff + 1;
+            }
+        }
+        return minMaxD;
+    }
+    private boolean isDiffPoss(int nums[], int p, int maxDiff){
+         int sz = nums.length, pCnt = 0, prevIndxInc = -1;
+         for(int indx = 0; indx<sz-1; indx++){
+            if(nums[indx+1] - nums[indx] <= maxDiff){//if the diff of currNum with next Num is less than or equal to maxDiff then a pair is formed and jump to next pair formation
+                indx++;
+                pCnt++;//increase the number of pairs formed
+            }
+         }
+         return pCnt >= p; 
+    }
+}
+-----------------------------------------------------C++-------------------------------------------
+class Solution {
+public:
+    int minimizeMax(vector<int>& nums, int p) {
+      return findMinMax(nums, p);
+    }
+private:
+    int findMinMax(vector<int>& nums, int p){
+        sort(nums.begin(), nums.end());
+        int left = 0, right = 1e9; 
+        int minMaxD = INT_MAX;       
+        while(left <= right){
+            int maxDiff = left + (right - left) /2;
+            if(isDiffPoss(nums, p, maxDiff)){
+                minMaxD = maxDiff;
+                right = maxDiff-1;
+            }else{
+                left = maxDiff + 1;
+            }
+        }
+        return minMaxD;
+    }
+    bool isDiffPoss(vector<int> & nums, int p, int maxDiff){
+         int sz = nums.size(), pCnt = 0, prevIndxInc = -1;
+         for(int indx = 0; indx<sz-1; indx++){
+            if(nums[indx+1] - nums[indx] <= maxDiff){
+                indx++;
+                pCnt++;
+            }
+         }
+         return pCnt >= p; 
+    }
+};
