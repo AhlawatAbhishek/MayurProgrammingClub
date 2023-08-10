@@ -1,0 +1,77 @@
+-----------------------------------------------C++---------------------------------------------
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int sz = nums.size();
+        //the search space for applying binary search which nothing but the indicies of the given input array
+        int left = 0, right = sz-1;
+        while(left <= right){
+            //generating a middle value / position in the search space
+            int midPos = left + (right - left) / 2;
+            //the number at the midPos in input array is equal to target, then we will return true
+            //************this is differnt**********
+            //instead of returning the index of target element the array we are just returing whether it is present in the array or not
+            if(nums[midPos] == target)return true;
+            //************this is differnt**********
+            //this condition is to handle duplicates present in the nums array
+            else if(nums[midPos] == nums[left] && nums[midPos] == nums[right]){
+                //move your left and right pointers to the center of the array because you will not be able to determine whether your are in rotated part or the no rotated part of the input array
+                left++,right--;
+            }
+            //if the number at midPos is not equal to target then we will check for the two different part of array individually.
+            else if(nums[midPos] >  nums[right]){ //we are in rotatedPart
+              if(nums[midPos] > target && nums[left] <= target){
+                  right = midPos - 1;
+              }else{
+                  left = midPos + 1;
+              }
+            }else{//we are in non-rotated part
+                if(nums[midPos] < target && nums[right] >= target){
+                     left = midPos + 1;
+                }else{
+                     right = midPos - 1;
+                }
+            }
+        }
+        return false;
+    }
+};
+--------------------------------------------------------Java----------------------------------------------------------------------------
+cclass Solution {
+    public boolean search(int[] nums, int target) {
+        int sz = nums.length;
+        //the search space for applying binary search which nothing but the indicies of the given input array
+        int left = 0, right = sz-1;
+        while(left <= right){
+            //generating a middle value / position in the search space
+            int midPos = left + (right - left) / 2;
+            //the number at the midPos in input array is equal to target, then we will return true
+            //************this is differnt**********
+            //instead of returning the index of target element the array we are just returing whether it is present in the array or not
+            if(nums[midPos] == target)return true;
+            //************this is differnt**********
+            //this condition is to handle duplicates present in the nums array
+            else if(nums[midPos] == nums[left] && nums[midPos] == nums[right]){
+                //move your left and right pointers to the center of the array because you will not be able to determine whether your are in rotated part or the no rotated part of the input array
+                left++;
+                 right--;
+            }
+            //if the number at midPos is not equal to target then we will check for the two different part of array individually.
+            else if(nums[midPos] >  nums[right]){ //we are in rotatedPart
+              if(nums[midPos] > target && nums[left] <= target){
+                  right = midPos - 1;
+              }else{
+                  left = midPos + 1;
+              }
+            }else{//we are in non-rotated part
+                if(nums[midPos] < target && nums[right] >= target){
+                     left = midPos + 1;
+                }else{
+                     right = midPos - 1;
+                }
+            }
+        }
+        //if we are not able to find the target element then we will return false
+        return false;
+    }
+}
