@@ -1,0 +1,82 @@
+int sz = coins.length; 
+       
+
+
+
+
+
+
+---------------------------------CODE WITH COMMENTS-------------------------------------------------------------------------------------------------
+------------------------------------Java-----------------------------------------------------------
+class Solution {
+    public int change(int amt, int[] coins) {
+        int sz = coins.length; 
+        int combCnt[] = new int[amt+1];
+        combCnt[0] = 1;
+        for(int cIndx = 0; cIndx < sz; cIndx++){
+          for(int curAmt = coins[cIndx]; curAmt<=amt; curAmt++){
+             int contri = curAmt - coins[cIndx];
+                    combCnt[curAmt] += combCnt[contri];
+          }
+        }
+        return combCnt[amt];
+    }
+}
+------------------------------------C++------------------------------------------------------------
+class Solution {
+public:
+    int change(int amt, vector<int>& coins) {
+        int sz = coins.size(); 
+        vector<int> combCnt(amt+1, 0);
+        combCnt[0] = 1;
+        for(int cIndx = 0; cIndx < sz; cIndx++){
+          for(int curAmt = coins[cIndx]; curAmt<=amt; curAmt++){
+             int contri = curAmt - coins[cIndx];
+                    combCnt[curAmt] += combCnt[contri];
+          }
+        }
+        return combCnt[amt];
+    }
+};
+
+
+
+
+-------------------------CODE WITH COMMENTS--------------------------------------------------------------------------------------------------------------------------------------
+-----------------------Java----------------------------------------------------------------------
+ lass Solution {
+    public int change(int amt, int[] coins) {
+        int sz = coins.length; 
+        //##############!!!!!!#########THIS PART IS ONLY FOR UNDERSTANDING WHY WE HAVE TAKEN THE NESTED LOOPS IN THE PARTICULAR BELOW WHY NOT THE OTHER WAY AROUND##################!!!!#######################
+        // int combCnt[] = new int[amt+1];
+        // combCnt[0] = 1;
+        // for(int curAmt = 1; curAmt <= amt; curAmt++){
+        //     for(int cIndx = 0; cIndx < sz; cIndx++){
+        //         if(coins[cIndx] <= curAmt){
+        //             int contri = curAmt - coins[cIndx];
+        //             // System.out.println("currAmt: " + curAmt + " contri: "+ contri);
+        //             combCnt[curAmt] += combCnt[contri];
+        //         }
+        //     }
+        // }
+        // System.out.println("**********************************");
+        int combCnt1[] = new int[amt+1];
+        combCnt1[0] = 1;
+        for(int cIndx = 0; cIndx < sz; cIndx++){
+          for(int curAmt = coins[cIndx]; curAmt<=amt; curAmt++){
+             int contri = curAmt - coins[cIndx];
+                    // System.out.println("currAmt: " + curAmt + " contri: "+ contri);
+                    combCnt1[curAmt] += combCnt1[contri];
+          }
+        }
+        // for(var am : combCnt){
+        //     System.out.print(am + " ");
+        // }
+        // System.out.println();
+        // for(var am : combCnt1){
+        //     System.out.print(am + " ");
+        // }
+        // System.out.println();
+        return combCnt1[amt];
+    }
+}
