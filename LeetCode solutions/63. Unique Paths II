@@ -1,0 +1,68 @@
+---------------------------------------------------WITHOUT COMMENTS CODE-----------------------------------------------------------
+------------------------------------------C++----------------------------------------------
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obsGrd) {
+        int rows = obsGrd.size(), cols = obsGrd[0].size();
+        vector<vector<int>> pathCnt(rows, vector<int>(cols, 0));
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c<cols; c++){
+                if(r== 0 && c == 0){
+                    pathCnt[r][c] = (obsGrd[r][c] == 1 ? 0 : 1);
+                }else{
+                    int leftPathCnt = (c - 1 > -1 && obsGrd[r][c-1] != 1) ? pathCnt[r][c-1] : 0;
+                    int upPathCnt = (r -1 > -1 && obsGrd[r-1][c] != 1) ? pathCnt[r-1][c] : 0;
+                   if(obsGrd[r][c] != 1) 
+                    pathCnt[r][c] += leftPathCnt + upPathCnt;
+                }
+            }
+        }
+        return pathCnt[rows-1][cols-1];
+    }
+};
+--------------------------------------Java------------------------------------------------------------
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obsGrd) {
+        int rows = obsGrd.length, cols = obsGrd[0].length;
+        int pathCnt[][] = new int[rows][cols];
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c<cols; c++){
+                if(r== 0 && c == 0){
+                    pathCnt[r][c] = (obsGrd[r][c] == 1 ? 0 : 1);
+                }else{
+                    int leftPathCnt = (c - 1 > -1 && obsGrd[r][c-1] != 1) ? pathCnt[r][c-1] : 0;
+                    int upPathCnt = (r -1 > -1 && obsGrd[r-1][c] != 1) ? pathCnt[r-1][c] : 0;
+                   if(obsGrd[r][c] != 1) 
+                    pathCnt[r][c] += leftPathCnt + upPathCnt;
+                }
+            }
+        }
+        return pathCnt[rows-1][cols-1];
+    }
+}
+
+--------------------------------------------------------WITH COMMENTS CODE----------------------------------------------------------
+-----------------------------------------------------Java----------------------------------------------------
+class Solution {
+    public int uniquePathsWithObstacles(int[][] obsGrd) {
+        int rows = obsGrd.length, cols = obsGrd[0].length;
+        int pathCnt[][] = new int[rows][cols];//this where we will store the results of previously calculated state and avoid extra to re calculate them when we will encounter them again in some other possible set of choice for path form 0, 0 cell to row-1, col-1 cell.
+
+        //Also based on previously calculated states we will from the solution for the current, state here is nothing but the cell in the grid with co ordinates say (r, c)
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c<cols; c++){
+                if(r== 0 && c == 0){
+                    pathCnt[r][c] = (obsGrd[r][c] == 1 ? 0 : 1);
+                }else{
+                    //for current state you could have moved from the cell above or the cell from left hand side because on two moves down and right are allowed 
+                    //if previous states were out of grid boundries or there were obstacles present on the previous states then we will not take their contribution else we will take
+                    int leftPathCnt = (c - 1 > -1 && obsGrd[r][c-1] != 1) ? pathCnt[r][c-1] : 0;
+                    int upPathCnt = (r -1 > -1 && obsGrd[r-1][c] != 1) ? pathCnt[r-1][c] : 0;
+                   if(obsGrd[r][c] != 1) //if the current state is also not having a obstacle then we will take previous states contributions
+                    pathCnt[r][c] += leftPathCnt + upPathCnt;
+                }
+            }
+        }
+        return pathCnt[rows-1][cols-1];//return the pathCount to the bottom right cell
+    }
+}
