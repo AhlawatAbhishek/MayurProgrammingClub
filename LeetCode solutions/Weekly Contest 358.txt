@@ -1,0 +1,198 @@
+-------------------------------------------------------1--------------------------------------------------------------
+class Solution {
+public:
+    int maxSum(vector<int>& nums) {
+        int sz = nums.size(), maxSum = INT_MIN;
+        for(int indx = 0; indx<sz; indx++){//try to from the pair of current number with every other number in the nums array
+            for(int indx1 = indx+1; indx1 < sz; indx1++){
+                int num1 = nums[indx], num2 = nums[indx1];
+                // cout<<"num1 " << num1 << " num2 "<<num2<<endl;
+                if(maxEle(num1) == maxEle(num2)){//the condition to form a pair is to check if the max digit in both numbers in pair is equal -> then we can form a pair
+                    maxSum = max(maxSum, num1 + num2);//updating our maxSum
+                }
+            }
+        }
+        return maxSum == INT_MIN ? -1 : maxSum; 
+    }
+    int maxEle(int num){
+        int maxEl = INT_MIN;//to represent max digit
+        while(num > 0){
+            maxEl = max(maxEl, num % 10);//we will keep updating our max digit
+            num /=10;
+        }
+        return maxEl;
+    }
+};
+
+----------------------------------------------------2------------------------------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* doubleIt(ListNode* head) {
+        ListNode *prev = NULL;//initially our prev will be pointing to null
+        stack<ListNode*> st; // storing all the value of given Linked List in a left to right fashion in the stack of ListNode
+        for(ListNode * curr = head; curr != NULL; curr = curr->next){
+            st.push(curr);
+        }
+        int carry = 0;
+        //you will just mimic the mulitply operation with help of stack and accordigly you will be updating your prev and curr nodes values
+        while(!st.empty()){
+            ListNode *curr = st.top();
+            st.pop();
+            int val = curr->val;
+            val *= 2;
+            val += carry;
+            int dig = val % 10;
+            carry = val / 10;
+            curr->val = dig;
+            curr->next = prev;
+            prev = curr;
+        }
+        //after you have exhausted the length of the given Linked List if there is still carry left then you will form a new node make it's next to point to the prev node        
+        if(carry > 0){
+            ListNode *newNode  = new ListNode(carry);
+            newNode->next = prev;
+            return newNode;
+        }
+        return head;
+    }
+};
+----------------------------------------------------------3-------------------------------------------------------------
+class Solution {
+public:
+    int minAbsoluteDifference(vector<int>& nums, int x) {
+        int sz = nums.size(), minDiff = INT_MAX;
+        set<int> stt; //this set is to maintain the indicies which are 'x' distance apart from the current index being considered in a sorted format, so that we can apply binary search to find lower bound for the value of current index 
+        
+        
+        //this pointer is to help us add the indicies which are atleast 'x' distance apart from the current index being considered
+        int indx1 = 0;
+    
+        for(int indx = x; indx<sz; indx++){
+            if(indx1 < sz)
+                 stt.insert(nums[indx1++]);
+                int diff = INT_MAX;//minimum abs diff possible with the current index being considered(indx)
+                auto it = stt.lower_bound(nums[indx]);//a variation of binary search
+                // cout<<"num "<<nums[indx];
+                //check if the lower bound value or the value previous to it is giving you least absolute difference with the element at current index(indx)
+                if(it != stt.end()){
+                  diff = min(diff, abs(nums[indx] - *it));
+                  // cout<<" one "<<(*it);
+                }    
+                if(it != stt.begin())it--;//move one index / address previous than the lowerbound
+                if(it != stt.end()){
+                  diff = min(diff, abs(nums[indx] - *it));
+                  // cout<<" two "<<(*it);
+                } 
+                // cout<<endl;
+                minDiff = min(minDiff, diff);//updating the value or say result to be returned
+        }
+        // cout<<"**************************"<<endl;
+        return minDiff;
+    }
+
+};
+-------------------------------------------------------------------4------------------------------------------------------------------
+class Solution {
+public:
+    int MOD = 1e9+7;
+
+    int maximumScore(vector<int>& nums, int k) {
+        int sz = nums.size();
+
+        vector<int> scores = findPScr(nums);//finding prime scores for each number
+        vector<int> nG = findNg(nums, scores);//finding next greater element for each element in given array in terms of primeScore
+        vector<int> pEG = findPEG(scores, nums);//finding previous greater or equal element for each element in terms of prime score.
+
+        
+
+        int res = 1LL;
+        vector<pair<int, int>> indxValMp;//this is we preserving the indicies of the given elements in the input array -> nums
+        for (int indx = 0; indx < sz; indx++) {
+            indxValMp.push_back(make_pair(nums[indx], indx));
+        }
+        //this we sorting the nums array according to values of the elements in descending order while preserving the index of the elements
+        sort(indxValMp.begin(), indxValMp.end(), greater<pair<int, int>>());
+        //this is we maximizing our score or say result by greedly picking numbers with the largest values in the give input array nums
+        for (auto& pr: indxValMp) {
+            auto num = pr.first;//current number being considered for it's contribution to the result or say final score
+            auto indx = pr.second;
+            //number of sub arrays including current num between (previous element with equal or greater score) and (element with geater score) both limits excluded
+            int subs = (indx - pEG[indx]) * (nG[indx] - indx);
+            int opsReq = min(subs, k);
+            //this we we taking the contributions of current number being considered -> num, and multiplying those contributions with final score or say result
+            //num will be picked to be multiplied with score or say res 'opsReq' number of times
+            res = (int)((1L * res * binPow(num, opsReq)) % MOD);
+            k -= opsReq;
+            if (k == 0) {
+                return res;
+            }
+        }
+
+        return res;
+    }
+private:
+    // O(maE * log(maxE)), modified sieve of eratosthenes
+    vector<int> findPScr(vector<int> & nums){
+        int maxEle = *max_element(nums.begin(), nums.end()) + 1;
+        vector<bool> prime(maxEle, true);
+        prime[0] = prime[1] = false;
+        vector<int> scores(maxEle, 0);
+        for (int num = 2; num < maxEle; num++) {
+            if (prime[num]) {
+                for (int mul = num; mul < maxEle; mul += num) {
+                    scores[mul]++;
+                    prime[mul] = false;
+                }
+            }
+        }
+        return scores;
+    }
+    vector<int> findNg(vector<int> & nums, vector<int> & scores){
+        int sz = nums.size();
+        vector<int> nG(sz, sz);
+        stack<int> indxSt;
+        for (int indx = sz - 1; indx >= 0; indx--) {
+            while (!indxSt.empty() && scores[nums[indx]] >= scores[nums[indxSt.top()]]) {
+                indxSt.pop();
+            }
+            nG[indx] = indxSt.empty() ? sz : indxSt.top();
+            indxSt.push(indx);
+        }
+        return nG; 
+    }
+    vector<int> findPEG(vector<int> & scores, vector<int> & nums){
+        int sz = nums.size();
+        vector<int> pEG(sz, -1);
+        stack<int> indxSt;
+        for (int indx = 0; indx < sz; indx++) {
+            while (!indxSt.empty() && scores[nums[indx]] > scores[nums[indxSt.top()]]) {
+                indxSt.pop();
+            }
+            pEG[indx] = indxSt.empty() ? -1 : indxSt.top();
+            indxSt.push(indx);
+        }
+        return pEG;
+    }
+    //binary exponentiation.
+    int binPow(int num, int pow) {
+        int res = 1;
+        while (pow > 0) {
+            if (pow & 1) {
+                res = (int)((1L * res * num) % MOD);
+            }
+            num = (int)((1L * num * num) % MOD);
+            pow  >>=1;
+        }
+        return res;
+    }
+};
