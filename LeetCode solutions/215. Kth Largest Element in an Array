@@ -1,0 +1,56 @@
+
+--------------------------------------------CODE WITHOUT COMMENTS------------------------------------------------------------------
+
+-------------------------------------------Java----------------------------------------------------
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for(var num : nums){
+           if(minHeap.size() < k) 
+            minHeap.offer(num);
+           else if(minHeap.peek() < num){
+               minHeap.poll();
+               minHeap.offer(num);
+           } 
+        }
+        return minHeap.peek();
+    }
+}
+----------------------------------------C++---------------------------------------------------------------
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> minHeap;
+        for(auto num : nums){
+           if(minHeap.size() < k) 
+            minHeap.push(num);
+           else if(minHeap.top() < num){
+               minHeap.pop();
+               minHeap.push(num);
+           } 
+        }
+        return minHeap.top();
+    }
+};
+
+
+
+
+--------------------------------------------CODE WITH COMMENTS------------------------------------------------------------------
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // top of this heap or say root of this heap will always be the minimum value in the heap
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for(var num : nums){
+            //if the number of elements in the minHeap are lesser than k, then we will keep inserting the elements in the heap
+           if(minHeap.size() < k) 
+            minHeap.offer(num);
+           else if(minHeap.peek() < num){//if the top of the heap is smaller than the curr element being considered then pop out the top of minHeap and insert the new element
+               minHeap.poll();
+               minHeap.offer(num);
+           } 
+        }
+        //at last the top of the heap will represent kth largeest number in sorted order, because you have maintained only the k size heap and at present there are k largest numbers / elements present in heap and top of heap is the smallest of them
+        return minHeap.peek();
+    }
+}
