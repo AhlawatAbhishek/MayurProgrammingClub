@@ -1,0 +1,91 @@
+-----------------------------------------------------------------------WITHOUT COMMENTS CODE---------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------C++---------------------------------------------
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if(head == NULL)return head;
+        ListNode *dummyHeadSml = new ListNode();
+        ListNode *curSmlNode = dummyHeadSml;
+
+        ListNode *dummyHeadEg = new ListNode();
+        ListNode *curEgNode = dummyHeadEg;
+
+        for(ListNode *curr = head; curr != NULL;){
+            ListNode *next = curr->next;
+            curr->next = NULL;
+            if(curr->val < x){
+                curSmlNode->next = curr;
+                curSmlNode = curr;
+            }else{
+                curEgNode->next = curr;
+                curEgNode = curr;
+            }
+            curr = next;
+        }
+        
+        curSmlNode->next = dummyHeadEg->next;
+        return dummyHeadSml->next;
+    }
+};
+
+-------------------------------------------------------------------------------Java---------------------------------------------
+class Solution {
+    public ListNode partition(ListNode head, int x) {
+        if(head == null)return head;
+        ListNode dummyHeadSml = new ListNode();
+        ListNode curSmlNode = dummyHeadSml;
+
+        ListNode dummyHeadEg = new ListNode();
+        ListNode curEgNode = dummyHeadEg;
+
+        for(ListNode curr = head; curr != null;){
+            ListNode next = curr.next;
+            curr.next = null;
+            if(curr.val < x){
+                curSmlNode.next = curr;
+                curSmlNode = curr;
+            }else{
+                curEgNode.next = curr;
+                curEgNode = curr;
+            }
+            curr = next;
+        }
+        
+        curSmlNode.next = dummyHeadEg.next;
+        return dummyHeadSml.next;
+    }
+}
+
+-----------------------------------------------------------------------WITH COMMENTS CODE---------------------------------------------------------------------------
+class Solution {
+    public ListNode partition(ListNode head, int x) {
+        if(head == null)return head;//in case your input linked list is not having any node
+        ListNode dummyHeadSml = new ListNode();//this will point to the head of small linked list
+        ListNode curSmlNode = dummyHeadSml;//this currSmlNode will be used to form the small linked list
+
+//we will declare the similar variables for the list of equals or greater than x
+        ListNode dummyHeadEg = new ListNode();//dummy head equal or greater
+        ListNode curEgNode = dummyHeadEg;//this will be used to form the equal or bigger linked list
+
+       //we will be forming both of the lists in one traversal of the input list 
+        for(ListNode curr = head; curr != null;){
+            //you will store the next node of current and make the next node of current to null, this being done so that after applying futher operations we donot form a loop in our final linked list.
+            ListNode next = curr.next;
+            curr.next = null;
+            //if the curr node's value is smaller than x then you will add it to smaller linked list
+            if(curr.val < x){
+                curSmlNode.next = curr;
+                curSmlNode = curr;
+            }else{//else you will add it to linked list of bigs or equals
+                curEgNode.next = curr;
+                curEgNode = curr;
+            }
+            curr = next;
+        }
+        //at last you will joining the last node of small linked list to the first node of linked list bigs or equals
+        curSmlNode.next = dummyHeadEg.next;
+//and you will return the the first node of small linked list        
+        return dummyHeadSml.next;
+    }
+}
