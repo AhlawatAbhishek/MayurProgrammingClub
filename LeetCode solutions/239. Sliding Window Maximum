@@ -1,0 +1,75 @@
+---------------------------------------CODE WITHOUT COMMENTS------------------------------------------------------------------------------------
+----------------------------------------------Java-----------------------------------------
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        Deque<Integer> deq = new ArrayDeque<>();
+        int sz = nums.length, result[] = new int[sz - k + 1], idx = 0;
+        for(int indx = 0; indx < sz; indx++){
+            int currNum = nums[indx];
+            while(!deq.isEmpty() && deq.peekLast() < indx - k + 1){
+               deq.pollLast();
+            }
+            while(!deq.isEmpty() && nums[deq.peekFirst()] < currNum){
+               deq.pollFirst();
+            }
+            deq.offerFirst(indx);
+            if(indx + 1 >= k){
+                result[idx++] = nums[deq.peekLast()];  
+            }
+        }
+        return result;
+    }
+}
+-----------------------------------------C++---------------------------------------------
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> deq;
+        int sz = nums.size(), idx = 0;
+        vector<int> result(sz - k + 1, 0);
+        for(int indx = 0; indx < sz; indx++){
+            int currNum = nums[indx];
+            while(!deq.empty() && deq.back() < indx - k + 1){
+               deq.pop_back();
+            }
+            while(!deq.empty() && nums[deq.front()] < currNum){
+               deq.pop_front();
+            }
+            deq.push_front(indx);
+            if(indx + 1 >= k){
+                result[idx++] = nums[deq.back()];  
+            }
+        }
+        return result;
+    }
+};
+
+
+-----------------------------------------------------CODE WITH COMMENTS-----------------------------------------------------------------------------------------
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        //we will use the deque to store the indicies of the elements in the given array
+        //we are using indices to facilitate the removal of elements indices from the windows as it moves from very left to very right of the given array
+        Deque<Integer> deq = new ArrayDeque<>();
+        int sz = nums.length, result[] = new int[sz - k + 1], idx = 0;//this pointer will be used to populate the result array
+        for(int indx = 0; indx < sz; indx++){
+            int currNum = nums[indx];
+            //if the left most index in the window is no longer part of the window, which window has moved one position ahead, then you will delete that left most index to make room for the new index to be added in the window
+            while(!deq.isEmpty() && deq.peekLast() < indx - k + 1){
+               deq.pollLast();
+            }
+            //till the value at front index of the current window is less than the currNum then will keep removing those indicies
+            while(!deq.isEmpty() && nums[deq.peekFirst()] < currNum){
+               deq.pollFirst();
+            }
+            //add the index of the current element
+            deq.offerFirst(indx);
+            //if the size of window is k currently
+            if(indx + 1 >= k){
+                //the index of the number at the end of the windows will be maximum
+                result[idx++] = nums[deq.peekLast()];  
+            }
+        }
+        return result;
+    }
+}
