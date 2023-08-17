@@ -1,0 +1,61 @@
+------------------------------------------------------------------CODE WITHOUT COMMENTS--------------------------------------------------------------
+------------------------------------C++-----------------------------
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int maxDist = 10004;
+        int rows = mat.size(), cols = mat[0].size();
+        vector<vector<int>> dist(rows, vector<int>(cols));
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(mat[r][c] == 1){
+                   int prevStateDis = min((r - 1 > -1) ? dist[r-1][c] : maxDist, (c-1 > -1) ? dist[r][c-1] : maxDist);
+                   dist[r][c] = prevStateDis + 1;
+                }
+            }
+        }
+
+        for(int r = rows -1; r > -1; r--){
+            for(int c = cols - 1; c > -1; c--){
+                if(mat[r][c] == 1){
+
+                    int prevStateDis =  min((r+1 < rows) ? dist[r+1][c] : maxDist, (c + 1 < cols) ? dist[r][c+1] : maxDist);
+                    dist[r][c] = min(dist[r][c], 1  + prevStateDis);
+                }
+            }
+        }
+        return dist;
+    }
+};
+
+
+-------------------------------------------------------------Java---------------------------------------------------------
+class Solution {
+    public int[][] updateMatrix(int[][] mat) {
+        int maxDist = 10004;
+        int rows = mat.length, cols = mat[0].length;
+        int dist[][] = new int[rows][cols];
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(mat[r][c] == 1){
+                   int prevStateDis = Math.min((r - 1 > -1) ? dist[r-1][c] : maxDist, (c-1 > -1) ? dist[r][c-1] : maxDist);
+                   dist[r][c] = prevStateDis + 1;
+                }
+            }
+        }
+
+        for(int r = rows -1; r > -1; r--){
+            for(int c = cols - 1; c > -1; c--){
+                if(mat[r][c] == 1){
+
+                    int prevStateDis =  Math.min((r+1 < rows) ? dist[r+1][c] : maxDist, (c + 1 < cols) ? dist[r][c+1] : maxDist);
+                    dist[r][c] = Math.min(dist[r][c], 1  + prevStateDis);
+                }
+            }
+        }
+        return dist;
+    }
+}
+
+
+------------------------------------------------------------------CODE WITH COMMENTS--------------------------------------------------------------
