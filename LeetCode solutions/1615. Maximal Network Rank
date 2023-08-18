@@ -1,0 +1,80 @@
+------------------------------------------------------------CODE WITHOUT COMMENTS-----------------------------------------------------------------------------
+-----------------------------------C++---------------------------------------------------------------
+class Solution {
+public:
+    int maximalNetworkRank(int n, vector<vector<int>>& roads) {
+        unordered_map<int, int> connScore;
+        unordered_map<int, unordered_set<int>>graph;
+        for(auto & cityPr : roads){
+            graph[cityPr[0]].insert(cityPr[1]);
+            graph[cityPr[1]].insert(cityPr[0]);
+            connScore[cityPr[0]]++;
+            connScore[cityPr[1]]++;
+        }
+        vector<int> nRank;
+        for(int ct1 = 0; ct1 < n; ct1++){
+            for(int ct2 = ct1 + 1; ct2 < n; ct2++){
+               int rank =  connScore[ct1] + connScore[ct2] - ((graph.find(ct1) != graph.end() && graph[ct1].count(ct2) > 0) ? 1 : 0);  
+               nRank.push_back(rank);
+            }
+        }
+        sort(nRank.begin(), nRank.end(), greater<int>());         
+        return nRank[0];
+    }
+};
+-----------------------------------Java--------------------------------------------------------------
+class Solution {
+    public int maximalNetworkRank(int n, int[][] roads) {
+        Map<Integer, Integer> connScore = new HashMap<>();
+        Map<Integer, Set<Integer>>graph = new HashMap<>();
+        for(var cityPr : roads){
+            graph.putIfAbsent(cityPr[0],new HashSet<>());
+            graph.putIfAbsent(cityPr[1], new HashSet<>());
+            graph.get(cityPr[0]).add(cityPr[1]);
+            graph.get(cityPr[1]).add(cityPr[0]);
+            connScore.put(cityPr[0], connScore.getOrDefault(cityPr[0], 0)+1);
+            connScore.put(cityPr[1], connScore.getOrDefault(cityPr[1], 0)+1);
+        }
+        for(int city = 0; city < n; city++){
+            connScore.putIfAbsent(city, 0);
+        }
+        List<Integer> nRank = new ArrayList<>(); 
+        for(int ct1 = 0; ct1 < n; ct1++){
+            for(int ct2 = ct1 + 1; ct2 < n; ct2++){
+               int rank =  connScore.get(ct1) + connScore.get(ct2) - ((graph.containsKey(ct1) && graph.get(ct1).contains(ct2)) ? 1 : 0);  
+               nRank.add(rank);
+            }
+        }
+        Collections.sort(nRank, Collections.reverseOrder());         
+        return nRank.get(0);
+    }
+}
+
+------------------------------------------------------------CODE WITH COMMENTS-----------------------------------------------------------------------------
+class Solution {
+public:
+    int maximalNetworkRank(int n, vector<vector<int>>& roads) {
+        unordered_map<int, int> connScore;//how many cities are directly connected to a particular city
+        unordered_map<int, unordered_set<int>>graph;//to represent connection between cities
+        for(auto & cityPr : roads){
+            //for showing / representing the bidrectional edge or say bi directional road between two cities
+            graph[cityPr[0]].insert(cityPr[1]);
+            graph[cityPr[1]].insert(cityPr[0]);
+            //for earch of cities in roads array we will be increasing connection score for both of the cities
+            connScore[cityPr[0]]++;
+            connScore[cityPr[1]]++;
+        }
+        //this the array or say vector in which the calculated ranks for each pair of cities will be stored
+        vector<int> nRank;
+        //we will be calculating rank of each pair of cities and then we be returning max of them
+        for(int ct1 = 0; ct1 < n; ct1++){
+            for(int ct2 = ct1 + 1; ct2 < n; ct2++){
+               int rank =  connScore[ct1] + connScore[ct2] - ((graph.find(ct1) != graph.end() && graph[ct1].count(ct2) > 0) ? 1 : 0);  
+               nRank.push_back(rank);
+            }
+        }
+        //sort the ranks in descending order
+        sort(nRank.begin(), nRank.end(), greater<int>());         
+        return nRank[0];
+    }
+};
