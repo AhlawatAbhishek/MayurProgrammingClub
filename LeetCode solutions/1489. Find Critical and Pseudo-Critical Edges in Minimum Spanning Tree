@@ -1,0 +1,320 @@
+-----------------------------------------------------------------CODE WITHOUT COMMENTS-------------------------------------------------------
+--------------------------------Java--------------------------------
+class Solution {   
+    private class DSU{
+        private Integer parent[] = null, rank[] = null;
+        public int maxSize;
+        public DSU(int size){
+            parent = new Integer[size];
+            rank = new Integer[size];
+            Arrays.fill(rank, 1);
+            maxSize = 0;
+            for(int vert = 0; vert < size; vert++){
+                parent[vert] = vert;
+            }
+
+        }
+        public int find(int vert){
+            if(parent[vert] == vert) return vert;
+            return parent[vert] = find(parent[vert]);
+        }
+        void join(int vert1, int vert2){
+            int rep1 = find(vert1);
+            int rep2 = find(vert2);
+            if(rep1 != rep2){
+                int rank1 = rank[rep1], rank2 = rank[rep2];
+                if(rank1 < rank2){
+                    swap(rep1, rep2);
+                }
+                parent[rep2] = rep1;
+                rank[rep1] += rank[rep2];
+                maxSize = Math.max(maxSize, rank[rep1]);
+            }
+        }
+    }       
+    private void swap(int val1, int val2){
+        int temp = val1;
+        val1 = val2;
+        val2 = temp;
+    }       
+   public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n, int[][] edges) {
+        int sz = edges.length;
+        int[][] egWithIndx = new int[sz][4];
+        for(int indx = 0; indx < sz; indx++){
+            egWithIndx[indx][0] = edges[indx][0];
+            egWithIndx[indx][1] = edges[indx][1];
+            egWithIndx[indx][2] = edges[indx][2];
+            egWithIndx[indx][3] = indx;
+        }
+        Arrays.sort(egWithIndx, (a, b)->(a[2] - b[2]));
+
+        DSU ogMST = new DSU(n);
+        int ogWt = 0;
+
+        for(int eIndx = 0; eIndx < sz; eIndx++){
+            int []eg = egWithIndx[eIndx];
+            if(ogMST.find(eg[0]) != ogMST.find(eg[1])){
+                ogMST.join(eg[0], eg[1]);
+                ogWt += eg[2];
+            }    
+        }
+
+        List<List<Integer>> result = new ArrayList<>();
+        result.add(new ArrayList<>());
+        result.add(new ArrayList<>());
+        for(int eIndx = 0; eIndx < sz; eIndx++){
+            DSU newSpT = new DSU(n);
+            int newWt = 0;
+            for(int newEg = 0; newEg < sz; newEg++){
+                if(newEg == eIndx)continue;
+                int eg[] = egWithIndx[newEg];
+                if(newSpT.find(eg[0]) != newSpT.find(eg[1])){
+                    newSpT.join(eg[0], eg[1]);
+                    newWt += eg[2];
+                }    
+            }
+            if(newSpT.maxSize < n || newWt > ogWt){
+                int eg[] = egWithIndx[eIndx];
+                result.get(0).add(eg[3]);
+            }else{
+                DSU newSpT1 = new DSU(n);
+                newSpT1.join(egWithIndx[eIndx][0], egWithIndx[eIndx][1]);
+                int newWt1 = egWithIndx[eIndx][2];
+                for(int newEg = 0; newEg < sz; newEg++){
+                    if(newEg == eIndx)continue;
+                    int []eg = egWithIndx[newEg];
+                    if(newSpT1.find(eg[0]) != newSpT1.find(eg[1])){
+                        newSpT1.join(eg[0], eg[1]);
+                        newWt1 += eg[2];
+                    }    
+                }
+                if(newSpT1.maxSize == n && newWt1 == ogWt){
+                    int []eg = egWithIndx[eIndx];
+                    result.get(1).add(eg[3]);
+                }
+            }
+
+        }
+        return result;  
+    }
+}
+
+----------------------------------------------C++-------------------------------------------------------------------
+class Solution {
+private: 
+class DSU{
+private:
+        vector<int> parent, rank;
+public: 
+        int maxSize;
+        DSU(int size){
+            maxSize = 0;
+            parent.resize(size);
+            rank.resize(size, 1);
+            for(int vert = 0; vert < size; vert++){
+                parent[vert] = vert;
+            }
+        }
+public:
+   int find(int vert){
+       if(parent[vert] == vert) return vert;
+       return parent[vert] = find(parent[vert]);
+   }
+   void join(int vert1, int vert2){
+       int rep1 = find(vert1);
+       int rep2 = find(vert2);
+       if(rep1 != rep2){
+           int rank1 = rank[rep1], rank2 = rank[rep2];
+           if(rank1 < rank2){
+               swap(rep1, rep2);
+           }
+           parent[rep2] = rep1;
+           rank[rep1] += rank[rep2];
+           maxSize = max(maxSize, rank[rep1]);
+       }
+   }  
+        
+};    
+public:
+    
+    vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>>& edges) {
+        int sz = edges.size();
+        vector<vector<int>> egWithIndx(sz, vector<int>(4));
+        for(int indx = 0; indx < sz; indx++){
+            egWithIndx[indx] = edges[indx];
+            egWithIndx[indx].push_back(indx);
+        }
+        sort(egWithIndx.begin(), egWithIndx.end(), [](const vector<int> & eg1, vector<int>& eg2)->bool{
+            return eg1[2] < eg2[2];
+        });
+        DSU ogMST(n);
+        int ogWt = 0;
+        for(int eIndx = 0; eIndx < sz; eIndx++){
+            vector<int> &eg = egWithIndx[eIndx];
+            if(ogMST.find(eg[0]) != ogMST.find(eg[1])){
+                ogMST.join(eg[0], eg[1]);
+                ogWt += eg[2];
+            }    
+        }
+        cout<<"ogWt "<<ogWt<<endl;
+
+        vector<vector<int>> result(2);
+        for(int eIndx = 0; eIndx < sz; eIndx++){
+            auto &eg = egWithIndx[eIndx];
+            DSU newSpT(n);
+            int newWt = 0;
+            for(int newEg = 0; newEg < sz; newEg++){
+                if(newEg == eIndx)continue;
+                vector<int> &eg = egWithIndx[newEg];
+                if(newSpT.find(eg[0]) != newSpT.find(eg[1])){
+                    newSpT.join(eg[0], eg[1]);
+                    newWt += eg[2];
+                }    
+            }
+            if(newSpT.maxSize < n || newWt > ogWt){
+                result[0].push_back(eg[3]);
+                cout<<"maxSize"<<newSpT.maxSize<<" newWt "<<newWt<<endl;
+            }else{
+                DSU newSpT1(n);
+                vector<int> &eg = egWithIndx[eIndx];
+                newSpT1.join(eg[0], eg[1]);
+                int newWt1 = eg[2];
+                for(int newEg = 0; newEg < sz; newEg++){
+                    if(newEg == eIndx)continue;
+                    vector<int> &eg = egWithIndx[newEg];
+                    if(newSpT1.find(eg[0]) != newSpT1.find(eg[1])){
+                        newSpT1.join(eg[0], eg[1]);
+                        newWt1 += eg[2];
+                    }    
+                }
+                if(newSpT1.maxSize == n && newWt1 == ogWt){
+                    result[1].push_back(eg[3]);
+                }
+            }
+
+        }
+        return result;
+    }
+};
+-----------------------------------------------------------------CODE WITH COMMENTS-------------------------------------------------------
+class Solution {
+private: 
+//path compression and union by rank
+class DSU{
+private:
+        vector<int> parent, rank;
+public: 
+        int maxSize;
+        DSU(int size){
+            maxSize = 0;
+            parent.resize(size);
+            rank.resize(size, 1);
+            for(int vert = 0; vert < size; vert++){
+                parent[vert] = vert;
+            }
+        }
+public:
+   int find(int vert){
+       if(parent[vert] == vert) return vert;
+       return parent[vert] = find(parent[vert]);
+   }
+   void join(int vert1, int vert2){
+       int rep1 = find(vert1);
+       int rep2 = find(vert2);
+       if(rep1 != rep2){
+           int rank1 = rank[rep1], rank2 = rank[rep2];
+           if(rank1 < rank2){
+               swap(rep1, rep2);
+           }
+           parent[rep2] = rep1;
+           rank[rep1] += rank[rep2];
+           maxSize = max(maxSize, rank[rep1]);
+       }
+   }  
+        
+};    
+public:
+    
+    vector<vector<int>> findCriticalAndPseudoCriticalEdges(int n, vector<vector<int>>& edges) {
+        int sz = edges.size();
+        //we will form a new 2d array or say vector for preserving the index of the edge so that we can return it as our answer
+        vector<vector<int>> egWithIndx(sz, vector<int>(4));
+        for(int indx = 0; indx < sz; indx++){
+            egWithIndx[indx] = edges[indx];
+            egWithIndx[indx].push_back(indx);
+        }
+        // for(auto &vc : egWithIndx){
+        //     cout<<vc[0]<<" "<<vc[1]<<" "<<vc[2]<<" "<<vc[3]<<endl;
+        // }
+        // cout<<endl;
+        
+
+        //sort the edges according to their weights in increasing order
+        sort(egWithIndx.begin(), egWithIndx.end(), [](const vector<int> & eg1, vector<int>& eg2)->bool{
+            return eg1[2] < eg2[2];
+        });
+        // for(auto &vc : egWithIndx){
+        //     cout<<vc[0]<<" "<<vc[1]<<" "<<vc[2]<<" "<<vc[3]<<endl;
+        // }
+        // cout<<endl;
+
+
+        //you will form a MST and check it's weight with help of kruskal's Algo
+        DSU ogMST(n);
+        int ogWt = 0;
+        //calculating minimum weight of min spanning tree of the graph
+        for(int eIndx = 0; eIndx < sz; eIndx++){
+            vector<int> &eg = egWithIndx[eIndx];
+            if(ogMST.find(eg[0]) != ogMST.find(eg[1])){
+                ogMST.join(eg[0], eg[1]);
+                ogWt += eg[2];
+            }    
+        }
+        // cout<<"ogWt "<<ogWt<<endl;
+        //populating the result 2d array or say vector
+        vector<vector<int>> result(2);
+       //for each edge you will check if it is critical or pseudo critical edge 
+        for(int eIndx = 0; eIndx < sz; eIndx++){
+            auto &eg = egWithIndx[eIndx];
+            //checking for the critical edge by trying to remove it from the minimum spanning tree
+            //if it's critical then it will result in disconnected spanning tree or increase in the weight of the min spanning tree
+            DSU newSpT(n);
+            int newWt = 0;
+            for(int newEg = 0; newEg < sz; newEg++){
+                if(newEg == eIndx)continue;
+                vector<int> &eg = egWithIndx[newEg];
+                if(newSpT.find(eg[0]) != newSpT.find(eg[1])){
+                    newSpT.join(eg[0], eg[1]);
+                    newWt += eg[2];
+                }    
+            }
+            if(newSpT.maxSize < n || newWt > ogWt){// in these cases the edge will be a critical edge
+                result[0].push_back(eg[3]);
+                // cout<<"maxSize"<<newSpT.maxSize<<" newWt "<<newWt<<endl;
+            }else{//it that's not the case check if it is pseudo critical edge
+
+            
+
+                //checking for pseudo-critical edges involves forming a MST with the current edge and all other remaining edges and then checking if the weight remains same and MST does not become disconnected
+                DSU newSpT1(n);
+                vector<int> &eg = egWithIndx[eIndx];
+                newSpT1.join(eg[0], eg[1]);
+                int newWt1 = eg[2];
+                for(int newEg = 0; newEg < sz; newEg++){
+                    if(newEg == eIndx)continue;
+                    vector<int> &eg = egWithIndx[newEg];
+                    if(newSpT1.find(eg[0]) != newSpT1.find(eg[1])){
+                        newSpT1.join(eg[0], eg[1]);
+                        newWt1 += eg[2];
+                    }    
+                }
+                //
+                if(newSpT1.maxSize == n && newWt1 == ogWt){// this condition satisfies then the edge is pseudo - critical edge.
+                    result[1].push_back(eg[3]); // we are storing the index of the edge in the result array
+                }
+            }
+
+        }
+        return result;
+    }
+};
