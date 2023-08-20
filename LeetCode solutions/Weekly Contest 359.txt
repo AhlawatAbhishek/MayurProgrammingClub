@@ -1,0 +1,212 @@
+-------------------------------------------------1-----------------------------------------------------
+C++
+---------------------------
+class Solution {
+public:
+    bool isAcronym(vector<string>& words, string s) {
+        string res = "";
+        //for each word in the words array, we will be taking it's first letter and forming acronym
+        for(auto & w : words){
+            res += w[0];
+        }
+        //at last we will check if our acronym matches with 's', which is the give acronym
+        return res == s;
+    }
+};
+Java
+-----------------------------------
+class Solution {
+    public int minimumSum(int n, int k) {
+         List<Integer> arr = new ArrayList<>();
+        //set to check for the elements present in 'k' avoid array till a particular point or say number in O(1) time
+        Set<Integer> unq = new HashSet<>();
+        for(int num = 1; num <= 10000; num++){
+            //we will add the current number 'num' in the array if the number is not forming a pair with any other number present in the 'k' avoiding array till now
+            if(!unq.contains(k - num)){
+                arr.add(num);
+                unq.add(num);
+            }
+            if(arr.size() == n)break;
+        }
+        //at last we will return the sum of the 'k' avoiding array
+        int sum  = arr.stream().mapToInt(a -> a).sum();
+
+        return sum;
+    }
+}
+
+-------------------------------------------------------------------------------2----------------------------------------------------
+C++
+--------------------------------------
+class Solution {
+public:
+    int minimumSum(int n, int k) {
+        vector<int> arr;
+        //set to check for the elements present in 'k' avoid array till a particular point or say number in O(1) time
+        unordered_set<int> unq;
+        for(int num = 1; num <= 10000; num++){
+            //we will add the current number 'num' in the array if the number is not forming a pair with any other number present in the 'k' avoiding array till now
+            if(!unq.count(k - num)){
+                arr.push_back(num);
+                unq.insert(num);
+            }
+            if(arr.size() == n)break;
+        }
+        //at last we will return the sum of the 'k' avoiding array
+        int sum = accumulate(arr.begin(), arr.end(), 0);
+        return sum;
+        
+    }
+};
+-----------------
+Java
+---------------------------
+class Solution {
+    public int minimumSum(int n, int k) {
+         List<Integer> arr = new ArrayList<>();
+        //set to check for the elements present in 'k' avoid array till a particular point or say number in O(1) time
+        Set<Integer> unq = new HashSet<>();
+        for(int num = 1; num <= 10000; num++){
+            //we will add the current number 'num' in the array if the number is not forming a pair with any other number present in the 'k' avoiding array till now
+            if(!unq.contains(k - num)){
+                arr.add(num);
+                unq.add(num);
+            }
+            if(arr.size() == n)break;
+        }
+        //at last we will return the sum of the 'k' avoiding array
+        int sum  = arr.stream().mapToInt(a -> a).sum();
+
+        return sum;
+    }
+}
+--------------------------------------------------------------3---------------------------------------------------------------------
+C++
+-----------------------------------
+class Solution {
+public:
+    int maximizeTheProfit(int n, vector<vector<int>>& offers) {
+        //profit according to end points of the range's of offers made by the buyers i.e. till a particular house index
+        vector<int> profit(1e5+1, 0);//max profit's till a particular house index 
+        //deals or say offers made by the buyers ending at a particular house Index.
+        vector<pair<int, int>> deals[100001];
+        for(auto &of : offers){
+            //for the current deal ending at the house index of[1], which nothing but the end point of the range of number of houses of the current buyers interset
+                                    //start of the range of offer            
+            deals[of[1]].push_back(make_pair(of[0], of[2]));
+                                                    //profit a particular offer will provide
+        }
+        //we will be calculating the max profit that can be made by considering all the deals or offers whose end points lie on or before a particular house index or say house number
+        for(int hIndx = 0; hIndx < n; hIndx++){
+            
+               
+                //for each deal ending at hIndx i.e. house with index hIndx, do the following:
+                //either exclude the current deal and take the previous profits till now 
+                //or take the current deal's and the previous deal's profit whose range's 'end' doesn't coincide with the current deal's range's 'start' that we have decided to take.
+
+                //this if you decide not to take the current deals ending at 'hIndx'
+                profit[hIndx] = (hIndx != 0) ? profit[hIndx - 1] : 0; 
+                //which ever of the option gives you maximum value take that option
+               for(auto &currDeal : deals[hIndx])
+                profit[hIndx] = max(profit[hIndx], currDeal.second + ((currDeal.first == 0) ? 0 : profit[currDeal.first - 1]));
+            
+        }
+        //the you will return the profit at the (n-1)th house
+        return profit[n-1];
+    }
+};
+-------------------------------
+Java
+------------------------------------
+class Solution {
+    public int maximizeTheProfit(int n, List<List<Integer>> offers) {
+        //profit according to end points of the range's of offers made by the buyers i.e. till a particular house index
+        int []profit = new int[100001];//max profit's till a particular house index 
+        //deals or say offers made by the buyers ending at a particular house Index.
+        List<Pair<Integer, Integer>> deals[] = new ArrayList[100001];
+        for(int indx = 0; indx < 100001; indx++){
+            deals[indx] = new ArrayList<>();
+        }
+        for(var of : offers){
+            //for the current deal ending at the house index of[1], which nothing but the end point of the range of number of houses of the current buyers interset
+                                    //start of the range of offer            
+            deals[of.get(1)].add(new Pair<Integer, Integer>(of.get(0), of.get(2)));
+                                                    //profit a particular offer will provide
+        }
+        //we will be calculating the max profit that can be made by considering all the deals or offers whose end points lie on or before a particular house index or say house number
+        for(int hIndx = 0; hIndx < n; hIndx++){
+            
+               
+                //for each deal ending at hIndx i.e. house with index hIndx, do the following:
+                //either exclude the current deal and take the previous profits till now 
+                //or take the current deal's and the previous deal's profit whose range's 'end' doesn't coincide with the current deal's range's 'start' that we have decided to take.
+
+                //this if you decide not to take the current deals ending at 'hIndx'
+                profit[hIndx] = (hIndx != 0) ? profit[hIndx - 1] : 0; 
+                //which ever of the option gives you maximum value take that option
+               for(var currDeal : deals[hIndx])
+                profit[hIndx] = Math.max(profit[hIndx], currDeal.getValue() + ((currDeal.getKey() == 0) ? 0 : profit[currDeal.getKey() - 1]));
+            
+        }
+        //the you will return the profit at the (n-1)th house
+        return profit[n-1]; 
+    }
+}
+---------------------------------------------------------------------4--------------------------------------------------------
+C++
+---------------------
+class Solution {
+public:
+    int longestEqualSubarray(vector<int>& nums, int k) {
+        //this is to store the indicies at which a particular element occurs in the given input array. Indicies will stored in ascending order as we traverse the input array
+        unordered_map<int, vector<int>> numIndx;
+        int sz = nums.size();
+        //storing the indices at which each element occurs in the given input array
+        for(int indx = 0; indx < sz; indx++){
+            numIndx[nums[indx]].push_back(indx);
+        }
+        //this length of max length sub array which will be fromed by making at most 'k' deletion in a sub array of the input array
+        int maxCnt = 0;
+        for(auto &pr : numIndx){
+            //for a element this vector or say array will contain all the indicies of it's occurence in the input array
+            auto &indVc = pr.second;
+            //we will make use of two pointer technique which will sliding window to calculate the maxLen of the sub array
+            int left = 0;
+            for(int right = 0; right < indVc.size(); right++){
+                //sliding window technique
+                while(indVc[right] - indVc[left] + 1 - (right - left + 1) > k)left++;
+                maxCnt = max(maxCnt, right - left + 1);
+            }
+        }
+        return maxCnt;
+    }
+};
+-----------------------
+Java
+-------------------------
+class Solution {
+    public int longestEqualSubarray(List<Integer> nums, int k) {
+         //this is to store the indicies at which a particular element occurs in the given input array. Indicies will stored in ascending order as we traverse the input array
+        Map<Integer, List<Integer>> numIndx = new HashMap<>();
+        int sz = nums.size();
+        //storing the indices at which each element occurs in the given input array
+        for(int indx = 0; indx < sz; indx++){
+            numIndx.putIfAbsent(nums.get(indx), new ArrayList<>());
+            numIndx.get(nums.get(indx)).add(indx);
+        }
+        //this length of max length sub array which will be fromed by making at most 'k' deletion in a sub array of the input array
+        int maxCnt = 0;
+        for(var pr : numIndx.entrySet()){
+            //for a element this vector or say array will contain all the indicies of it's occurence in the input array
+            var indVc = pr.getValue();
+            //we will make use of two pointer technique which will sliding window to calculate the maxLen of the sub array
+            int left = 0;
+            for(int right = 0; right < indVc.size(); right++){
+                //sliding window technique
+                while(indVc.get(right) - indVc.get(left) + 1 - (right - left + 1) > k)left++;
+                maxCnt = Math.max(maxCnt, right - left + 1);
+            }
+        }
+        return maxCnt;
+    }
+}
