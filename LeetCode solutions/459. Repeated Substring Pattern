@@ -1,0 +1,26 @@
+----------------------------------------------------------CODE WITHOUT COMMENTS----------------------------------------------------------------
+-------------------Java--------------------------------
+class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+       String bigStr = s + s;
+       return bigStr.substring(1, bigStr.length()-1).indexOf(s) != -1;
+    }
+}
+--------------------C++----------------------------------
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+       string bigStr = s + s;
+       return bigStr.substr(1, bigStr.length()-2).find(s) != -1;
+    }
+};
+-------------------------------------------------------CODE WITH COMMENTS-----------------------------------------------------------------------
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+       //form a big by append the given string two times in a empty string
+       string bigStr = s + s;
+       //and then eliminate the first and last characters of the bigString, in order to eliminate the possiblity of getting the two parts that formed the bigString originally
+       return bigStr.substr(1, bigStr.length()-2).find(s) != -1;
+    }
+};
