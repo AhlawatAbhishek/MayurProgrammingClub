@@ -1,0 +1,46 @@
+----------------------------------------------------------------C++-------------------------------------------------------------------
+class Solution {
+public:
+    string convertToTitle(int cNum) {
+        string res = "";
+        
+        //the title will be fromed from right to left fashion
+        while(cNum > 0){
+            cNum--; 
+         
+            int letterDistFromA = cNum % 26;
+            
+            cNum /= 26;
+            
+            res += ((char)('A' + letterDistFromA));
+        }
+        //since the tile is formed from right to left fashion, we will reverse the title
+        reverse(res.begin(), res.end());
+        
+        //and at last we will return the title
+        return res;
+    }
+};
+-----------------------------------------------------------------------Java---------------------------------------------------
+class Solution {
+    public String convertToTitle(int cNum) {
+        //title for the column number cNum
+        StringBuilder res = new StringBuilder();
+        
+        //the title will be fromed from right to left fashion
+        while(cNum > 0){
+            cNum--; 
+         
+            int letterDistFromA = cNum % 26;
+            
+            cNum /= 26;
+            
+            res.append((char)('A' + letterDistFromA));
+        }
+        //since the tile is formed from right to left fashion, we will reverse the title
+        res.reverse();
+        
+        //and at last we will return the title
+        return res.toString();
+    }
+}
