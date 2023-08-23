@@ -1,0 +1,137 @@
+-----------------------------------------------CODE WITHOUT COMMENTS--------------------------------------------------------------------------------------------------
+---------Java---------------------------
+class Solution {
+    public String reorganizeString(String s) {
+        int chrs[] = new int[26];
+        for(var chr : s.toCharArray()){
+            chrs[chr- 'a']++;
+        }
+        PriorityQueue<Pair<Integer, Character>> maxFreq = new PriorityQueue<>((a, b)->(b.getKey() - a.getKey()));
+        for(int indx = 0; indx < 26; indx++){
+            if(chrs[indx] != 0){
+               maxFreq.offer(new Pair<Integer, Character>(chrs[indx], (char)(indx + 'a')));
+            }
+        }
+        StringBuilder res  = new StringBuilder();
+        while(maxFreq.size() >= 2){
+            var freqPr1 = maxFreq.poll();
+            var freqPr2 = maxFreq.poll();
+            int freq1 = freqPr1.getKey(), 
+            freq2 = freqPr2.getKey();
+            res.append(freqPr1.getValue());
+            res.append(freqPr2.getValue());
+            if(freq1-1 > 0){
+               maxFreq.offer(new Pair<Integer, Character>(freq1-1, freqPr1.getValue()));
+            }
+            if(freq2 - 1 > 0){
+                maxFreq.offer(new Pair<Integer, Character>(freq2 - 1, freqPr2.getValue()));
+            }
+
+        }
+        if(maxFreq.size() > 0){
+            var freqPr = maxFreq.poll();
+            if(freqPr.getKey() > 1){
+                return "";
+            }
+            res.append(freqPr.getValue());
+        }
+        return res.toString();
+    }
+}
+----------------------------C++----------------------------------
+class Solution {
+public:
+    string reorganizeString(string s) {
+        vector<int> chrs(26, 0);
+
+        for(auto chr : s){
+            chrs[chr- 'a']++;
+    
+        }
+        priority_queue<pair<int, char>> maxFreq;
+        for(int indx = 0; indx < 26; indx++){
+            if(chrs[indx] != 0){
+                
+               maxFreq.push(make_pair(chrs[indx], (char)(indx + 'a')));
+            }
+        }
+        
+        string res  = "";
+        while(maxFreq.size() >= 2){
+            auto freqPr1 = maxFreq.top();
+            // cout<<freqPr1.first<<endl;
+            maxFreq.pop();
+            auto freqPr2 = maxFreq.top();
+            // cout<<freqPr2.first<<endl;
+            maxFreq.pop();
+            int freq1 = freqPr1.first, 
+            freq2 = freqPr2.first;
+            res += (freqPr1.second);
+            res += (freqPr2.second);
+            if(freq1-1 > 0){
+               maxFreq.push(make_pair(freq1-1, freqPr1.second));
+            }
+            if(freq2 - 1 > 0){
+                maxFreq.push(make_pair(freq2 - 1, freqPr2.second));
+            }
+
+        }
+        if(maxFreq.size() > 0){
+            auto freqPr = maxFreq.top();
+            if(freqPr.first > 1){
+                return "";
+            }
+            res += (freqPr.second);
+        }
+        return res;
+    }
+};
+
+-----------------------------------------------CODE WITH COMMENTS-----------------------------------------------------------------------------------------------------
+class Solution {
+    public String reorganizeString(String s) {
+        //this array we are using to store the frequencies of the characters in the string
+        int chrs[] = new int[26];
+        for(var chr : s.toCharArray()){
+            chrs[chr- 'a']++;
+        }
+        //this is the max heap in which (freq, char) pairs will be stored  in descreasing order of their frequencies
+        PriorityQueue<Pair<Integer, Character>> maxFreq = new PriorityQueue<>((a, b)->(b.getKey() - a.getKey()));
+        for(int indx = 0; indx < 26; indx++){
+            if(chrs[indx] != 0){
+            //you will be adding (freq, char) pairs to maxHeap
+               maxFreq.offer(new Pair<Integer, Character>(chrs[indx], (char)(indx + 'a')));
+            }
+        }
+        //and then you will be building your string
+        StringBuilder res  = new StringBuilder();
+        while(maxFreq.size() >= 2){
+            //till there are greater than or equal to 2 (freq, char) pairs in the heap you will repeat this process
+
+            //you will take top 2 freq characters from the heap and append them and them append the string formed to resultant string
+            var freqPr1 = maxFreq.poll();
+            var freqPr2 = maxFreq.poll();
+            int freq1 = freqPr1.getKey(), 
+            freq2 = freqPr2.getKey();
+            res.append(freqPr1.getValue());
+            res.append(freqPr2.getValue());
+            //if there are still occurences left of these two characters then you will again add them to the heap
+            if(freq1-1 > 0){
+               maxFreq.offer(new Pair<Integer, Character>(freq1-1, freqPr1.getValue()));
+            }
+            if(freq2 - 1 > 0){
+                maxFreq.offer(new Pair<Integer, Character>(freq2 - 1, freqPr2.getValue()));
+            }
+
+        }
+        //if at last a single (freq, char) pair is remaining then you will check whether the freq of the last character remaining is 1 or not
+        if(maxFreq.size() > 0){
+            var freqPr = maxFreq.poll();
+            if(freqPr.getKey() > 1){
+                return "";
+            }
+            res.append(freqPr.getValue());
+        }
+        return res.toString();
+    }
+}
