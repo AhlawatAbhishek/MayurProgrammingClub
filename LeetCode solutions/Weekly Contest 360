@@ -1,0 +1,202 @@
+---------------------------------------------------------------------1----------------------------------------------------------------------------------------
+-------------------------------------C++-----------------------------------------------------
+class Solution {
+public:
+    int furthestDistanceFromOrigin(string mv) {
+        vector<char> moves;
+        for(auto m : mv){
+            moves.push_back(m);
+        }
+        int lC = count(moves.begin(), moves.end(), 'L');
+        int rC = count(moves.begin(), moves.end(), 'R');
+        int blank = count(moves.begin(), moves.end(), '_');
+        return abs(lC  - rC) + blank;
+
+    }
+};
+-------------------------------------Java----------------------------------------------------
+class Solution {
+public:
+    int furthestDistanceFromOrigin(string mv) {
+        vector<char> moves;
+        for(auto m : mv){
+            moves.push_back(m);
+        }
+        int lC = count(moves.begin(), moves.end(), 'L');
+        int rC = count(moves.begin(), moves.end(), 'R');
+        int blank = count(moves.begin(), moves.end(), '_');
+        return abs(lC  - rC) + blank;
+
+    }
+};
+---------------------------------------------------------------------2----------------------------------------------------------------------------------------
+-------------------------------------C++-----------------------------------------------------
+class Solution {
+public:
+    long long minimumPossibleSum(int n, int target) {
+        int sz = 0;
+        long long sum = 0;
+        unordered_set<long long> taken;
+        for(long long num = 1; num <= 1e9+7; num++){
+            //if the current number can form a pair which already taken number with sum equal target then current number will be ingnored else the current number will be taken
+            if(!taken.count(target - num)){
+                taken.insert(num);
+                sum += num;
+                sz++;
+            }
+            if(sz == n)return sum;
+        }
+        return 0;
+    }
+};
+-------------------------------------Java----------------------------------------------------
+class Solution {
+    public long minimumPossibleSum(int n, int target) {
+        int sz = 0;
+        long sum = 0;
+        Set<Long> taken = new HashSet<>();
+        for(int num = 1; num <= 1000000007; num++){
+            if(!taken.contains((target - num) * 1L)){
+                taken.add(num * 1L);
+                sum += num * 1L;
+                sz++;
+            }
+            if(sz == n)return sum;
+        }
+        return 0;
+    }
+}
+---------------------------------------------------------------------3----------------------------------------------------------------------------------------
+-------------------------------------C++-----------------------------------------------------
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int target) {
+        vector<int>bitFreq(32);
+        //counting the number of times each bit position is set in a 32 bit element of nums array
+        for(auto num : nums){
+            for(int bitPos = 0; bitPos < 31; bitPos++){
+                if((num & (1<<bitPos)) != 0){
+                    bitFreq[bitPos]++;
+                }
+            }
+        }
+        //we will greedily pick on one set bit occurence from the bitFreq array and rest other occurences of a pariticular bitPos will be carried forward to the further bitPos + 1
+        int absentBitPos = 111, ops = 0;
+        for(int bitPos = 0; bitPos<31; bitPos++){
+            //if the current bit is set in target number then use one bitPos occrence and if there no occurence of set bit on that particular bitPos then mark it as absentBitPos  and take the minValue of current absentBitPos and overall absentBitPos since the operation we will be doing will anyways cover the the absentBitPos with larger values
+            if((target & (1 << bitPos)) != 0){
+                if(bitFreq[bitPos] <= 0)absentBitPos = min(bitPos, absentBitPos);
+                else bitFreq[bitPos]--;
+            }
+            //if any bit is not present that perform divisions
+            if(absentBitPos != 111 && absentBitPos < bitPos && bitFreq[bitPos] > 0){
+               bitFreq[bitPos]--; 
+               ops += (bitPos - absentBitPos);
+               absentBitPos = 111;//it indicates that all the absent bitPos till now are covered 
+            }
+            //since adding of two powers of two is of zero cost we can use the left out frequencies of the current bit pos
+            bitFreq[bitPos + 1] += bitFreq[bitPos]/2;
+        }
+        //if there are still some absent bit pos required to be covered then in that case you will return -1 else you will return number of ops done
+        return absentBitPos == 111 ? ops : -1;
+    }
+};
+-------------------------------------Java----------------------------------------------------
+class Solution {
+    public int minOperations(List<Integer> nums, int target) {
+        int bitFreq[] = new int[32];
+        for(var num : nums){
+            for(int bitPos = 0; bitPos < 31; bitPos++){
+                if((num & (1<<bitPos)) != 0){
+                    bitFreq[bitPos]++;
+                }
+            }
+        }
+        int absentBitPos = 111, ops = 0;
+        for(int bitPos = 0; bitPos<31; bitPos++){
+            if((target & (1 << bitPos)) != 0){
+                if(bitFreq[bitPos] <= 0)absentBitPos = Math.min(bitPos, absentBitPos);
+                else bitFreq[bitPos]--;
+            }
+            //if any bit is not present that perform divisions
+            if(absentBitPos != 111 && absentBitPos < bitPos && bitFreq[bitPos] > 0){
+               bitFreq[bitPos]--; 
+               ops += (bitPos - absentBitPos);
+               absentBitPos = 111;
+            }
+            //since adding of two powers of two is of zero cost we can use the left out frequencies of the current bit pos
+            bitFreq[bitPos + 1] += bitFreq[bitPos]/2;
+        }
+        return absentBitPos == 111 ? ops : -1;
+    }
+}
+---------------------------------------------------------------------4----------------------------------------------------------------------------------------
+-------------------------------------C++-----------------------------------------------------
+class Solution {
+public:
+    long long getMaxFunctionValue(vector<int>& receiver, long long k) {
+        int m = log2(1e10) + 5, n = receiver.size();
+        // recvIdValue[pos][id] means from node with ID 'id', move 2^pos steps upwards or say forward while storing two data of (currRecID, valueSum) at each node
+        vector<vector<pair<long long, long long>>> recvIdValue(m, vector<pair<long long, long long>> (n));
+          for (int j = 0; j < n; ++j) recvIdValue[0][j] = make_pair(receiver[j], receiver[j]);
+        for (int pos = 1; pos < m; pos++) {
+            for (int id = 0; id < n; id++) {
+                int prevRec = recvIdValue[pos-1][id].first;//parent of the current receiver
+                long long addVal = recvIdValue[pos-1][prevRec].second; 
+                //form the state for the current player based upond the state of the previous player or say it's parent
+                recvIdValue[pos][id] = make_pair(recvIdValue[pos-1][prevRec].first, recvIdValue[pos-1][id].second + addVal);
+            }
+        }
+
+        //then we will use this state table or 2 - array, state(curreRecId, currValueSum)
+        long long maxValSum = 0;
+        //for each player you will consider him as the starting player and perform 'k' passes in terms of binary representation of k so instead of second loop going as many times as 1e10, wilt go till log2(1e10)
+        for (int id = 0; id < n; id++) {//this loop loop will be running for each being considered as the starting player of the game and we will caculate f(id) for each player and at last return the maximum value of f(id)
+            long long currValSum = id;
+            int currRec = id;
+            //this is we iterating over the binary representation of k
+            for (int pos = 0; pos < m; pos++) {
+                //if the current bit pos is set in k then we will do calculations
+                if (((1l << pos) & k)){ 
+                    currValSum += recvIdValue[pos][currRec].second;
+                    int prevRec = recvIdValue[pos][currRec].first;
+                    currRec = prevRec;
+                } 
+            }
+            maxValSum = max(currValSum, maxValSum);
+        }
+        return maxValSum;
+
+    }
+};
+-------------------------------------Java----------------------------------------------------
+class Solution {
+    public long getMaxFunctionValue(List<Integer> receiver, long k) {
+        int m = (int)(Math.log(1e10)/Math.log(2)) + 5, n = receiver.size();
+        // recvIdValue[pos][id] means from node with ID 'id', move 2^pos steps upwards or say forward while storing two data of (currRecID, valueSum) at each node
+        long [][][]recvIdValue = new long[m][n][2];
+          for (int id = 0; id < n; id++) recvIdValue[0][id][1] = recvIdValue[0][id][0] =  1l * receiver.get(id);
+        for (int pos = 1; pos < m; pos++) {
+            for (int id = 0; id < n; id++) {
+                int prevRec = (int)recvIdValue[pos-1][id][0];
+                long addVal = recvIdValue[pos-1][prevRec][1]; 
+                recvIdValue[pos][id] = new long[]{recvIdValue[pos-1][prevRec][0], recvIdValue[pos-1][id][1] + addVal};
+            }
+        }
+        long maxValSum = 0;
+        for (int id = 0; id < n; id++) {
+            long currValSum = id;
+            int currRec = id;
+            for (int pos = 0; pos < m; pos++) {
+                if (((1l << pos) & k) != 0){ 
+                    currValSum += recvIdValue[pos][currRec][1];
+                    int prevRec = (int)recvIdValue[pos][currRec][0];
+                    currRec = prevRec;
+                } 
+            }
+            maxValSum = Math.max(currValSum, maxValSum);
+        }
+        return maxValSum;
+    }
+}
+
