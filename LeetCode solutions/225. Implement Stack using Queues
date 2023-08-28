@@ -1,0 +1,167 @@
+--------------------------------------------------------------------------CODE WITHOUT COMMENTS--------------------------------------------------------------------------------
+------------------------------------------------------Java--------------------------------------------------------
+class MyStack {
+    private Deque<Integer> primary = null, secondary = null;
+    public MyStack() {
+        primary = new ArrayDeque<>();
+        secondary = new ArrayDeque<>();
+    }
+    
+    public void push(int x) {
+        primary.offerLast(x);
+    }
+    
+    public int pop() {
+        while(primary.size() != 1){
+            secondary.offerLast(primary.pollFirst());
+        }
+        int res = primary.pollFirst();
+        while(!secondary.isEmpty()){
+            primary.offerLast(secondary.pollFirst());
+        }
+        return res;
+    }
+    
+    public int top() {
+        while(primary.size() != 1){
+            secondary.offerLast(primary.pollFirst());
+        }
+        int res = primary.pollFirst();
+        secondary.offerLast(res);
+        while(!secondary.isEmpty()){
+            primary.offerLast(secondary.pollFirst());
+        }
+        return res;
+    }
+    
+    public boolean empty() {
+        return primary.isEmpty();
+    }
+}
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack obj = new MyStack();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.top();
+ * boolean param_4 = obj.empty();
+ */
+
+------------------------------------------------------C++---------------------------------------------------------
+class MyStack {
+private:
+    queue<int> primary, secondary;
+public:
+    MyStack() {
+        
+    }
+    void push(int x) {
+        primary.push(x);
+    }
+    
+    int pop() {
+        while(primary.size() != 1){
+            secondary.push(primary.front());
+            primary.pop();
+        }
+        int res = primary.front();
+        primary.pop();
+        while(!secondary.empty()){
+            primary.push(secondary.front());
+            secondary.pop();
+        }
+        return res;
+    }
+
+
+    int top() {
+        while(primary.size() != 1){
+            secondary.push(primary.front());
+            primary.pop();
+        }
+        int res = primary.front();
+        primary.pop();
+        secondary.push(res);
+        while(!secondary.empty()){
+            primary.push(secondary.front());
+            secondary.pop();
+        }
+        return res;
+    }
+    
+    bool empty() {
+        return primary.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+
+--------------------------------------------------------------------------CODE WITH COMMENTS-----------------------------------------------------------------------------------
+class MyStack {
+private:
+//primary queue is your stack and secondary queue is to support the operation of the stack
+    queue<int> primary, secondary;
+public:
+    MyStack() {
+        
+    }
+    //only primary queue is being used in the push operation
+    void push(int x) {
+        primary.push(x);
+    }
+    
+    int pop() {
+        //till the size of the primary queue remains greater than 1 we will keep poping elements from primary queue and enqueing them to the secondary queue
+        while(primary.size() != 1){
+            secondary.push(primary.front());
+            primary.pop();
+        }
+        //store the single element remaining in the primary queue in res variable and this returned at the end of the queue
+        int res = primary.front();
+        primary.pop();
+        //once your are done removing all the elements form the primary queue, you will add the elements form the secondary queue to the primary queue again
+        while(!secondary.empty()){
+            primary.push(secondary.front());
+            secondary.pop();
+        }
+        // and at last you will return your result
+        return res;
+    }
+    
+    //top function is very much simillar to the pop fuction, with a little exception that in top function none of the elements are removed from the primary queue permanently
+    int top() {
+        while(primary.size() != 1){
+            secondary.push(primary.front());
+            primary.pop();
+        }
+        int res = primary.front();
+        primary.pop();
+        secondary.push(res);
+        while(!secondary.empty()){
+            primary.push(secondary.front());
+            secondary.pop();
+        }
+        return res;
+    }
+    //for empty we will just return whether the primary queue is empty or not
+    bool empty() {
+        return primary.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
