@@ -1,0 +1,53 @@
+-------------------------------------------------------------------------CODE WITHOUT COMMENTS-------------------------------------------------------------------------------------
+--------------------------------------------C++---------------------------------------------------------------
+class Solution {
+public:
+    long long minimumReplacement(vector<int>& nums) {
+        long long sz = nums.size(), ops = 0, prevNum = nums[sz-1];
+        for(int indx = sz-2; indx > - 1; indx--){ 
+            int opTimes = (nums[indx] / prevNum);
+            if(nums[indx] % prevNum){
+                opTimes++;
+                prevNum = nums[indx] /  opTimes;
+            }
+            ops += opTimes - 1;
+        }
+        return ops;
+    }
+};
+-------------------------------------------Java-----------------------------------------------------------------
+class Solution {
+    public long minimumReplacement(int[] nums) {
+        int sz = nums.length, prevNum = nums[sz-1];
+        long ops = 0;
+        for(int indx = sz-2; indx > - 1; indx--){ 
+            int opTimes = (nums[indx] / prevNum);
+            if(nums[indx] % prevNum != 0){
+                opTimes++;
+                prevNum = nums[indx] /  opTimes;
+            }
+            ops += opTimes - 1;
+        }
+        return ops;
+    }
+}
+-------------------------------------------------------------------------CODE WITHCOMMENTS-------------------------------------------------------------------------------------
+class Solution {
+    public long minimumReplacement(int[] nums) {
+        int sz = nums.length, prevNum = nums[sz-1];
+        long ops = 0;
+        //we will be traversing the nums array form right to left in order to achieve linear time complexity without much trouble
+        for(int indx = sz-2; indx > - 1; indx--){ 
+            //the number of times that you will be carrying out the operation on current number 'nums[indx]'
+            int opTimes = (nums[indx] / prevNum);
+            //in case the prevNum does not fully divide the currNum 'nums[indx]'
+            if(nums[indx] % prevNum != 0){
+                opTimes++;
+                prevNum = nums[indx] /  opTimes;
+            }
+            ops += opTimes - 1;
+        }
+        //at last you will return the number of operations
+        return ops;
+    }
+}
