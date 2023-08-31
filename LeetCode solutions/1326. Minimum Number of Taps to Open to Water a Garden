@@ -1,0 +1,89 @@
+----------------------------------------------------------------------CODE WITHOUT COMMENTS-----------------------------------------------------------------------
+------------------------------------C++----------------------------------------------------------------------
+class Solution {
+public:
+    int minTaps(int n, vector<int>& ranges) {
+        vector<int> newRanges(n+1);
+        for(int pos = 0; pos <= n; pos++){
+            if(ranges[pos] == 0)continue;
+            int leftLimit = max(0, pos - ranges[pos]);
+            int rightLimit = min(n, pos + ranges[pos]);
+            newRanges[leftLimit] = max(newRanges[leftLimit], rightLimit);
+        }
+        int lastTpCov = 0, tpCnt = 0;
+        for(int pos = 0; pos <= n && lastTpCov < n; ){
+            int currLastTpCov = lastTpCov;
+            tpCnt++;
+            while(pos <= n && pos <= lastTpCov){
+                 currLastTpCov = max(newRanges[pos++], currLastTpCov);
+            }
+            if(currLastTpCov == lastTpCov)return -1;
+            lastTpCov = currLastTpCov;
+        }
+        return tpCnt;
+
+    }
+};
+--------------------------------------------Java-------------------------------------------------------------
+class Solution {
+    public int minTaps(int n, int[] ranges) {
+       int []newRanges = new int[n+1];
+        for(int pos = 0; pos <= n; pos++){
+            if(ranges[pos] == 0)continue;
+            int leftLimit = Math.max(0, pos - ranges[pos]);
+            int rightLimit = Math.min(n, pos + ranges[pos]);
+            newRanges[leftLimit] = Math.max(newRanges[leftLimit], rightLimit);
+        }
+        int lastTpCov = 0, tpCnt = 0;
+        for(int pos = 0; pos <= n && lastTpCov < n; ){
+            int currLastTpCov = lastTpCov;
+            tpCnt++;
+            while(pos <= n && pos <= lastTpCov){
+                 currLastTpCov = Math.max(newRanges[pos++], currLastTpCov);
+            }
+            if(currLastTpCov == lastTpCov)return -1;
+            lastTpCov = currLastTpCov;
+        }
+        return tpCnt;
+
+    }
+}
+----------------------------------------------------------------------CODE WITH COMMENTS--------------------------------------------------------------------------
+class Solution {
+public:
+    int minTaps(int n, vector<int>& ranges) {
+        //at each position of our garden in this new Ranges array we will storing what is the max position towards right which can be watered by a tap that is having 'leftLimit' as the current position
+        vector<int> newRanges(n+1);
+        for(int pos = 0; pos <= n; pos++){
+            //if the range of the tap is zero, we will discard it
+            if(ranges[pos] == 0)continue;
+            //we will be checking left and right limits that a tap can water 
+            int leftLimit = max(0, pos - ranges[pos]);//as the garden starting from zero
+            int rightLimit = min(n, pos + ranges[pos]);//as the garden ending at zero
+            //for the pos which is equal to leftLimit of the current tap we will store the maximam rightPos value that can be watered
+            newRanges[leftLimit] = max(newRanges[leftLimit], rightLimit);//
+        }
+        // for(auto rg : newRanges){
+        //     cout<<rg<<" ";
+        // }
+        // cout<<endl;
+
+        //we will check what is the current right most tap that can be watered
+        int lastTpCov = 0, tpCnt = 0;
+        for(int pos = 0; pos <= n && lastTpCov < n; ){
+            //starting from the current pos what is the right most tap(pos of tap) that can be reached
+            int currLastTpCov = lastTpCov;
+            tpCnt++;//for each segment formed we will increase tapCount
+            //greedily discarding the taps which are not required to be opened
+            while(pos <= n && pos <= lastTpCov){//this for discarding taps which are not contributing to tapCount
+                 currLastTpCov = max(newRanges[pos++], currLastTpCov);
+            }
+            if(currLastTpCov == lastTpCov)return -1;//not position in garden can be watered, in this case you will return -1
+            //updating the value of last tap that can be covered
+            lastTpCov = currLastTpCov;
+        }
+        //at last we will return our tap count
+        return tpCnt;
+
+    }
+};
