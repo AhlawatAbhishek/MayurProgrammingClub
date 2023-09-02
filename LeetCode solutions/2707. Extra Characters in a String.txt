@@ -1,0 +1,81 @@
+-------------------------------CODE WITHOUT COMMENTS---------------------------------------------------------------------------
+--------------------------C++---------------------------------------------------
+class Solution {
+public:
+    int minExtraChar(string s, vector<string>& dictionary) {
+        unordered_set<string> dictSet;
+        int sz = s.size();
+        for(auto word : dictionary){
+            dictSet.insert(word);
+        }
+        vector<int> delCount(sz+1);
+        for(int right = 1; right<=sz; right++){
+                delCount[right] = 1 + delCount[right-1];
+                for(int left = right; left > 0; left--){
+                    string word = s.substr(left-1, right - left+1);
+                    if(dictSet.count(word)){
+                        delCount[right] = min(delCount[right], delCount[left-1]);
+                    }
+                }
+        }
+        for(int indx = 0; indx < sz; indx++){
+            cout<<"indx: "<<indx<<" = "<<delCount[indx]<<"\n";
+        }
+        return delCount[sz];
+    }
+};
+--------------------------Java--------------------------------------------------
+class Solution {
+    public int minExtraChar(String s, String[] dictionary) {
+        Set<String> dictSet = new HashSet<>();
+        int sz = s.length();
+        for(var word : dictionary){
+            dictSet.add(word);
+        }
+        int delCount[] = new int[sz+1];
+        for(int right = 1; right<=sz; right++){
+                delCount[right] = 1 + delCount[right-1];
+                for(int left = right; left > 0; left--){
+                    String word = s.substring(left-1, right);
+                    if(dictSet.contains(word)){
+                        delCount[right] = Math.min(delCount[right], delCount[left-1]);
+                    }
+                }
+        }
+        return delCount[sz];
+    }
+}
+
+-------------------------------CODE WITH COMMENTS------------------------------------------------------------------------------
+class Solution {
+public:
+    int minExtraChar(string s, vector<string>& dictionary) {
+        unordered_set<string> dictSet;
+        int sz = s.size();
+        //this is used to look up whether a word is present in the dictionary or not in O(1)
+        // time complexity
+        for(auto word : dictionary){
+            dictSet.insert(word);
+        }
+        vector<int> delCount(sz+1);
+        //And then we are using a sliding window approach to check for each index that if a 
+        //partition is places after this index, then minimum how many extra word need to be
+        //deleted or considered
+        for(int right = 1; right<=sz; right++){
+                delCount[right] = 1 + delCount[right-1];
+                string word = "";
+                for(int left = right; left > 0; left--){
+                    string word = s.substr(left-1, right - left+1);
+                    if(dictSet.count(word)){//if the sub string between left and right partitions is present in dictionary then the number of extra characters for this word will be zero and we will check what is the number of extra characters till left partition
+                        delCount[right] = min(delCount[right], delCount[left-1]);
+                    }
+                }
+        }
+        // for(int indx = 0; indx < sz; indx++){
+        //     cout<<"indx: "<<indx<<" = "<<delCount[indx]<<"\n";
+        // }
+
+        //and at last we will return minimum number of extra characters present in the given string 's' if the partitions are placed optimally or say substring between those partitions are formed optimally 
+        return delCount[sz];
+    }
+};
