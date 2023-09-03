@@ -1,0 +1,226 @@
+------------------------------------------------------------------------------------1--------------------------------------------------------------------
+------------------------------C++--------------------------------------------------------
+class Solution {
+public:
+    int countSymmetricIntegers(int low, int high) {
+        int cnt = 0;
+        for(int num = low; num <= high; num++){
+            //only those numbers will be considered whose number of digits are even
+            if(countDig(num) % 2 == 0){
+                auto pr = findSum(num);
+                // cout<<num<<" : "<<pr.first<<" "<<pr.second<<endl;
+                if(pr.first == pr.second){
+                    cnt++;
+                    // cout<<num<<" ";
+                }
+                
+            }    
+        }
+        // cout<<endl;
+        return cnt;
+    }
+    int countDig(int num){
+        int count = 0;
+        while(num > 0){
+            num /= 10;
+            count++;
+        }
+        return count;
+    }
+    //(sum of first half, sum of second half)
+    pair<int, int> findSum(int num){
+        int totalD = countDig(num);
+        int hlf = totalD / 2, sum1 = 0, sum2 = 0;
+        // cout<<"hlf "<<hlf<<endl;
+        while(totalD-->0){
+            int d = num % 10;
+            if(hlf-- > 0){ 
+                sum1 += d;
+            }else sum2 += d;
+            num /= 10;
+        }
+        // cout<<"Sum1 "<<sum1<<"sum2 "<<sum2<<endl;
+        return make_pair(sum1, sum2);
+    }
+};
+
+------------------------------------------------------2-----------------------------------------------------------------------
+------------------------------C++--------------------------------------------------------
+class Solution {
+    
+    int countOps(string s, string lastTwoDigs) {
+        int indx = s.size() - 1;
+        //we will check if zero exists in the string to take care of the when the number is not having any of the patterns we are checking for i.e. '00', '25', '50', '75'
+        bool zeroExist = false;
+        if(s.find('0') != string::npos)zeroExist = true;
+        while(indx >= 0 and s[indx] != lastTwoDigs[1]) indx -= 1;
+        //this when the string is not having lastTwoDigit pattern
+        if(indx == -1) return s.size() - ((zeroExist) ? 1 : 0);
+        indx--;
+        //if that's not the case match first digit
+        while(indx >= 0 and s[indx] != lastTwoDigs[0]) indx -= 1;
+        if(indx == -1) return s.size() - ((zeroExist) ? 1 : 0);
+        return (s.size() - 1 - indx) - 1;//substracting one for lastTwoDigs[0]
+    }
+    
+public:
+    int minimumOperations(string num) {
+        return min(min(countOps(num, "00"), countOps(num, "25")), min(countOps(num, "50"), countOps(num, "75")));
+    }
+};
+------------------------------------------------------3-------------------------------------------------------------------------
+------------------------------C++--------------------------------------------------------
+class Solution {
+public:
+    long long countInterestingSubarrays(vector<int>& nums, int modulo, int k) {
+        //first of all you will convert the given nums array element into their contributions to the count
+        for(auto &num : nums) {
+            num = (num % modulo == k) ? 1 : 0;
+        }
+        //this prefSum variable along with hashing will be used to check whether a particular subarray with a given sum exist or not
+        int prefSum = 0;
+        unordered_map<int, int> sumFreq;
+        sumFreq[0] = 1;
+        long long res = 0;
+        for(int i = 0; i < nums.size(); i++) {
+            prefSum = (prefSum +  nums[i]) % modulo;
+            int prevSum = (prefSum - k + modulo) % modulo;
+            //you will check for the number of times previous sum has been spotted before this value of prefix sum and that numbers of time will be increase in the numbero of interesting sub arrays
+            res += sumFreq.count(prevSum) ? sumFreq[prevSum] : 0;
+            //you will increament the occurence of this particular value of perfix sum
+            sumFreq[prefSum]++;
+        }
+        //this is is nothing but number of interesting sub arrays
+        return res;
+    }
+};
+-------------------------------------------------------4---------------------------------------------------------------------------
+--------------------------Java----------------------------------------
+class Solution {
+    //make a graph representing the tree
+    List<List<int[]>> graph;
+    int[] parentOf;
+    int[] depthLevel;
+    int[][] wtFreq;
+    int[][] parentOfMatrix;//used in binary lifting
+    public int[] minOperationsQueries(int n, int[][] edges, int[][] queries) {
+        graph = new ArrayList<>();//shows how the connections are made in the tree
+        parentOf = new int[n];//what is the immediate parent of a node
+        depthLevel = new int[n]; //shows depth level of each node
+        wtFreq = new int[n][27];//from root to a particular node what is the freq of occurence of a pariticular weight value
+
+        for(int i = 0; i < n; i++) {
+            graph.add(new ArrayList<>());
+        }
+        
+        //forming the graph or say tree using edges array
+        for(int[] edge : edges) {
+            graph.get(edge[0]).add(new int[]{edge[1], edge[2]});
+            graph.get(edge[1]).add(new int[]{edge[0], edge[2]});
+        }
+        //DFS of the graph that we have made using edges array
+        //fill data in the 'parentOF', 'depthLevel', 'wtFreq' arrays or say vectors
+        populateData(0, -1, 1, new int[27]);
+        parentOf[0] = 0;
+        //used binary lifting here
+        parentOfMatrix = buildparentOfMatrix();
+
+        int[] results = new int[queries.length];
+
+        for(int q = 0; q < queries.length; q++) {
+            int u = queries[q][0];
+            int v = queries[q][1];
+            int LcaUsingBinaryLifting = LcaUsingBinaryLifting(u, v);
+            //total number of weightValues occruring between vertex u and v minus the freq of weightValue occuring maximum number of times between vertex or say node u and v is the answer for the current query
+            int maxFreq_U_V = 0, totalWtFreq_U_V = 0;
+
+            for(int wtVal = 1; wtVal <= 26; wtVal++) {
+                int freq = wtFreq[LcaUsingBinaryLifting][wtVal];
+                int freqU = wtFreq[u][wtVal];
+                int freqV = wtFreq[v][wtVal];
+
+                totalWtFreq_U_V += freqU + freqV - 2 * freq;
+
+                if(freqU + freqV - 2 * freq > maxFreq_U_V) {
+                    maxFreq_U_V = freqU + freqV - 2 * freq;
+                }
+            }
+            //result for a query ('u', 'v')->no of wts in path between u and v - freq of maximum occuring wt in the path between 'u' and 'v'
+            int noOfOpsReq = totalWtFreq_U_V - maxFreq_U_V;
+            results[q] = noOfOpsReq;
+        }
+
+        return results;
+    }
+
+    private int LcaUsingBinaryLifting(int u, int v) {
+        if(depthLevel[u] > depthLevel[v]) {
+            return LcaUsingBinaryLifting(v, u);
+        }
+
+        int depthLevelDiff = depthLevel[v] - depthLevel[u];
+
+       //bring the nodes at the same level, for that start form the more deep node and going their depthLevel difference upward 
+        for(int bitPos = 0; bitPos < 31; bitPos++) {
+            if((depthLevelDiff & (1 << bitPos)) != 0) {
+                int parentOfOfV = parentOfMatrix[bitPos][v];
+                v = parentOfOfV;
+            }
+        }
+        
+        //to check if the one of them is LcaUsingBinaryLifting of other
+        //in case u is LcaUsingBinaryLifting of both u and v
+        if(u == v) return v;
+
+        //starting from root, keep finding the common ancestor 
+        for(int bitPos = 30; bitPos >= 0; bitPos--) {
+            //if there comes a point when there ancesstors are not equal move u and v to their ancestors
+            if(parentOfMatrix[bitPos][u] != parentOfMatrix[bitPos][v]) {
+                u = parentOfMatrix[bitPos][u];
+                v = parentOfMatrix[bitPos][v];
+            }
+        }
+        //finally the lca will be their immediate parent, therefore return it
+        return parentOfMatrix[0][v];
+    }
+    //DFS of graph or say tree
+    //populateData is used to populate the depthLevel, parentOf, and wtFreq arrays or say vector which will help us to calculate LcaUsingBinaryLifting and answer the queries
+    private void populateData(int node, int par, int level, int[] wts) {
+        depthLevel[node] = level;
+        parentOf[node] = par;
+
+        for(int i = 0; i <= 26; i++) {
+            wtFreq[node][i] = wts[i];
+        }
+
+        for(int[] child : graph.get(node)) {
+            if(child[0] == par) continue;
+
+            wts[child[1]]++;
+            populateData(child[0], node, level + 1, wts);
+            wts[child[1]]--;
+        }
+    }
+
+    //binary lifting used here 
+    private int[][] buildparentOfMatrix() {
+        int n = parentOf.length, limit = 31;
+        int[][] parMat = new int[limit][n];
+        
+        //for immediate parents of each node they will be same as that of parent array
+        parMat[0] = parentOf;
+        
+        //form indx to (2 ^ bitPos) upward in the graph or say tree
+        for(int bitPos = 1; bitPos < limit; bitPos++) {
+            for(int indx = 0; indx < n; indx++) {
+                //parent (2^(bitPos-1)) upward
+                // currNode----->((2^(bitPos-1)) upward from currNode)(prevParent)----------->(2^(bitPos-1)) upward form prevParent-------->target(parMat[bitPos][indx])((2^(bitPos)) upward from)
+                int prevParent = parMat[bitPos - 1][indx];
+                parMat[bitPos][indx] = parMat[bitPos - 1][prevParent];
+            }
+        }
+
+        return parMat;
+    }
+}
+
