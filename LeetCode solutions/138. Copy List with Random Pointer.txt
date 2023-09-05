@@ -1,0 +1,90 @@
+-------------------------------------C++----------------------------------------------------------------
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if(head == NULL)return NULL;
+        //step 1: you will make deep copies of each node in the given linked list and place those copies one place ahead of the currNode and re adjust the links of the linked list
+        for(Node *curr = head; curr != NULL; curr = curr->next){
+            Node *newNode = new Node(curr->val);
+            Node *next = curr->next;
+            curr->next = newNode;
+            curr = newNode;
+            newNode->next = next;
+        }
+        // return NULL;
+        // Step2 you will assign the value of random pointer in the copied list
+        for(Node *curr = head; curr != NULL; curr = curr->next->next){
+            Node *copy = curr->next;
+            copy->random = (curr->random == NULL) ?  NULL : curr->random->next;
+        }
+        //seperate out the two lists and re adjust their links such that links in the original list are not altered
+        Node *dummyHead = new Node(0), *currCopyPtr = dummyHead;
+        for(Node *curr = head; curr != NULL; curr = curr->next){
+              currCopyPtr->next = curr->next;
+              currCopyPtr = curr->next;
+              curr->next = currCopyPtr->next;
+        }
+        //and at last we will return head of copied list
+        return dummyHead->next;
+    }
+};
+---------------------------------------------------Java--------------------------------------------------------------------------
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        if(head == null)return null;
+        //step 1: you will make deep copies of each node in the given linked list and place those copies one place ahead of the currNode and re adjust the links of the linked list
+        for(Node curr = head; curr != null; curr = curr.next){
+            Node newNode = new Node(curr.val);
+            Node next = curr.next;
+            curr.next = newNode;
+            curr = newNode;
+            newNode.next = next;
+        }
+        // return NULL;
+        // Step2 you will assign the value of random pointer in the copied list
+        for(Node curr = head; curr != null; curr = curr.next.next){
+            Node copy = curr.next;
+            copy.random = (curr.random == null) ?  null : curr.random.next;
+        }
+        //seperate out the two lists and re adjust their links such that links in the original list are not altered
+        Node dummyHead = new Node(0), currCopyPtr = dummyHead;
+        for(Node curr = head; curr != null; curr = curr.next){
+              currCopyPtr.next = curr.next;
+              currCopyPtr = curr.next;
+              curr.next = currCopyPtr.next;
+        }
+        //and at last we will return head of copied list
+        return dummyHead.next;
+    }
+}
