@@ -1,4 +1,4 @@
-//I have not considered the extra space used for the result array while explaning time complexity in the video
+//I have not considered the extra space used for the result array while explaning space complexity in the video
 ---------------------------------------------------------Java-------------------------------------------------------
 class Solution {
     public ListNode[] splitListToParts(ListNode head, int k) {
