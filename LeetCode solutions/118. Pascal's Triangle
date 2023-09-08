@@ -1,0 +1,50 @@
+---------------------------------------------------------------------------------CODE WITHOUT COMMENTS------------------------------------------------------------------------------------
+----------------------------------------------------C++------------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        vector<vector<int>> tria(numRows);
+        for(int r = 0; r < numRows; r++){
+            vector<int>cols(r+1, 1);
+            tria[r] = cols;
+            for(int c = 1; c<r; c++){
+                tria[r][c] = tria[r-1][c-1] + tria[r-1][c];
+            }
+        }
+        return tria;
+    }
+};
+----------------------------------------------------------------------Java------------------------------------------------------------------
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+       List<List<Integer>> tria = new ArrayList<>(numRows);
+        for(int r = 0; r < numRows; r++){
+            List<Integer>cols = new ArrayList<>(Collections.nCopies(r+1, 1));
+            
+            for(int c = 1; c<r; c++){
+                cols.set(c, tria.get(r-1).get(c-1) + tria.get(r-1).get(c));
+            }
+            tria.add(cols);
+        }
+        return tria; 
+    }
+}
+---------------------------------------------------------------------------------CODE WITH COMMENTS------------------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        //this the array or say 2d vector that you will be returning as the pascal's triangle
+        vector<vector<int>> tria(numRows);
+        //this is how fill the tria based upon our observation
+        for(int r = 0; r < numRows; r++){
+            vector<int>cols(r+1, 1);
+            tria[r] = cols;
+            //the last and the first value in each row will remain one and all other values in between will be updated
+            for(int c = 1; c<r; c++){
+                tria[r][c] = tria[r-1][c-1] + tria[r-1][c];
+            }
+        }
+        //at last you will be returning your triangle
+        return tria;
+    }
+};
