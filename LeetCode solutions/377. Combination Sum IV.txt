@@ -1,0 +1,58 @@
+------------------------------------------CODE WITHOUT COMMENTS--------------------------------------------------------------
+--------------------------------------------------------------------C++-----------------------------------------------
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        vector<unsigned int> sumCount(target + 1);
+        sumCount[0] = 1;
+        int sz = nums.size();
+        for(int sum = 1; sum <= target; sum++){
+            for(int indx = 0; indx < sz; indx++){
+                if(nums[indx] <= sum){
+                    sumCount[sum] = (sumCount[sum] + sumCount[sum-nums[indx]]);
+                }
+            }
+        }
+        return sumCount[target];
+    }
+};
+
+------------------------------------------------------------------Java-------------------------------------------------------
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        int sumCount[] = new int[target + 1];
+        sumCount[0] = 1;
+        int sz = nums.length;
+        for(int sum = 1; sum <= target; sum++){
+            for(int indx = 0; indx < sz; indx++){
+                if(nums[indx] <= sum){
+                    sumCount[sum] = (sumCount[sum] + sumCount[sum-nums[indx]]);
+                }
+            }
+        }
+        return sumCount[target];
+    }
+}
+------------------------------------------CODE WITHOUT COMMENTS--------------------------------------------------------------
+class Solution {
+    public int combinationSum4(int[] nums, int target) {
+        //this is the array where you will be storing the results of a particular state that you will encounter while forming a solution.
+        //state here is nothing but the value of target or say sum at a particular instance
+        int sumCount[] = new int[target + 1];
+        //for the sum value or say target value equal to zero, there will be one possible combination
+        sumCount[0] = 1;
+        int sz = nums.length;
+        //for each current of sum(state) you will add the contribution of previous states or sums that could have landed us on the current sum(state)
+        for(int sum = 1; sum <= target; sum++){
+            for(int indx = 0; indx < sz; indx++){
+                //if the value of a number in the nums array is lesser than or equal to the current value of sum(state) then it can be considered as a previous state for the current state and it will contribute to the current state
+                if(nums[indx] <= sum){
+                    //adding contributions of previous states and thus forming solution for current state
+                    sumCount[sum] = (sumCount[sum] + sumCount[sum-nums[indx]]);
+                }
+            }
+        }
+        //and at last we will return number of combinations that could have added upto target
+        return sumCount[target];
+    }
+}
