@@ -1,0 +1,184 @@
+---------------------------------WITH COMMENTS-----------------------------------------------------------------------------------------
+-------------------------------------------1-----------------------------------------------------------
+------C++-------------------
+class Solution {
+public:
+    int numberOfPoints(vector<vector<int>>& nums) {
+        int sz = nums.size();
+        //size 200 will be sufficient to accomodate all the points
+        vector<int> pref(200);
+        //for each interval representing a car you will mark the starting and ending points of it's contribution on number line (flags)
+        for(auto &num : nums){
+            pref[num[0]] += 1;
+            pref[num[1]+1] -= 1;
+        }
+        //generate the prefix sum array
+        for(int indx = 0; indx < pref.size(); indx++){
+           if(indx != 0) 
+            pref[indx] += pref[indx-1];
+        }
+        //then you will count the number of zeroes in the prefi sum array
+        int zeros = count(pref.begin(), pref.end(), 0);
+        //then you will return the number of points that are covered by atleast one car
+        return pref.size() - zeros;
+    }
+};
+-----------Java---------------
+class Solution {
+    public int numberOfPoints(List<List<Integer>> nums) {
+        int sz = nums.size();
+        //size 200 will be sufficient to accomodate all the points
+        int []pref = new int[200];
+        //for each interval representing a car you will mark the starting and ending points of it's contribution on number line (flags)
+        for(var num : nums){
+            pref[num.get(0)] += 1;
+            pref[num.get(1)+1] -= 1;
+        }
+        //generate the prefix sum array
+        for(int indx = 0; indx < pref.length; indx++){
+           if(indx != 0) 
+            pref[indx] += pref[indx-1];
+        }
+        //then you will count the number of zeroes in the prefi sum array
+        int zeros = count(pref, 0);
+        //then you will return the number of points that are covered by atleast one car
+        return 200 - zeros;
+    }
+    private int count(int pref[], int val){
+        int cnt = 0;
+        for(var num : pref){
+            if(num == val)cnt++;
+        }
+        return cnt;
+    }
+}
+-------------------------------------------2-----------------------------------------------------------
+------C++-------------------
+class Solution {
+public:
+    bool isReachableAtTime(int sx, int sy, int fx, int fy, int t) {
+        if(sx == fx && sy == fy)return t > 1 || t == 0;
+        int distx = abs(sx - fx), disty = abs(sy - fy);
+        //Diagonal distance
+        int togDist = min(distx, disty);
+        //the left over distance will be either vertical or horizontal
+        int leftOverDist = abs(distx - togDist) + abs(disty - togDist);     
+        // cout<<"togDist "<<togDist<<endl;
+        // cout<<"elftOverDist "<<leftOverDist<<endl;
+        
+        //calculate the total distance
+        togDist += leftOverDist;
+        return togDist <= t;
+    }
+};
+------Java-------------------
+class Solution {
+    public boolean isReachableAtTime(int sx, int sy, int fx, int fy, int t) {
+         if(sx == fx && sy == fy)return t > 1 || t == 0;
+        int distx = Math.abs(sx - fx), disty = Math.abs(sy - fy);
+        //Diagonal distance
+        int togDist = Math.min(distx, disty);
+        //the left over distance will be either vertical or horizontal
+        int leftOverDist = Math.abs(distx - togDist) + Math.abs(disty - togDist);     
+        // cout<<"togDist "<<togDist<<endl;
+        // cout<<"elftOverDist "<<leftOverDist<<endl;
+        
+        //calculate the total distance
+        togDist += leftOverDist;
+        return togDist <= t;
+    }
+}
+-------------------------------------------3-----------------------------------------------------------
+------C++-------------------
+class Solution {
+public:
+    int minMovs = -1;
+    int minimumMoves(vector<vector<int>>& grid) {
+        //initially initialize the minimum moves to maximum interger value
+        minMovs = INT_MAX;
+        //store the co-ordinates of zero containing cell and cells with more than one stone
+        int rows = grid.size(), cols = grid[0].size();
+        //these two will be used to store the co - ordinates
+        vector<pair<int, int>> zeros, ones;
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(grid[r][c] > 1){
+                    ones.push_back(make_pair(r, c));
+                }else if(grid[r][c] == 0){
+                    zeros.push_back(make_pair(r, c));
+                }
+            }
+        }
+        //you will implement a backtracking solution
+        findMoves(zeros, ones, 0, 0, grid);
+        //and at last you will return the minimum number of moves
+        return minMovs;
+    }
+    void findMoves(vector<pair<int, int>> & zeros, vector<pair<int, int>> & ones, int startIndx, int mov, vector<vector<int>> & grid){
+        int sz = zeros.size(), szO = ones.size();
+        //once you have filled all the cells with alteast one stone then you will update the minimum number of moves
+        if(sz == startIndx){
+            minMovs = min(minMovs, mov);
+            return;
+        }
+        //for each zero containing cell you will explore all the options it is having in a depth wise manner and backtrack to explore further options
+        auto &pr1 = zeros[startIndx];
+        for(int indx = 0; indx < szO; indx++){
+            auto &pr = ones[indx];
+            if(grid[pr.first][pr.second] > 1){
+                //if you decide to take stone form a cell then you will decrement the number of stones in that cell
+                grid[pr.first][pr.second]--;
+                findMoves(zeros, ones, startIndx+1, mov + abs(pr1.first - pr.first) + abs(pr.second - pr1.second), grid);
+                //once you decide to backtrack then you will simply return the number of stones present in the cell to it's original value
+                grid[pr.first][pr.second]++;
+            }
+        }
+    }
+};
+
+------Java-------------------
+class Solution {
+    private int minMovs = -1;
+    public int minimumMoves(int[][] grid) {
+         //initially initialize the minimum moves to maximum interger value
+        minMovs = Integer.MAX_VALUE;
+        //store the co-ordinates of zero containing cell and cells with more than one stone
+        int rows = grid.length, cols = grid[0].length;
+        //these two will be used to store the co - ordinates
+        List<Pair<Integer, Integer>> zeros = new ArrayList<>(), ones = new ArrayList<>();
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(grid[r][c] > 1){
+                    ones.add(new Pair<Integer, Integer>(r, c));
+                }else if(grid[r][c] == 0){
+                    zeros.add(new Pair<Integer, Integer>(r, c));
+                }
+            }
+        }
+        //you will implement a backtracking solution
+        findMoves(zeros, ones, 0, 0, grid);
+        //and at last you will return the minimum number of moves
+        return minMovs;
+    }
+    private void findMoves(List<Pair<Integer, Integer>> zeros, List<Pair<Integer, Integer>>  ones, int startIndx, int mov, int[][] grid){
+        int sz = zeros.size(), szO = ones.size();
+        //once you have filled all the cells with alteast one stone then you will update the minimum number of moves
+        if(sz == startIndx){
+            minMovs = Math.min(minMovs, mov);
+            return;
+        }
+        //for each zero containing cell you will explore all the options it is having in a depth wise manner and backtrack to explore further options
+        var pr1 = zeros.get(startIndx);
+        for(int indx = 0; indx < szO; indx++){
+            var pr = ones.get(indx);
+            if(grid[pr.getKey()][pr.getValue()] > 1){
+                //if you decide to take stone form a cell then you will decrement the number of stones in that cell
+                grid[pr.getKey()][pr.getValue()]--;
+                findMoves(zeros, ones, startIndx+1, mov + Math.abs(pr1.getKey() - pr.getKey()) + Math.abs(pr.getValue() - pr1.getValue()), grid);
+                //once you decide to backtrack then you will simply return the number of stones present in the cell to it's original value
+                grid[pr.getKey()][pr.getValue()]++;
+            }
+        }
+    }
+}
+
