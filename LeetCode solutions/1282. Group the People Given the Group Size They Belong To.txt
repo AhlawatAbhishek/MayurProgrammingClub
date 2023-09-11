@@ -1,0 +1,78 @@
+-------------------------------------CODE WITH COMMENTS---------------------------------------------------------------------------------
+---------------------------C++------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> groupThePeople(vector<int>& groupSizes) {
+          unordered_map<int, vector<int>> grps;
+          int sz = groupSizes.size();
+          vector<vector<int>> res;
+          for(int id = 0; id<sz; id++){
+              int grpSz = groupSizes[id];
+              if(grps[grpSz].size() == grpSz){
+                  res.push_back(grps[grpSz]);
+                  vector<int> newGrp;
+                  grps[grpSz] = newGrp;
+              }
+              grps[grpSz].push_back(id);
+          }
+          for(auto &pr : grps){
+              if(pr.second.size() > 0){
+                  res.push_back(pr.second);
+              }
+          }
+          return res;
+    }
+};
+-----------------------------------------------------Java---------------------------
+class Solution {
+    public List<List<Integer>> groupThePeople(int[] groupSizes) {
+          Map<Integer, List<Integer>> grps = new HashMap<>();
+          int sz = groupSizes.length;
+          List<List<Integer>> res = new ArrayList<>();
+          for(int id = 0; id<sz; id++){
+              int grpSz = groupSizes[id];
+              grps.putIfAbsent(grpSz, new ArrayList<>());
+              if(grps.containsKey(grpSz) && grps.get(grpSz).size() == grpSz){
+                  res.add(grps.get(grpSz));
+                  grps.put(grpSz, new ArrayList<>());
+              }
+              grps.get(grpSz).add(id);
+          }
+          for(var pr : grps.entrySet()){
+              if(pr.getValue().size() > 0){
+                  res.add(pr.getValue());
+              }
+          }
+          return res;
+    }
+}
+
+-------------------------------------CODE WITH COMMENTS---------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> groupThePeople(vector<int>& groupSizes) {
+        //a map will be used containing group size as key and vector of id's as values
+          unordered_map<int, vector<int>> grps;
+          int sz = groupSizes.size();
+          vector<vector<int>> res;
+          for(int id = 0; id<sz; id++){
+              int grpSz = groupSizes[id];
+              //as soon as your group of groupSize 'grpSz' reaches it's limit then you will add it to your result
+              if(grps[grpSz].size() == grpSz){
+                  res.push_back(grps[grpSz]);
+                  vector<int> newGrp;
+                  grps[grpSz] = newGrp;
+              }
+              //and you will keep forming your group of group size 'grpSz'
+              grps[grpSz].push_back(id);
+          }
+          //if there are any groups left in the map, if yes then you will add them to your result
+          for(auto &pr : grps){
+              if(pr.second.size() > 0){
+                  res.push_back(pr.second);
+              }
+          }
+          //and at last return your result
+          return res;
+    }
+};
