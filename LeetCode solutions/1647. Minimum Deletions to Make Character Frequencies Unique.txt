@@ -1,0 +1,114 @@
+---------------------------------------------------------CODE WITHOUT COMMENTS-----------------------------------------------------------------------------------------
+----------------C++--------------------------------
+class Solution {
+public:
+    int minDeletions(string s) {
+        vector<int> freq(26);
+        for(auto c : s){
+            freq[c-'a']++;
+        }
+        sort(freq.begin(), freq.end(), greater<int>());
+        unordered_set<int> unqFreq;
+        for(auto f : freq){
+            cout<<f<<" ";
+            if(f != 0)unqFreq.insert(f);
+        }
+        cout<<endl;
+        int dels = 0;
+        int missFreq = -1;
+        for(int indx = 0; indx < 26; indx++){
+            if(!freq[indx])break;
+            if(indx + 1 < 26 && freq[indx] == freq[indx+1]){
+               int currFreq = freq[indx];
+               missFreq = currFreq;
+               while(missFreq > 0 && unqFreq.count(missFreq))missFreq--;
+               dels += currFreq - missFreq;
+               if(missFreq != 0)unqFreq.insert(missFreq);
+            }
+        }
+        return dels;
+    }
+};
+------------------Java--------------------------
+class Solution {
+    public int minDeletions(String str) {
+        char s[] = str.toCharArray();
+        int freq[] = new int[26];
+        for(var c : s){
+            freq[c-'a']++;
+        }
+        Arrays.sort(freq);
+        reverse(freq);
+        HashSet<Integer> unqFreq = new HashSet<>();
+        for(var f : freq){
+            if(f != 0)unqFreq.add(f);
+        }
+        int dels = 0;
+        int missFreq = -1;
+        for(int indx = 0; indx < 26; indx++){
+            if(freq[indx] == 0)break;
+            if(indx + 1 < 26 && freq[indx] == freq[indx+1]){
+               int currFreq = freq[indx];
+               missFreq = currFreq;
+               while(missFreq > 0 && unqFreq.contains(missFreq))missFreq--;
+               dels += currFreq - missFreq;
+               if(missFreq != 0)unqFreq.add(missFreq);
+            }
+        }
+        return dels;
+    }
+    private static void reverse(int[] array)
+    {
+ 
+      
+        int n = array.length;
+        for (int i = 0; i < n / 2; i++) {
+            int temp = array[i];
+            array[i] = array[n - i - 1];
+            array[n - i - 1] = temp;
+        }
+    }
+}
+---------------------------------------------------------CODE WITH COMMENTS-----------------------------------------------------------------------------------------
+class Solution {
+public:
+    int minDeletions(string s) {
+        //this freq array or say vector will be used to store the frequencies of characters
+        vector<int> freq(26);
+        for(auto c : s){
+            //we are using relative differece between each character and 'a'
+            freq[c-'a']++;
+        }
+        //then we will sort the freq array in descending order
+        sort(freq.begin(), freq.end(), greater<int>());
+        //then we will use a hashset or say set to keep track of frequencies already present in the string or the missing frequencies that have already been used
+        unordered_set<int> unqFreq;
+
+        for(auto f : freq){
+            // cout<<f<<" ";
+            if(f != 0)unqFreq.insert(f);
+        }
+        // cout<<endl;
+
+        //this will account for the number of deletions required
+        int dels = 0;
+        int missFreq = -1;
+        for(int indx = 0; indx < 26; indx++){
+            // as soon as you hit a zero freq then you will exit the loop
+            if(!freq[indx])break;
+            // if current freq is having a duplicate freq
+            if(indx + 1 < 26 && freq[indx] == freq[indx+1]){
+               //you will start looking for missing freq from the value of current freq such that this missing freq haven't been used 
+               int currFreq = freq[indx];
+               missFreq = currFreq;
+               while(missFreq > 0 && unqFreq.count(missFreq))missFreq--;
+               //you number of deletion required for current freq will 
+               dels += currFreq - missFreq;
+               //you current freq will become missing freq so you will add that to the unique freq set
+               if(missFreq != 0)unqFreq.insert(missFreq);
+            }
+        }
+        //and at last you will return the number of deletions required
+        return dels;
+    }
+};
