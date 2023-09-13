@@ -1,0 +1,84 @@
+------------------------------------Java---------------------------------
+class Solution {
+    public int candy(int[] ratings) {
+        int sz = ratings.length;
+        //this will be used in case a child is not having a left or right neighbors
+        int maxRat = 2 * 10000 + 1;
+        //this candy array will be used to store the candies that each child will be given according to the requirements
+        int cand[] = new int[sz];
+        Arrays.fill(cand, 1);
+
+        //min cand required to be distributed
+        int minCand = 0;
+        //first we will check for the left neighbors
+        for(int indx = 0; indx < sz; indx++){
+           int leftNeigh = (indx - 1) > -1 ? ratings[indx-1] : maxRat;
+           int self = ratings[indx];
+
+           //in case the left neighbor's ratings is less than current child rating
+           //then you will update his candies
+           if(self > leftNeigh){
+             //greedily giving one more candy than the left neighbor
+              cand[indx] = cand[indx-1] + 1;
+           }
+        }
+
+        //then we will do the same thing for right neighbors
+        for(int indx = sz-1; indx > -1; indx--){
+           int rightNeigh =(indx + 1) < sz ? ratings[indx + 1] : maxRat;
+           int self = ratings[indx];
+           if(self > rightNeigh){
+             //we will use this extra check to ensure that only minimum candies are used to distribute 
+             if(cand[indx] <= cand[indx+1])
+              cand[indx] = cand[indx+1] + 1;
+           }
+        }
+        //then you get the total no of candies required to meet the requirements
+        for(var c : cand){
+          minCand += c;
+        }
+        // and at last you will return the minimum number of candies
+        return minCand; 
+    }
+}
+-------------------------------------C++---------------------------------
+class Solution {
+public:
+    int candy(vector<int>& ratings) {
+        int sz = ratings.size();
+        //this will be used in case a child is not having a left or right neighbors
+        int maxRat = 2 * 10000 + 1;
+        //this candy array will be used to store the candies that each child will be given according to the requirements
+        vector<int> cand(sz, 1);
+
+        //min cand required to be distributed
+        int minCand = 0;
+        //first we will check for the left neighbors
+        for(int indx = 0; indx < sz; indx++){
+           int leftNeigh = (indx - 1) > -1 ? ratings[indx-1] : maxRat;
+           int self = ratings[indx];
+
+           //in case the left neighbor's ratings is less than current child rating
+           //then you will update his candies
+           if(self > leftNeigh){
+             //greedily giving one more candy than the left neighbor
+              cand[indx] = cand[indx-1] + 1;
+           }
+        }
+
+        //then we will do the same thing for right neighbors
+        for(int indx = sz-1; indx > -1; indx--){
+           int rightNeigh =(indx + 1) < sz ? ratings[indx + 1] : maxRat;
+           int self = ratings[indx];
+           if(self > rightNeigh){
+             //we will use this extra check to ensure that only minimum candies are used to distribute 
+             if(cand[indx] <= cand[indx+1])
+              cand[indx] = cand[indx+1] + 1;
+           }
+        }
+        //then you get the total no of candies required to meet the requirements
+        minCand = accumulate(cand.begin(), cand.end(), 0);
+        // and at last you will return the minimum number of candies
+        return minCand; 
+    }
+};
