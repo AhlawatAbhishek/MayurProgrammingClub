@@ -1,0 +1,52 @@
+--------------------------------------------Java-----------------------------------------------------------------------------
+class Solution {
+    public List<String> findItinerary(List<List<String>> tickets) {
+        //construct a graph with key as the departure airport and values as the possible arrival airports
+      HashMap<String, PriorityQueue<String>> graph = new HashMap<>();
+        for (var ticket : tickets){
+            graph.putIfAbsent(ticket.get(0), new PriorityQueue<>());
+            graph.get(ticket.get(0)).offer(ticket.get(1));
+        }
+        //use this list or say array to store lexicographically samllest itinerary possible
+        List<String> path = new ArrayList<>();
+        builtItn("JFK", graph, path);
+        return path;
+    }
+
+    
+    //DFS for building the itinerary
+    void builtItn(String src, HashMap<String, PriorityQueue<String>> graph, List<String> path) {
+        PriorityQueue<String> airports = graph.get(src);
+        //you keep remove the possible arrival airports from current departure airport 'src'
+        while (airports != null && !airports.isEmpty()) {
+            //as you are using the tickets, you will throw them away so that they can't be reused.
+            builtItn(airports.poll(), graph, path);
+        }
+        //once you are done with recursion for the current branch then you will add the airport to itinerary
+        path.add(0, src);
+    }    
+}
+-----------------------------------------------------------------C++------------------------------------------------------------------
+class Solution {
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        unordered_map<string, multiset<string>> graph;
+        for (auto ticket : tickets){
+            graph[ticket[0]].insert(ticket[1]);
+        }
+        vector<string> path;
+        builtItn("JFK", graph, path);
+        return vector<string>(path.rbegin(), path.rend());
+    }
+
+    
+private:
+    void builtItn(string src, unordered_map<string, multiset<string>> & graph, vector<string> & path) {
+        while (graph[src].size()) {
+            string next = *graph[src].begin();
+            graph[src].erase(graph[src].begin());
+            builtItn(next, graph, path);
+        }
+        path.push_back(src);
+    }    
+};
