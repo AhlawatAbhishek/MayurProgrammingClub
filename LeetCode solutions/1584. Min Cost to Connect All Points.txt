@@ -1,0 +1,90 @@
+--------------------------------------------Java----------------------------------------------------------------------------
+class Solution {
+    public int minCostConnectPoints(int[][] points) {
+        //the indicies of the points array or say vector will be used as node number to be added to the MST that will be formed
+        int sz = points.length;
+        //this set will be to keep track of nodes currently present in MST
+        Set<Integer> mst = new HashSet<>();
+        int minCost  = 0;
+        int cost[] = new int[sz];
+        //initially since MST will be empty you can pick any of the nodes as your first node to be added in the MST
+        //find cost of all nodes with 'sz-1' as src node;
+        for(int dest = 0; dest < sz; dest++){
+             cost[dest]  = findCost(points, dest, sz-1);
+        }
+        //then you will start building your MST further
+        while(mst.size() < sz){
+            //in each iteration the current source value of node will be set to -1 and the node which having minimum cost to be added to the MST will be considered for addition
+           int currSrc = -1;
+           for(int dest = 0; dest < sz; dest++){
+               //you will consider only those nodes which are not present in MST as of now
+               if(!mst.contains(dest)){
+                   if(currSrc == - 1 || cost[currSrc] > cost[dest]){
+                       currSrc = dest;
+                   }
+               }
+           }
+        //    cout<<"currSrc: "<<currSrc<<endl;
+        //then you will add that node to the MST
+           mst.add(currSrc);
+        //and also add it's cost to the overall cost
+           minCost += cost[currSrc];
+           //update the cost (cost of joining the node with mst) for each node for each node which are not present in MST as of now
+           for(int dest = 0; dest < sz; dest++){
+               if(!mst.contains(dest)){
+                   cost[dest] = Math.min(cost[dest], findCost(points, currSrc, dest));
+               }
+           }
+        }
+        return minCost;
+    }
+    private int findCost(int[][]pts, int pt1, int pt2){
+        return Math.abs(pts[pt1][0] - pts[pt2][0]) + Math.abs(pts[pt1][1] - pts[pt2][1]);
+    }
+}
+-----------------------------------------------------------------C++------------------------------------------------------------------
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        //the indicies of the points array or say vector will be used as node number to be added to the MST that will be formed
+        int sz = points.size();
+        //this set will be to keep track of nodes currently present in MST
+        unordered_set<int> mst;
+        int minCost  = 0;
+        vector<int> cost(sz);
+        //initially since MST will be empty you can pick any of the nodes as your first node to be added in the MST
+        //find cost of all nodes with 'sz-1' as src node;
+        for(int dest = 0; dest < sz; dest++){
+             cost[dest]  = findCost(points, dest, sz-1);
+        }
+        //then you will start building your MST further
+        while(mst.size() < sz){
+            //in each iteration the current source value of node will be set to -1 and the node which having minimum cost to be added to the MST will be considered for addition
+           int currSrc = -1;
+           for(int dest = 0; dest < sz; dest++){
+               //you will consider only those nodes which are not present in MST as of now
+               if(!mst.count(dest)){
+                   if(currSrc == - 1 || cost[currSrc] > cost[dest]){
+                       currSrc = dest;
+                   }
+               }
+           }
+        //    cout<<"currSrc: "<<currSrc<<endl;
+        //then you will add that node to the MST
+           mst.insert(currSrc);
+        //and also add it's cost to the overall cost
+           minCost += cost[currSrc];
+           //update the cost (cost of joining the node with mst) for each node for each node which are not present in MST as of now
+           for(int dest = 0; dest < sz; dest++){
+               if(!mst.count(dest)){
+                   cost[dest] = min(cost[dest], findCost(points, currSrc, dest));
+               }
+           }
+        }
+        return minCost;
+    }
+private:
+    int findCost(vector<vector<int>> & pts, int pt1, int pt2){
+        return abs(pts[pt1][0] - pts[pt2][0]) + abs(pts[pt1][1] - pts[pt2][1]);
+    }    
+};
