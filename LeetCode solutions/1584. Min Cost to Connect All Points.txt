@@ -88,3 +88,4 @@ private:
         return abs(pts[pt1][0] - pts[pt2][0]) + abs(pts[pt1][1] - pts[pt2][1]);
     }    
 };
+

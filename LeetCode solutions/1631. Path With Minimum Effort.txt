@@ -1,0 +1,102 @@
+-----------------------------------------------------------------Java-------------------------------------------------------------
+class Solution {
+    private int rows, cols;
+    public int minimumEffortPath(int[][] heights) {
+        rows = heights.length;
+        cols = heights[0].length;
+        //this is a modified binary search over the answer which is miniEffort
+        //what binary search will do is that it will propose a possible effort and then will check if a route with the effort is possible if yes then we will reduce the upper limit of our search space which 'right' and if that's not the case then you have reduce the search space by increasing lower limit of the search space which is 'left'
+        int left = 0;
+        int minEffort = Integer.MAX_VALUE;
+        int right = 1000001;
+        while (left <= right) {
+            int possEffort = left + (right - left) / 2;
+            if (isValidEffort(possEffort, heights)) {
+                //is a route is existing with this effort or say less then it will your current minimum effort
+                minEffort = possEffort;
+                right = possEffort - 1;
+            } else {
+                left = possEffort + 1;
+            }
+        }
+        //at last you will return your search space
+        return minEffort;
+    }
+    //it will call for a dfs funciton to search for a route with effort less or equal to proposed effort by binary search
+    private boolean isValidEffort(int threshold, int [][]heights) {
+            boolean[][] visited = new boolean[rows][cols];
+            return dfs(0, 0, visited, threshold, heights);
+    }
+    //since you are allowed to move in 4 direction these will be the 4 directions in which you can move
+    private int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        boolean dfs(int r, int c, boolean[][] visited, int threshold, int heights[][]) {
+            if (r == rows-1 && c == cols-1) {
+                return true;
+            }
+            visited[r][c] = true;
+            for (var dir : dirs) {
+                int newRow = r + dir[0];
+                int newCol = c + dir[1];
+                if (isValidCord(newRow, newCol, visited)) {
+                    //whenever you will find a route with effort less than or equal to the proposed effort by binary search then you will return true;
+                   if (Math.abs(heights[newRow][newCol] - heights[r][c]) <= threshold && dfs(newRow, newCol, visited, threshold, heights)) {
+                        return true;
+                   }                
+                }
+                
+            }
+            return false;
+        }
+        //this to check whether the co ordrinates lie inside the grid and the cell is visited or not
+        private boolean isValidCord(int r, int c, boolean [][]visited){
+            return r >= 0 && r < rows && c >= 0 && c < cols && !visited[r][c];
+        }
+}
+----------------------------------------------------------------------------C++-----------------------------------------------------------
+class Solution {
+private:
+    int rows, cols;
+public:
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        rows = heights.size();
+        cols = heights[0].size();
+        int left = 0;
+        int minEffort = INT_MAX;
+        int right = 1000001;
+        while (left <= right) {
+            int possEffort = left + (right - left) / 2;
+            if (isValidEffort(possEffort, heights)) {
+                minEffort = possEffort;
+                right = possEffort - 1;
+            } else {
+                left = possEffort + 1;
+            }
+        }
+        return minEffort;
+    }
+private:
+    bool isValidEffort(int threshold, vector<vector<int>>& heights) {
+        vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+        return dfs(0, 0, visited, threshold, heights);
+    }
+    vector<vector<int>> dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    bool dfs(int r, int c, vector<vector<bool>>& visited, int threshold, vector<vector<int>>& heights) {
+        if (r == rows-1 && c == cols-1) {
+            return true;
+        }
+        visited[r][c] = true;
+        for (auto dir : dirs) {
+            int newRow = r + dir[0];
+            int newCol = c + dir[1];
+            if (isValidCord(newRow, newCol, visited)) {
+                if (abs(heights[newRow][newCol] - heights[r][c]) <= threshold && dfs(newRow, newCol, visited, threshold, heights)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    bool isValidCord(int r, int c, vector<vector<bool>>& visited) {
+        return r >= 0 && r < rows && c >= 0 && c < cols && !visited[r][c];
+    }
+};
