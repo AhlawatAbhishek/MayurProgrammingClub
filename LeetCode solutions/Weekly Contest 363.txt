@@ -1,0 +1,203 @@
+--------------------------------------------------------------------1---------------------------------------------------------
+-----------------------C++---------------------------------------------
+class Solution {
+public:
+    int sumIndicesWithKSetBits(vector<int>& nums, int k) {
+        int sum = 0;
+        for(int indx = 0; indx < nums.size(); indx++){
+            //only those indicies whose number of set bits is k will be considered
+            if(__builtin_popcount(indx) == k){
+                sum += nums[indx];
+            }
+        }
+        return sum;
+    }
+};
+-------------------------------Java------------------------------------
+class Solution {
+    public int sumIndicesWithKSetBits(List<Integer> nums, int k) {
+        int sum = 0;
+        for(int indx = 0; indx < nums.size(); indx++){
+            
+            if(Integer.bitCount(indx) == k){
+                sum += nums.get(indx);
+            }
+        }
+        return sum;
+    }
+}
+--------------------------------------------------------------------2---------------------------------------------------------
+-----------------------C++---------------------------------------------
+class Solution {
+public:
+    int countWays(vector<int>& nums) {
+        int selecCount = 0, sz = nums.size(), ways = 0;
+        //sorting the nums array becuase the student being happy depends upon nums array values 
+        //and sorting it will make you placing of partition easier in order to divided student among 
+        //selected and not selection ones and then checking if everyone is happy
+        sort(nums.begin(), nums.end());
+
+        if(nums[0])ways++;//if selecCOunt == 0, so students form '0' to 'sz-1' index will not be selected and if 'nums[0]' is not zero than not selected students will be happy as the array is sorted in increasing order
+        
+        
+        //according to partition select few and not select rest, and this partition is nothing but current value of indx
+        //so at each indx you will try to make partition so that till that index the students are selected and remaining ones are not selected, which are on right hand side of partition
+        for(int indx = 0; indx < sz; indx++){
+            selecCount++;
+            //checking if all students are happy
+            //first checking if selected students are happy
+            if(nums[indx] < selecCount){
+                //now checking if not selected students are happy
+               if(indx + 1 < sz && selecCount < nums[indx+1]){
+                     ways++;
+               }
+               //if all the students are selected
+               if(indx + 1 == sz){
+                   ways++;
+               }
+            }
+        }
+        return ways;
+    }
+};
+-------------------------------Java------------------------------------
+class Solution {
+    public int countWays(List<Integer> nums) {
+        int selecCount = 0, sz = nums.size(), ways = 0;
+        nums.sort(null);
+        if(nums.get(0) != 0) ways++;
+        for(int indx = 0; indx < sz; indx++){
+            selecCount++;
+            if(nums.get(indx) < selecCount){
+               if(indx + 1 < sz && selecCount < nums.get(indx+1)){
+                     ways++;
+               }
+               if(indx + 1 == sz){
+                   ways++;
+               }
+            }
+        }
+        return ways;
+    }
+}
+--------------------------------------------------------------------3---------------------------------------------------------
+-----------------------C++---------------------------------------------
+class Solution {
+public:
+    int maxNumberOfAlloys(int n, int k, int budget, vector<vector<int>>& composition, vector<int>& stock, vector<int>& cost) {
+        //we will binary search over the number of alloys that can be made and try to find it's max value using binary search
+        //the number of alloys will vary betweeen the range 0 to 10 ^ 9
+        int rows = composition.size(), cols = composition[0].size(), left = 0, right = 1e9;
+        int result = 0;
+        while(left <= right){
+            long long numAlloy = left + (right - left) /2;
+            //to reduce you search space you will check if a machine is able to give you numAlloy 'number of alloys' while in staying in budget then you will check for higher values of 'number of that can be possibly made' and vice versa
+            if(canProduce(numAlloy, n, k, budget, composition, stock, cost)){
+                result = numAlloy;
+                left = numAlloy + 1;
+            }else{
+                right = numAlloy - 1;
+            }
+        }
+        return result;
+    }
+    bool canProduce(long long numAlloy, int n, int k, int budget, vector<vector<int>>& composition, vector<int>& stock, vector<int>& cost){
+        //the money that a paritcular machine will spend to make numAlloys 'number of alloys' is within budget number of coins
+        for(auto & comp : composition){
+            long long spend = 0;
+            for(int indx = 0; indx < comp.size(); indx++){
+               long long req = numAlloy * comp[indx];
+               if(stock[indx] > req)req = 0;
+               else req -= stock[indx];
+               spend += req * cost[indx];
+            }
+            //if any of the machine is able to do so
+            if(spend <= budget)return true;
+        }
+        return false;
+    }
+};
+-------------------------------Java------------------------------------
+class Solution {
+    public int maxNumberOfAlloys(int n, int k, int budget, List<List<Integer>> composition, List<Integer> stock, List<Integer> cost) {
+        int rows = composition.size();
+        int cols = composition.get(0).size();
+        int left = 0;
+        int right = 1_000_000_000;
+        int result = 0;
+        
+        while (left <= right) {
+            long numAlloy = left + (right - left) / 2;
+            
+            if (canProduce(numAlloy, n, k, budget, composition, stock, cost)) {
+                result = (int) numAlloy;
+                left = (int) numAlloy + 1;
+            } else {
+                right = (int) numAlloy - 1;
+            }
+        }
+        
+        return result;
+    }
+    
+    public boolean canProduce(long numAlloy, int n, int k, int budget, List<List<Integer>> composition, List<Integer> stock, List<Integer> cost) {
+        for (List<Integer> comp : composition) {
+            long spend = 0;
+            for(int indx = 0; indx < comp.size(); indx++){
+               long req = numAlloy * comp.get(indx);
+               if(stock.get(indx) > req)req = 0;
+               else req -= stock.get(indx);
+               spend += req * cost.get(indx);
+            }
+            if(spend <= budget)return true;
+        }
+        return false;
+    }
+}
+--------------------------------------------------------------------4---------------------------------------------------------
+-----------------------C++---------------------------------------------
+class Solution {
+public:
+    long long maximumSum(vector<int>& nums) {
+        //this map will be used to store the sum of all numbers which are having same odd power maxEleSumidue
+        unordered_map<int, long long> oddPowerResidue;
+        long long maxEleSum = 0;
+        //from every index value remove all the perfect squamaxEleSum from it and then add the contribution of this index to the complete subset that will be consiting of this index 
+        for (int indx = 0; indx < nums.size(); indx++) {
+            int indxVal = indx+1;
+            //removing perfect squamaxEleSum from current indxVal
+            for (int num = 2; num * num <= indxVal; num++)
+                while (indxVal % (num * num) == 0){
+                    indxVal /= num * num;
+                }    
+                //it will be contribution of pmaxEleSument index to it's complete subset
+                oddPowerResidue[indxVal] += nums[indx];
+                //along with that keep update maxEleSum
+                maxEleSum = max(maxEleSum, oddPowerResidue[indxVal]);
+        }
+        return maxEleSum;
+    }
+};
+-------------------------------Java------------------------------------
+class Solution {
+    public long maximumSum(List<Integer> nums) {
+        Map<Integer, Long> oddPowerResidue = new HashMap<>();
+        long maxEleSum = 0;
+        
+        for (int indx = 0; indx < nums.size(); indx++) {
+            int indxVal = indx + 1;
+            
+            for (int num = 2; num * num <= indxVal; num++) {
+                while (indxVal % (num * num) == 0) {
+                    indxVal /= num * num;
+                }
+            }
+            
+            oddPowerResidue.put(indxVal, oddPowerResidue.getOrDefault(indxVal, 0L) + nums.get(indx));
+            
+            maxEleSum = Math.max(maxEleSum, oddPowerResidue.get(indxVal));
+        }
+        
+        return maxEleSum;
+    }
+}
