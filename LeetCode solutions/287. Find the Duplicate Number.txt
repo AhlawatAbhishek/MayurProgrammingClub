@@ -1,0 +1,53 @@
+-------------------------------------------C++-------------------------------------------------
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int slow = 0, fast = 0;
+ 
+        //the first step detects the cycle in the array
+        while(true){
+           fast = nums[nums[fast]];//fast will move 2 positions in single go
+           slow = nums[slow]; //slow will move only one position
+  
+           if(slow == fast)break;//when fast again becom equal to slow it will show that a cycle exist in your array 
+        }
+   
+
+
+        //after the cycle is detected for detecting start of the loop the slow will be placed at starting index and then both pointers will move one step at a time
+
+        slow = 0;
+        while(slow != fast){
+            //slow and fast both move one position ahead at a time
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return fast;
+    }
+};
+------------------------------------------------------Java------------------------------------------
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int slow = 0, fast = 0;
+ 
+        //the first step detects the cycle in the array
+        while(true){
+           fast = nums[nums[fast]];//fast will move 2 positions in single go
+           slow = nums[slow]; //slow will move only one position
+  
+           if(slow == fast)break;//when fast again becom equal to slow it will show that a cycle exist in your array 
+        }
+   
+
+
+        //after the cycle is detected for detecting start of the loop the slow will be placed at starting index and then both pointers will move one step at a time
+
+        slow = 0;
+        while(slow != fast){
+            //slow and fast both move one position ahead at a time
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return fast;
+    }
+}
