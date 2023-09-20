@@ -1,0 +1,106 @@
+---------------------------------------------------------------------Java----------------------------------------------------
+class Solution {
+    public int minOperations(int[] nums, int x) {
+        int sz = nums.length, prefSum[] =  new int[sz];
+        //we will generate prefix sum array to find the sum of left and right hand side deletions individually in O(1) time
+        for(int indx = 0; indx < sz; indx++){
+           if(indx == 0) 
+            prefSum[indx] = nums[indx];
+           else
+            prefSum[indx] = nums[indx] + prefSum[indx -  1];
+        }
+
+
+        int suffixSum = 0, minOps = Integer.MAX_VALUE;
+
+  
+        // you will try to find the optimal value of number of right and left deletions in order to achieve a sum of 'x'
+        for(int indx = sz - 1; indx > - 1; indx--){//this loop will help you to find optimal right deletions
+            //remaining value of target which x minus suffixSum or sum of right deletions
+            int target = x - suffixSum;
+
+            //if target is zero then you need not to check for left deletion
+            if(target == 0){
+                int rightOps = sz - 1 - indx;
+                minOps = Math.min(rightOps, minOps);
+                continue;
+            }
+            
+            //this binary search will help will you to find optimal number of left deletions
+            int left = 0, right = indx;
+            int leftDelIndx = -1;
+            while(left <= right){
+                int leftOpIndx = left + (right - left)/2;
+                if(prefSum[leftOpIndx] == target){
+                    leftDelIndx = leftOpIndx;
+                    break;
+                }else if(prefSum[leftOpIndx] < target){
+                    left = leftOpIndx + 1;
+                }else{
+                    right = leftOpIndx - 1;
+                }
+            }
+            if(leftDelIndx != -1){
+                int rightOps = sz-1 - indx;
+                int leftOps = leftDelIndx+1;
+                minOps = Math.min(minOps, rightOps + leftOps);
+            }
+            suffixSum += nums[indx];
+        }
+        //at last you will return minimum operation or -1 in case you were not able to form a sum of 'x' form any left and right and deletions
+        return minOps == Integer.MAX_VALUE ? -1 : minOps;
+    }
+}
+----------------------------------------------------C++-------------------------------------------------------------------------------
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int x) {
+        int sz = nums.size();
+        vector<int> prefSum(sz);
+        
+        for(int indx = 0; indx < sz; indx++){
+            if(indx == 0) 
+                prefSum[indx] = nums[indx];
+            else
+                prefSum[indx] = nums[indx] + prefSum[indx -  1];
+        }
+        int suffixSum = 0, minOps = INT_MAX;
+        
+        for(int indx = sz - 1; indx > - 1; indx--){
+            
+            int target = x - suffixSum;
+            
+            if(target == 0){
+                int rightOps = sz - 1 - indx;
+                minOps = min(rightOps, minOps);
+                continue;
+            }
+            
+            int left = 0, right = indx;
+            int leftDelIndx = -1;
+            while(left <= right){
+                int leftOpIndx = left + (right - left)/2;
+                if(prefSum[leftOpIndx] == target){
+                    leftDelIndx = leftOpIndx;
+                    break;
+                }
+                else if(prefSum[leftOpIndx] < target){
+                    left = leftOpIndx + 1;
+                }
+                else{
+                    right = leftOpIndx - 1;
+                }
+            }
+            
+            if(leftDelIndx != -1){
+                int rightOps = sz - 1 - indx;
+                int leftOps = leftDelIndx + 1;
+                minOps = min(leftOps + rightOps, minOps);
+            }
+            
+            suffixSum += nums[indx];
+        }
+        
+        return minOps == INT_MAX ? -1 : minOps;
+    }
+};
