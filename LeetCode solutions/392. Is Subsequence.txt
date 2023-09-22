@@ -1,0 +1,34 @@
+-----------------------------C++-----------------------------------------
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int sSz = s.size(), tSz = t.size();
+        if(sSz > tSz) return false; 
+        //a variable to point to curr character of sub seq 's'
+        int sIndx = 0;
+        //traverse over the given string
+        for(int indx = 0; indx < tSz && sIndx < sSz; indx ++){
+            if(t[indx] == s[sIndx]){
+                sIndx++;
+            }
+        }
+        return sIndx == sSz;
+    }
+};
+----------------------------------------Java--------------------------------------
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        int sSz = s.size(), tSz = t.size();
+        if(sSz > tSz) return false; 
+        //a variable to point to curr character of sub seq 's'
+        int sIndx = 0;
+        //traverse over the given string
+        for(int indx = 0; indx < tSz && sIndx < sSz; indx ++){
+            if(t[indx] == s[sIndx]){
+                sIndx++;
+            }
+        }
+        return sIndx == sSz;
+    }
+};
