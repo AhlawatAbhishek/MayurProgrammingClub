@@ -1,4 +1,5 @@
---------------------------------------1----------------------------------------------------------------
+--------------------------------------1---------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------C++-------------------------------------------------
 class Solution {
 public:
     string maximumOddBinaryNumber(string s) {
@@ -23,7 +24,33 @@ public:
         return res;
     }
 };
-------------------------------------------------2-------------------------------------------------------
+-------------------------------------------------Java---------------------------------------------------
+class Solution {
+    public String maximumOddBinaryNumber(String s) {
+        int ones = Collections.frequency(stringToList(s), '1');
+        int sz = s.length();
+        StringBuilder res = new StringBuilder("1");
+        int nonOnes = sz - ones;
+        ones--;
+        while (nonOnes-- > 0) {
+            res.append("0");
+        }
+        while (ones-- > 0) {
+            res.append("1");
+        }
+        return res.reverse().toString();
+    }
+    
+    private List<Character> stringToList(String s) {
+        List<Character> list = new ArrayList<>();
+        for (char c : s.toCharArray()) {
+            list.add(c);
+        }
+        return list;
+    }
+}
+------------------------------------------------2---------------------------------------------------------------------------------------------------------------------------
+------------------------------------C++-----------------------------------------------------------
 class Solution {
 public:
     
@@ -56,6 +83,36 @@ private:
         return sum;
     }
 };
+------------------------------------------------Java-------------------------------------------------
+class Solution {
+    public long maximumSumOfHeights(List<Integer> h) {
+        long sum = 0;
+        int sz = h.size();
+        for (int indx = 0; indx < sz; indx++) {
+            sum = Math.max(findSum(new ArrayList<>(h), indx), sum);
+        }
+        return sum;
+    }
+
+    private long findSum(List<Integer> h, int maxIndx) {
+        long sum = 0;
+        int sz = h.size();
+        for (int indx = maxIndx - 1; indx > -1; indx--) {
+            if (h.get(indx) > h.get(indx + 1)) {
+                h.set(indx, h.get(indx + 1));
+            }
+        }
+        for (int indx = maxIndx + 1; indx < sz; indx++) {
+            if (h.get(indx) > h.get(indx - 1)) {
+                h.set(indx, h.get(indx - 1));
+            }
+        }
+        for (int indx = 0; indx < sz; indx++) {
+            sum += h.get(indx) * 1L;
+        }
+        return sum;
+    }
+}
 --------------------------------------------------3-----------------------------------------------------------------
 https://www.geeksforgeeks.org/introduction-to-monotonic-stack-data-structure-and-algorithm-tutorials/
 https://www.geeksforgeeks.org/next-greater-element/
