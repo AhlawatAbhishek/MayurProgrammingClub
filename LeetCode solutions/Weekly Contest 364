@@ -1,0 +1,223 @@
+--------------------------------------1----------------------------------------------------------------
+class Solution {
+public:
+    string maximumOddBinaryNumber(string s) {
+        //count number of ones
+        int ones = count(s.begin(), s.end(), '1');
+        int sz = s.size();
+        //one of them will be used for zeroth position
+        string res = "1";
+        //number of zeroes
+        int nonOnes = sz - ones;
+        ones--;
+        //now you will append zeroes
+        while(nonOnes-->0){
+            res += "0";
+        }
+        //after that you will append remaining ones
+        while(ones-->0){
+            res += "1";
+        }
+        //at last return the reversed string
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
+------------------------------------------------2-------------------------------------------------------
+class Solution {
+public:
+    
+    long long maximumSumOfHeights(vector<int>& h) {
+        long long sum = 0;
+        int sz = h.size();
+        //for each index in the 'h' / 'maxHeights' array,  you will consider that index as your peek and calculate sum of heights array that will be formed accordingly and return max sum possible for heights array
+        for(int indx = 0; indx < sz; indx++){
+            sum = max(findSum(h, indx), sum);
+        }
+        //at last you will return your maximum sum possible
+        return sum;
+    }
+private:
+    long long findSum(vector<int> h, int maxIndx){
+        long long sum = 0;
+        int sz = h.size();
+        //for every index on the left side of maxIndx or say peak you will make the height at that index to follow the rules give for a mountain array in the problem statement
+        for(int indx = maxIndx - 1; indx > -1; indx--){
+            if(h[indx] > h[indx+1])h[indx] = h[indx+1];
+        }
+        //similar thing you will do for every index on the right side of current peak index which is maxIndx
+        for(int indx = maxIndx + 1; indx < sz; indx++){
+            if(h[indx] > h[indx-1])h[indx] = h[indx-1];
+        }
+        //at last you will return the sum of the newly formed heights array
+        for(int indx = 0; indx < sz; indx++){
+            sum += h[indx] * 1ll;
+        }
+        return sum;
+    }
+};
+--------------------------------------------------3-----------------------------------------------------------------
+https://www.geeksforgeeks.org/introduction-to-monotonic-stack-data-structure-and-algorithm-tutorials/
+https://www.geeksforgeeks.org/next-greater-element/
+https://www.geeksforgeeks.org/previous-greater-element/
+---------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+public:
+    long long maximumSumOfHeights(vector<int>& maxHeights) 
+    {
+        int sz = maxHeights.size();
+        // -------------------------------------------------------------------------
+        //Use of monotonic stack
+        // ---------------------------------------------------------------------------
+        //first of all for each index in maxHeights array you will find what are the previous and next
+        //indicies having heights smaller than that of height of tower at current index 
+        stack<int>st;
+        //finding indicies of previous smaller heights for each index
+        vector<int>prevSmaller(sz, -1);
+        for (int indx = 0; indx < sz; indx++)
+        {
+            while(!st.empty() && maxHeights[st.top()] >= maxHeights[indx])
+            {
+                st.pop(); 
+            }
+            
+            if (!st.empty())
+                prevSmaller[indx] = st.top();
+            st.push(indx);
+        }
+        //finding indicies of next smaller heights for each index
+        vector<int>nextSmaller(sz, sz); 
+        st = stack<int>();
+        for (int indx = sz - 1; indx >= 0; indx--)
+        {
+            while(!st.empty() && maxHeights[st.top()] >= maxHeights[indx])
+            {
+                st.pop();
+            }
+            if (!st.empty())
+                nextSmaller[indx] = st.top();
+            st.push(indx);
+        }
+        //then you will populate that value in leftSideSum and rightSideSum array which help you to find the sum of heights of heights array in case of every candidate index for peak of heights array
+        vector<long long>leftSideSum(sz, 0);
+        leftSideSum[0] = maxHeights[0];
+        for (int indx = 1; indx < sz; indx++)
+        {
+            int indexOfPrevSmallerHeightTower = prevSmaller[indx];
+            int numberOfEqHghTowers = indx - indexOfPrevSmallerHeightTower;    
+            leftSideSum[indx] = leftSideSum[indx] + ((long long)numberOfEqHghTowers * maxHeights[indx]);
+            
+            if (indexOfPrevSmallerHeightTower != -1)
+                leftSideSum[indx] += leftSideSum[indexOfPrevSmallerHeightTower];
+        }
+        vector<long long>rightSideSum(sz, 0);
+        rightSideSum[sz - 1] = maxHeights[sz - 1];
+        for (int indx = sz - 2; indx >= 0; indx--)
+        {
+            int indexOfNextSmallerHeightTower = nextSmaller[indx];
+            int numberOfEqHghTowers = indexOfNextSmallerHeightTower - indx;
+            
+            rightSideSum[indx] = rightSideSum[indx] + ((long long)numberOfEqHghTowers * maxHeights[indx]);
+            
+            if (indexOfNextSmallerHeightTower != sz)
+                rightSideSum[indx] += rightSideSum[indexOfNextSmallerHeightTower]; 
+        }
+        //you will consider each of the index in heights array as you candidate peak and them caculate the sum of heights of height array
+        long long maxHeightSum = 0;
+        for (int indx = 0; indx < sz; indx++)
+        {
+            //for the current candidate peak index
+            long long currHeightSum = leftSideSum[indx] + rightSideSum[indx] - maxHeights[indx];
+            //we will keep updating the values of maximum height sum possbile
+            maxHeightSum = max(maxHeightSum, currHeightSum);
+        }
+        return maxHeightSum;
+    }
+};
+
+---------------------------------------------------------4----------------------------------------------------------------------------
+https://cp-algorithms.com/data_structures/disjoint_set_union.html
+https://cp-algorithms.com/algebra/sieve-of-eratosthenes.html
+---------------------------------------------------------------------------------------------------------------------------------------
+
+//implementation of disjoint set union
+struct dsu {
+    vector<int> parent;
+    int n;
+    dsu(int n) : n(n) { clear(); }
+    void clear(){ parent.assign(n, -1); }
+    int find(int u){ return (parent[u] < 0) ? u : parent[u] = find(parent[u]); }
+    bool same(int u, int v){ return find(u) == find(v); }
+    bool join(int u, int v){
+        u = find(u);
+        v = find(v);
+        if (u != v){
+            if (parent[u] > parent[v])
+                swap(u, v);
+            parent[u] += parent[v];
+            parent[v] = u;
+        }
+        return u != v;
+    }
+    int size(int u){ return -parent[find(u)]; }
+};
+
+class Solution {
+public:
+    void sieve(vector<int>& is_prime, int n){
+        is_prime[1] = 0; is_prime[1] = 0;
+        for(long long i = 2; i <= n; i++){
+            if(!is_prime[i]) continue;
+            for(long long j = i * i; j <= n; j += i) is_prime[j] = 0;
+        }
+    }
+    long long countPaths(int n, vector<vector<int>>& edges) {
+        //sieve of eratosthenese
+        //used for checking whether a number is prime or not
+        vector<int> is_prime(n + 1, 1);
+        sieve(is_prime, n);
+
+        //union find
+        dsu union_find(n + 1);
+        // making graph according to edges array 
+        vector<vector<int>> graph(n + 1);
+        for(int indx = 0; indx < n - 1; indx++){
+            int u = edges[indx][0], v = edges[indx][1];
+            //you will be forming bi directional edges
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+
+
+        //using union find
+        //first forming path without primes numbers in it
+        for(int node = 1; node <= n; node++){
+            //if a current node is a prime number than you will skip it
+            if(is_prime[node]) continue;
+            //check for the neighbors of that current node which are not prime
+            for(int neigh : graph[node]){
+                if(is_prime[neigh]) continue;
+                union_find.join(node, neigh);
+            }
+        }
+        long long numberOfValidPaths = 0;
+        //now adding primes to path without primes at different nodes available in the non prime paths
+        for(int node = 1; node <= n; node++){
+            //we will consider a node only if it's a prime node
+            if(!is_prime[node]) continue;
+            long long not_primes = 1ll;
+            //considering those paths which are attached to a prime number
+            for(int neigh : graph[node]){
+                if(is_prime[neigh]) continue;//2 primes are not allowed in a path
+                //attaching current path to existing paths
+                numberOfValidPaths += not_primes * union_find.size(neigh);
+                not_primes += union_find.size(neigh) * 1ll; //number of not primes will increase
+                //these  not primes will be used when all these non primes nodes can be attached to some other prime number, since a tree is a connected graph
+                
+            }
+        }
+        return numberOfValidPaths;
+    }
+};
+
