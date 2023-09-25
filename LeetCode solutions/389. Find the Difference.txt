@@ -1,0 +1,41 @@
+------------------------------C++---------------------------------------------------------------
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        vector<int> freq(26);
+        for(auto chr : t){
+            freq[chr - 'a']++;
+        }
+        //all the character frequencies of t that are present in s are deleted and only extra character freq in t is remaining which is not present in s
+        for(auto chr : s){
+            freq[chr - 'a']--;
+        }
+        //here we will find out what is relative difference of non zero character freq and with the help of that we will character by adding the int value of 'a' to that and then typecasting it to a char value
+        for(int diff = 0; diff < 26; diff++){
+            if(freq[diff] != 0){
+                return (char)(diff + 'a');
+            }
+        }
+        return '*';
+    }
+};
+-----------------------------------------------Java-------------------------------------------------------
+class Solution {
+    public char findTheDifference(String s, String t) {
+        int freq[] = new int[26];
+        for(var chr : t.toCharArray()){
+            freq[chr - 'a']++;
+        }
+        //all the character frequencies of t that are present in s are deleted and only extra character freq in t is remaining which is not present in s
+        for(var chr : s.toCharArray()){
+            freq[chr - 'a']--;
+        }
+        //here we will find out what is relative difference of non zero character freq and with the help of that we will character by adding the int value of 'a' to that and then typecasting it to a char value
+        for(int diff = 0; diff < 26; diff++){
+            if(freq[diff] != 0){
+                return (char)(diff + 'a');
+            }
+        }
+        return '*';
+    }
+}
