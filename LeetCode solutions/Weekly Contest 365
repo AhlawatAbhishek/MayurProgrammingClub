@@ -1,4 +1,5 @@
----------------------------------------------1--------------------------------
+---------------------------------------------1---------------------------------------------------------------------------------------------------------
+===============================================C++==========================================================
 #define ll long long
 class Solution {
 public:
@@ -26,7 +27,28 @@ public:
         return maxVal;
     }
 };
-----------------------------------------------2-------------------------------------------class Solution {
+===================================Java======================================================
+class Solution {
+    public long maximumTripletValue(int [] nums) {
+        int sz = nums.length;
+        int [] mxFromRightTill = new int[sz];
+        mxFromRightTill[sz-1] =  nums[sz-1];
+        long maxVal = 0;
+        for (int indx = sz-2; indx >= 0; indx--) {
+            mxFromRightTill[indx] = Math.max(mxFromRightTill[indx+1], nums[indx]);
+        }
+        int mxFromLeft = nums[0];
+        for (int indx = 1; indx < sz-1; indx++) {
+            mxFromLeft = Math.max(mxFromLeft, nums[indx-1]);
+            if (nums[indx] < mxFromLeft) {
+                maxVal = Math.max(maxVal, (mxFromLeft-nums[indx]) * (long)mxFromRightTill[indx+1]);
+            }
+        }
+        return maxVal;
+    }
+}
+----------------------------------------------2-------------------------------------------------------------------------------------------------------
+===============================================C++==========================================================
 #define ll long long
 class Solution {
 public:
@@ -54,7 +76,28 @@ public:
         return maxVal;
     }
 };
---------------------------------------------------3-----------------------------------------
+===================================Java======================================================
+class Solution {
+    public long maximumTripletValue(int [] nums) {
+        int sz = nums.length;
+        int [] mxFromRightTill = new int[sz];
+        mxFromRightTill[sz-1] =  nums[sz-1];
+        long maxVal = 0;
+        for (int indx = sz-2; indx >= 0; indx--) {
+            mxFromRightTill[indx] = Math.max(mxFromRightTill[indx+1], nums[indx]);
+        }
+        int mxFromLeft = nums[0];
+        for (int indx = 1; indx < sz-1; indx++) {
+            mxFromLeft = Math.max(mxFromLeft, nums[indx-1]);
+            if (nums[indx] < mxFromLeft) {
+                maxVal = Math.max(maxVal, (mxFromLeft-nums[indx]) * (long)mxFromRightTill[indx+1]);
+            }
+        }
+        return maxVal;
+    }
+}
+--------------------------------------------------3--------------------------------------------------------------------------------------------------------------
+==================================C++======================================
 class Solution {
 public:
 //prefix sum + hashing
@@ -88,7 +131,35 @@ public:
         return res < sz ? res + completeNumsUsed * sz : -1;
     }
 };
--------------------------------------------------4-----------------------------------------------------------
+===========================Java=========================================
+class Solution {
+    public int minSizeSubarray(int []nums, int target) {
+        long arraySum = 0;
+        for(var num : nums){
+            arraySum += num * 1L;
+        }
+        long prefSum = 0;
+        int sz = nums.length;
+        int completeNumsUsed = (int)(target / arraySum);
+        int res = Integer.MAX_VALUE;
+        target %= arraySum;
+        if (target == 0) {
+            return completeNumsUsed * sz;
+        }
+        Map<Long, Integer> prefSumIndxMp = new HashMap<>();
+        prefSumIndxMp.put(0L, -1);
+        for (int indx = 0; indx < 2 * sz; ++indx) {
+            prefSum += nums[indx % sz];
+            if (prefSumIndxMp.containsKey(prefSum - target)) {
+                res = Math.min(res, indx - prefSumIndxMp.get(prefSum - target));
+            }
+            prefSumIndxMp.put(prefSum, indx);
+        }
+        return res < sz ? res + completeNumsUsed * sz : -1;
+    }
+}
+-------------------------------------------------4----------------------------------------------------------------------------------------------------------------
+===============C++====================================
 class Solution {
 public:
         vector<int> countVisitedNodes(vector<int>& edges) {
@@ -130,5 +201,36 @@ public:
         return answer;
     }
 };
-
-__Random_User__
+==================================Java======================================
+class Solution {
+    public int[] countVisitedNodes(List<Integer> edges) {
+        int sz = edges.size();
+        List<Integer> answer = new ArrayList<>();
+        for(int indx = 0; indx < sz; indx++){
+            answer.add(0);
+        }
+        for (int indx = 0; indx < sz; ++indx) {
+              Set<Integer> visited = new HashSet<>();
+            List<Integer> nodeStack = new ArrayList<>();
+            int currSrc = indx;
+            while (!visited.contains(currSrc) && answer.get(currSrc) == 0) {
+                visited.add(currSrc);
+                nodeStack.add(currSrc);
+                currSrc = edges.get(currSrc);
+            }
+            if (visited.contains(currSrc)) {
+                int cycleLength = nodeStack.size() - nodeStack.indexOf(currSrc);
+                for (int times = 0; times < cycleLength; times++) {
+                    answer.set(nodeStack.get(nodeStack.size() - 1), cycleLength);
+                    nodeStack.remove(nodeStack.size() - 1);
+                }
+            }
+            while (!nodeStack.isEmpty()) {
+                currSrc = nodeStack.get(nodeStack.size() - 1);
+                nodeStack.remove(nodeStack.size() - 1);
+                answer.set(currSrc, answer.get(edges.get(currSrc)) + 1);
+            }
+        }
+        return answer.stream().mapToInt(Integer::intValue).toArray();
+    }
+}
