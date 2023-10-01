@@ -1,0 +1,134 @@
+---------------------------------------------1--------------------------------
+#define ll long long
+class Solution {
+public:
+    long long maximumTripletValue(vector<int>& nums) {
+       int sz = nums.size();
+       //this array will be used to store the max possible value from right hand side till a particular index
+       //'k' in the triplet
+        vector<int> mxFromRightTill(sz);
+        //max on right hand side
+        //no value on right hand side of last index
+        mxFromRightTill[sz-1] = nums[sz-1];
+        ll maxVal =0;
+        for(int indx=sz-2;indx>=0;indx--){ 
+            mxFromRightTill[indx] = max(mxFromRightTill[indx+1],nums[indx]);
+        }    
+        //max on left hand side ('i')
+        int mxFromLeft = nums[0];
+        //the indx is considered to be a candidate of 'j' in the ('i', 'j', 'k') triplet
+        for(int indx=1;indx<sz-1;indx++){
+            //max from left will update as we move form left to right int the given array
+            mxFromLeft=max(mxFromLeft,nums[indx-1]);
+            //in this case 'i' is the mxFromLeftddle element
+            if(nums[indx] < mxFromLeft) maxVal=max(maxVal,(mxFromLeft-nums[indx]) * (ll)mxFromRightTill[indx+1]);
+        }
+        return maxVal;
+    }
+};
+----------------------------------------------2-------------------------------------------class Solution {
+#define ll long long
+class Solution {
+public:
+    long long maximumTripletValue(vector<int>& nums) {
+       int sz = nums.size();
+       //this array will be used to store the max possible value from right hand side till a particular index
+       //'k' in the triplet
+        vector<int> mxFromRightTill(sz);
+        //max on right hand side
+        //no value on right hand side of last index
+        mxFromRightTill[sz-1] = nums[sz-1];
+        ll maxVal =0;
+        for(int indx=sz-2;indx>=0;indx--){ 
+            mxFromRightTill[indx] = max(mxFromRightTill[indx+1],nums[indx]);
+        }    
+        //max on left hand side ('i')
+        int mxFromLeft = nums[0];
+        //the indx is considered to be a candidate of 'j' in the ('i', 'j', 'k') triplet
+        for(int indx=1;indx<sz-1;indx++){
+            //max from left will update as we move form left to right int the given array
+            mxFromLeft=max(mxFromLeft,nums[indx-1]);
+            //in this case 'i' is the mxFromLeftddle element
+            if(nums[indx] < mxFromLeft) maxVal=max(maxVal,(mxFromLeft-nums[indx]) * (ll)mxFromRightTill[indx+1]);
+        }
+        return maxVal;
+    }
+};
+--------------------------------------------------3-----------------------------------------
+class Solution {
+public:
+//prefix sum + hashing
+    int minSizeSubarray(vector<int>& nums, int target) {
+        //calculate the sum of the array to see how many complete nums array will be used and then do the caculation of remaining value of target given
+        long arraySum = accumulate(nums.begin(), nums.end(), 0L), prefSum = 0;
+        int sz = nums.size();
+        int completeNumsUsed = target / arraySum;
+        int  res = INT_MAX;
+        //target will be updated to it's new value
+        target %= arraySum;
+        //in this case completeNumUsed will be sufficient to form the given target and you will return completeNumUsed * size of single nums array
+        if (target == 0){
+            return completeNumsUsed * sz;
+        }
+        //if that's not the case the you will do caculations for the remaining target that is not achieved with the complete nums array     
+        unordered_map<long, int> prefSumIndxMp;
+        prefSumIndxMp[0] = -1;
+        //here nums array will be appended twice to cover all the subarrays possible in this case
+        for (int indx = 0; indx < 2 * sz; ++indx) {
+            //current value of prefix sum will be updated
+            prefSum += nums[indx % sz];
+            //in this case there is sub array that can sum up to target if the following condition satisfies
+            if (prefSumIndxMp.count(prefSum - target)){
+                //length of sub array whose elements sums upto target
+                res = min(res, indx - prefSumIndxMp[prefSum - target]);
+            }
+            //update the value of index of current prefix sum
+            prefSumIndxMp[prefSum] = indx;
+        }
+        return res < sz ? res + completeNumsUsed * sz : -1;
+    }
+};
+-------------------------------------------------4-----------------------------------------------------------
+class Solution {
+public:
+        vector<int> countVisitedNodes(vector<int>& edges) {
+        int sz = edges.size();
+        //this is the answer array that you will be returning
+        vector<int> answer(sz);
+        //to keep check of visited nodes
+        set<int> visited;
+        //each of the index will be considered as the cadidate starting node for the process on the graph
+        for (int indx = 0; indx < sz; ++indx) {
+            visited.clear();
+            //the stack containing the path for the current starting point
+            vector<int> nodeStack;
+            //current starting point
+            int currSrc = indx;
+            //forming the path for the current starting point and continuing till you find a already visited node while processing the graph
+            while (visited.find(currSrc) == visited.end() && answer[currSrc] == 0) {
+                visited.insert(currSrc);
+                nodeStack.push_back(currSrc);
+                //this the next node to be visited in the path 
+                currSrc = edges[currSrc];
+            }
+            //if a cycle is formed
+            if (visited.find(currSrc) != visited.end()) { 
+                int cycleLength = nodeStack.size() - distance(nodeStack.begin(), find(nodeStack.begin(), nodeStack.end(), currSrc));
+                //for the nodes in the cycle their answer will be cycle length
+                for (int times = 0; times < cycleLength; times++) {
+                    answer[nodeStack.back()] = cycleLength;
+                    nodeStack.pop_back();
+                }
+            }
+            //then if there are node which are not part of cycle but connected to the cycle node via directed edge then will caculate answer for them
+            while (!nodeStack.empty()) {
+                currSrc = nodeStack.back();
+                nodeStack.pop_back();
+                answer[currSrc] = answer[edges[currSrc]] + 1;
+            }
+        }
+        return answer;
+    }
+};
+
+__Random_User__
