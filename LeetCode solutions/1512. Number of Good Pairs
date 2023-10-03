@@ -1,0 +1,35 @@
+-----------------------C++-------------------------------
+class Solution {
+public:
+    int numIdenticalPairs(vector<int>& nums) {
+        unordered_map<int, int> numFreqMp;
+        int answer = 0;
+        for(auto num : nums){
+            answer += numFreqMp[num];
+            numFreqMp[num]++;
+        }
+        return answer;
+    }
+};
+---------------------------Java----------------------------
+class Solution {
+    public int numIdenticalPairs(int[] nums) {
+        Map<Integer, Integer> numFreqMp = new HashMap<>();
+        int answer = 0;
+        for(var num : nums){
+            answer += numFreqMp.getOrDefault(num, 0);
+            numFreqMp.put(num, numFreqMp.getOrDefault(num, 0) + 1);
+        }
+        return answer;
+    }
+}
+--------------------------------Python3-----------------------
+class Solution:
+    def numIdenticalPairs(self, nums):
+        numFreqMp = {}
+        
+        answer = 0
+        for num in nums:
+            answer += numFreqMp.get(num, 0)
+            numFreqMp[num] = numFreqMp.get(num, 0) + 1
+        return answer
