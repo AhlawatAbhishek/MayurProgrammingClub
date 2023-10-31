@@ -1,0 +1,30 @@
+---------------------------------C++----------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] findArray(int[] pref) {
+        int sz = pref.length;
+        int [] orgArr = new int[sz];
+        for(int indx = 0; indx < sz; indx++){
+            orgArr[indx] = (indx - 1 > -1) ? (pref[indx-1] ^ pref[indx]) : pref[indx];  
+        }
+        return orgArr;
+    }
+}
+---------------------------------Java---------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] findArray(int[] pref) {
+        int sz = pref.length;
+        int [] orgArr = new int[sz];
+        for(int indx = 0; indx < sz; indx++){
+            orgArr[indx] = (indx - 1 > -1) ? (pref[indx-1] ^ pref[indx]) : pref[indx];  
+        }
+        return orgArr;
+    }
+}
+---------------------------------Python 3-----------------------------------------------------------------------------------------------------------------------
+class Solution:
+    def findArray(self, pref):
+        sz = len(pref)
+        orgArr = [0] * sz
+        for indx in range(sz):
+            orgArr[indx] = pref[indx-1] ^ pref[indx] if indx - 1 > -1 else pref[indx]
+        return orgArr

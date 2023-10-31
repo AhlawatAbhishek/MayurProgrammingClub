@@ -1,0 +1,116 @@
+----------------------------------C++---------------------------------------------------
+class NestedIterator {
+    vector<int> flatList;
+    int iterator;
+public:
+    NestedIterator(std::vector<NestedInteger>& nestedList) {
+        iterator = 0;
+        flattenList(nestedList);
+    }
+    
+    void flattenList(std::vector<NestedInteger>& nestedList) {
+        for (NestedInteger ele : nestedList) {
+            if (ele.isInteger()) {
+                flatList.push_back(ele.getInteger());
+            } else {
+                flattenList(ele.getList());
+            }
+        }
+    }
+    
+    int next() {
+        if (hasNext()) {
+            return flatList[iterator++];
+        } else {
+            return NULL;
+        }
+    }
+    
+    bool hasNext() {
+        return iterator < flatList.size();
+    }
+};
+--------------------------------------Python 3----------------------------------------------------------------------
+class NestedIterator:
+    def __init__(self, nestedList):
+        self.flatList = []
+        self.iterator = 0
+        self.flattenList(nestedList)
+    
+    def flattenList(self, nestedList):
+        for ele in nestedList:
+            if ele.isInteger():
+                self.flatList.append(ele.getInteger())
+            else:
+                self.flattenList(ele.getList())
+    
+    def next(self):
+        if self.hasNext():
+            val = self.flatList[self.iterator]
+            self.iterator += 1
+            return val
+        else:
+            return None
+    
+    def hasNext(self):
+        return self.iterator < len(self.flatList)
+------------------------------------------------------------Java-------------------------------------------------------
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * public interface NestedInteger {
+ *
+ *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     public boolean isInteger();
+ *
+ *     // @return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // Return null if this NestedInteger holds a nested list
+ *     public Integer getInteger();
+ *
+ *     // @return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // Return empty list if this NestedInteger holds a single integer
+ *     public List<NestedInteger> getList();
+ * }
+ */
+public class NestedIterator implements Iterator<Integer> {
+    List<Integer> flatList = null;
+    //index of the flatList
+    int iterator;
+    public NestedIterator(List<NestedInteger> nestedList) {
+        flatList = new ArrayList<>();
+        iterator = 0;
+        flattenList(nestedList);
+    }
+
+    private void flattenList(List<NestedInteger> nestedList){
+        //for each element in nestedList we will do either of two things depending upon whether the current element is a
+        //integer or a nestedList itself
+        for(NestedInteger ele : nestedList){
+            if(ele.isInteger()){
+                flatList.add(ele.getInteger());
+            }else{//recurse for the flatten list function
+                flattenList(ele.getList());
+            }
+        }
+    }
+
+    @Override
+    public Integer next() {
+        if(hasNext()){//you have not end of the flatList , then consider this case
+            return flatList.get(iterator++);
+        }else{
+            return null;
+        }
+    }
+
+    @Override
+    public boolean hasNext() {
+        return iterator < flatList.size();
+    }
+}
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i = new NestedIterator(nestedList);
+ * while (i.hasNext()) v[f()] = i.next();
+ */

@@ -1,0 +1,19 @@
+----------------------------------C++-----------------------------------------------------------------------
+//TC : O(1)
+//SC : O(1)
+class Solution {
+public:
+    bool isPowerOfFour(int n) {
+       return  n  > 0 && floor(log(n)/log(4)) == ceil(log(n)/log(4));
+    }
+};
+---------------------------------------Java------------------------------------------------------------------
+class Solution {
+    public boolean isPowerOfFour(int n) {
+        return  n  > 0 && Math.floor(Math.log(n)/Math.log(4)) == Math.ceil(Math.log(n)/Math.log(4));
+    }
+}
+---------------------------------------Python 3--------------------------------------------------------------
+class Solution:
+    def isPowerOfFour(self, n):
+        return n > 0 and math.floor(math.log(n)/math.log(4)) == math.ceil(math.log(n)/math.log(4))

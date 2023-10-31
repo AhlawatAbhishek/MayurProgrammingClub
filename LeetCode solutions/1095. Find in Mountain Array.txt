@@ -1,0 +1,140 @@
+-----------------------C++---------------------------------------------------------------------------------------------------------------
+/**
+ * // This is the MountainArray's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * class MountainArray {
+ *   public:
+ *     int get(int index);
+ *     int length();
+ * };
+ */
+
+class Solution {
+public:
+    int findInMountainArray(int target, MountainArray &mArr) {
+        //FINDING THE PEAK ELEMENT OF ARRAY
+        //USING BINARY ON THE SEARCH SPACE COMPRISING OF INCIDICIES OF THE MOUNTAIN ARRAY
+         int sz = mArr.length(), left = 0, right = sz-1, peakIndx = sz-1;
+         //to find the index of peak element in mountain array
+         while(left < right){
+             //to avoid integer overflow
+             int midIndx = left + (right - left)/2;
+             //comparing element at mid index and one element next to it
+             if(mArr.get(midIndx) < mArr.get(midIndx + 1)){
+                 left = midIndx + 1;
+                 peakIndx = midIndx + 1;
+             }else{//mArr.get(midIndx) > mArr.get(midIndx + 1)
+                 //we donot want to loose midIndx as it can be our peak index
+                 right = midIndx;
+             }
+         }
+         //try to find the peak element index in left side of peak element first becuse we have to return minimum index of occurence of target value by using binary search in left part, which comprising of indicies from 0 to peakIndx
+             left = 0;
+             right = peakIndx ;
+             while(left <= right){
+                 int midIndx = left + (right - left)/2;
+                 if(mArr.get(midIndx) < target){
+                    left = midIndx + 1;
+                 }else if(mArr.get(midIndx) > target){
+                     right = midIndx - 1;
+                 }else{ // if hit the target
+                     return midIndx;
+                 }
+             }
+         //try to find the peak element index in right part by using binary search in right part, which comprising of indicies from peakIndx to sz - 1
+             left = peakIndx;
+             right = sz - 1;
+             while(left <= right){
+                 int midIndx = left + (right - left)/2;
+                 if(mArr.get(midIndx) > target){
+                    left = midIndx + 1;
+                 }else if(mArr.get(midIndx) < target){
+                     right = midIndx - 1;
+                 }else{ // if hit the target
+                     return midIndx;
+                 }
+             }
+             return -1;
+    }
+};
+--------------------------------------------------------Java-------------------------------------------------------------------------------
+class Solution {
+    public int findInMountainArray(int target, MountainArray mArr) {
+        int sz = mArr.length(), left = 0, right = sz-1, peakIndx = sz-1;
+        while(left < right){
+            int midIndx = left + (right - left)/2;
+            if(mArr.get(midIndx) < mArr.get(midIndx + 1)){
+                left = midIndx + 1;
+                peakIndx = midIndx + 1;
+            }else{
+                right = midIndx;
+            }
+        }
+        left = 0;
+        right = peakIndx ;
+        while(left <= right){
+            int midIndx = left + (right - left)/2;
+            if(mArr.get(midIndx) < target){
+                left = midIndx + 1;
+            }else if(mArr.get(midIndx) > target){
+                right = midIndx - 1;
+            }else{
+                return midIndx;
+            }
+        }
+        left = peakIndx;
+        right = sz - 1;
+        while(left <= right){
+            int midIndx = left + (right - left)/2;
+            if(mArr.get(midIndx) > target){
+                left = midIndx + 1;
+            }else if(mArr.get(midIndx) < target){
+                right = midIndx - 1;
+            }else{ 
+                return midIndx;
+            }
+        }
+        return -1;
+    }
+}
+---------------------------------------------------------------Python 3--------------------------------------------------------------------
+class Solution:
+    def findInMountainArray(self, target, mArr):
+        sz = mArr.length()
+        left = 0
+        right = sz - 1
+        peakIndx = sz - 1
+        
+        while left < right:
+            midIndx = left + (right - left) // 2
+            if mArr.get(midIndx) < mArr.get(midIndx + 1):
+                left = midIndx + 1
+                peakIndx = midIndx + 1
+            else:
+                right = midIndx
+        
+        left = 0
+        right = peakIndx
+        
+        while left <= right:
+            midIndx = left + (right - left) // 2
+            if mArr.get(midIndx) < target:
+                left = midIndx + 1
+            elif mArr.get(midIndx) > target:
+                right = midIndx - 1
+            else:
+                return midIndx
+        
+        left = peakIndx
+        right = sz - 1
+        
+        while left <= right:
+            midIndx = left + (right - left) // 2
+            if mArr.get(midIndx) > target:
+                left = midIndx + 1
+            elif mArr.get(midIndx) < target:
+                right = midIndx - 1
+            else:
+                return midIndx
+        
+        return -1

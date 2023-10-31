@@ -1,0 +1,90 @@
+-----------------------------------------------Java-------------------------------------------------------------------
+class Solution {
+    public int[] fullBloomFlowers(int[][] flowers, int[] persons) {
+        int n = flowers.length;
+        int[] bloomStartTime = new int[n], bloomEndTime = new int[n];
+        
+        for (int indx = 0; indx < n; indx++) {
+            bloomStartTime[indx] = flowers[indx][0];
+            bloomEndTime[indx] = flowers[indx][1];
+        }
+        
+        Arrays.sort(bloomStartTime);
+        Arrays.sort(bloomEndTime);
+        
+        int[] res = new int[persons.length];
+        
+        for (int indx = 0; indx < persons.length; indx++) {
+            int t = persons[indx];
+            int bloomStartNumber = upper_bound(bloomStartTime, t);
+            int bloomEndNumber = lower_bound(bloomEndTime, t);
+            res[indx] = bloomStartNumber - bloomEndNumber;
+        }
+        
+        return res;
+    }
+    
+    private int upper_bound(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] <= target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        
+        return left;
+    }
+    
+    private int lower_bound(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+            if (arr[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        
+        return left;
+    }
+}
+
+-----------------------------------------------C++--------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> fullBloomFlowers(vector<vector<int>>& flowers, vector<int>& people) {
+        int sz = people.size();
+        vector<int> answers(sz, 0), bloomStartTime, bloomEndTime;
+        for(auto &times : flowers){
+            bloomStartTime.push_back(times[0]);
+            bloomEndTime.push_back(times[1]);
+        }
+        sort(bloomStartTime.begin(), bloomStartTime.end());
+        sort(bloomEndTime.begin(), bloomEndTime.end());
+        for(int indx = 0; indx < sz; indx++){
+           int arrivalTime = people[indx]; 
+           //index of first time value in bloomStartTime array which is having value greater than current arrival time
+           int bloomStartNumber = upper_bound(bloomStartTime.begin(), bloomStartTime.end(),  arrivalTime) - bloomStartTime.begin();
+
+           //index of first time value in bloomEndTime array which is having value atleast equal current arrival Time
+           int bloomEndNumber = lower_bound(bloomEndTime.begin(), bloomEndTime.end(), arrivalTime) - bloomEndTime.begin();
+           answers[indx] = bloomStartNumber - bloomEndNumber;
+        }
+        return answers;
+    }    
+};
+
+----------------------------------------------Python 3----------------------------------------------------------------
+class Solution:
+    def fullBloomFlowers(self, flowers: List[List[int]], people: List[int]) -> List[int]:
+        bloomStartTime = sorted([s for s, e in flowers])
+        bloomEndTime = sorted([e for s, e in flowers])
+        return [bisect_right(bloomStartTime, arrivalTime) - bisect_left(bloomEndTime, arrivalTime) for arrivalTime in people]

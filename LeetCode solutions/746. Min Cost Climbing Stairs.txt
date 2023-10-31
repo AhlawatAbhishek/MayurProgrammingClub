@@ -1,0 +1,42 @@
+--------------------------------C++-------------------------------------------------------------
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        int sz = cost.size();
+        vector<int> minCost(sz);
+        minCost[0] = cost[0];
+        minCost[1] = cost[1];
+        for(int indx = 2; indx < sz; indx++){
+            //for the current step or say state you could have landed here from 2 possible prev states
+            //will be taking minimum of the contribution along the contribution of cost of using current state or say step;
+                minCost[indx] = cost[indx] +  min(minCost[indx - 1], minCost[indx - 2]);
+        }
+        return min(minCost[sz - 2], minCost[sz - 1]);
+    }
+};
+
+--------------------------------Python 3--------------------------------------------------------
+class Solution:
+    def minCostClimbingStairs(self, cost):
+        sz = len(cost)
+        minCost = [0] * sz
+        minCost[0] = cost[0]
+        minCost[1] = cost[1]
+        for indx in range(2, sz):
+            minCost[indx] = cost[indx] + min(minCost[indx - 1], minCost[indx - 2])
+        return min(minCost[sz - 2], minCost[sz - 1])
+-----------------------------------------------Java--------------------------------------------------------
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        int sz = cost.length;
+        int minCost[] = new int[sz];
+        minCost[0] = cost[0];
+        minCost[1] = cost[1];
+        for(int indx = 2; indx < sz; indx++){
+            //for the current step or say state you could have landed here from 2 possible prev states
+            //will be taking minimum of the contribution along the contribution of cost of using current state or say step;
+                minCost[indx] = cost[indx] +  Math.min(minCost[indx - 1], minCost[indx - 2]);
+        }
+        return Math.min(minCost[sz - 2], minCost[sz - 1]);
+    }
+}

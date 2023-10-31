@@ -1,0 +1,74 @@
+---------------------------------------------------1-----------------------------------------------------
+class Solution {
+public:
+        vector<int> findIndices(vector<int>& nums, int indexDifference, int valueDifference) {
+            //intially min and max value index will be pointing to starting index
+        int minEleIndx = 0, maxEleIndx = 0, n = nums.size();
+        //starting from 'indexDifference' index in given array you will keep update value of minEleIndx and maxEleIndx
+        for (int indx = indexDifference; indx < n; indx++) {
+            if (nums[indx - indexDifference] < nums[minEleIndx]) minEleIndx = indx - indexDifference;
+            //if the value condition for minEleIndx satisfies then you return return pair of current index and minEleIndx
+            if (nums[indx] - nums[minEleIndx] >= valueDifference) return {indx, minEleIndx};
+            if (nums[indx - indexDifference] > nums[maxEleIndx]) maxEleIndx = indx - indexDifference;
+            //if the valueDiff condition for maxEleIndx satisfies then you will return pair of current index and maxEleIndx
+            if (nums[maxEleIndx] - nums[indx] >= valueDifference) return {indx, maxEleIndx};
+        }
+        //if the desired pair statisfying the conditions of valDiff and indexDiff is not found then you will return the array / vector containing following value
+        return { -1, -1};
+    }
+};
+-------------------------------------------------------------2------------------------------------------------
+class Solution {
+public:
+    string shortestBeautifulSubstring(string s, int k) {
+        int left = 0, right = 0, sz = s.size();
+        //it will contain all the possible sub strings of the given string 
+        vector<string> subStrings;
+        int currCnt = 0;
+        //here you will generate all possible sub strings
+        //it will take O(n^3) time complexity, where n is the size of the given string
+        for(int indx = 0; indx < sz ; indx++){
+            for(int indx1 = indx; indx1 < sz; indx1++){
+                subStrings.push_back(s.substr(indx, indx1 - indx + 1));
+            }
+        }
+        //to seperate out all the string having exactly k occurence of '1' in them
+        vector<string> res;
+        for(auto & str : subStrings){
+            int cnt = count(str.begin(), str.end(), '1');
+            if(cnt == k){
+                res.push_back(str);
+            }
+        }
+        //the next step will be to sort the substring such that the zeroth index of the 'res' array will be containing you answer.
+        sort(res.begin(), res.end(), [](const string & str1, const string & str2)->bool{
+            if(str1.size() != str2.size())return str1.size() < str2.size();
+            else return str1 < str2;
+        });
+        //if the size of the res array is greater than zero then you will return element at it's zeroth index
+        if(res.size())
+            return res[0];
+            //you have not found a substring satisfying the conditions given the problem and you will return empty string
+        else
+            return "";
+    }
+};
+------------------------------------------------3-------------------------------------------------------------------
+class Solution {
+public:
+        vector<int> findIndices(vector<int>& nums, int indexDifference, int valueDifference) {
+            //intially min and max value index will be pointing to starting index
+        int minEleIndx = 0, maxEleIndx = 0, n = nums.size();
+        //starting from 'indexDifference' index in given array you will keep update value of minEleIndx and maxEleIndx
+        for (int indx = indexDifference; indx < n; indx++) {
+            if (nums[indx - indexDifference] < nums[minEleIndx]) minEleIndx = indx - indexDifference;
+            //if the value condition for minEleIndx satisfies then you return return pair of current index and minEleIndx
+            if (nums[indx] - nums[minEleIndx] >= valueDifference) return {indx, minEleIndx};
+            if (nums[indx - indexDifference] > nums[maxEleIndx]) maxEleIndx = indx - indexDifference;
+            //if the valueDiff condition for maxEleIndx satisfies then you will return pair of current index and maxEleIndx
+            if (nums[maxEleIndx] - nums[indx] >= valueDifference) return {indx, maxEleIndx};
+        }
+        //if the desired pair statisfying the conditions of valDiff and indexDiff is not found then you will return the array / vector containing following value
+        return { -1, -1};
+    }
+};

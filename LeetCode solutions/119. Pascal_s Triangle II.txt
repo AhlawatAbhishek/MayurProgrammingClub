@@ -1,0 +1,55 @@
+-------------------------------------C++------------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        vector<vector<int>> tria (rowIndex + 1);
+        int colNum = 1;
+        for(int r = 0; r <= rowIndex; r++){
+            //current row being delcared
+           vector<int> row(colNum, 1);
+           //adding current row to triangle
+           tria[r] = row;
+           //filling your current row
+           //skipping the last and first column
+           //from the thrid row onwards this loop will run
+           for(int c = 1; c < colNum-1; c++){
+              tria[r][c] =  tria[r-1][c-1] + tria[r-1][c];
+           }
+           colNum++;
+        } 
+        //returning the row at 'rowIndex'
+        return tria[rowIndex];
+    }
+};
+-------------------------------------------------Java-------------------------------------------------------------
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        List<List<Integer>> tria = new ArrayList<>(rowIndex + 1);
+        int colNum = 1;
+        for (int r = 0; r <= rowIndex; r++) {
+            List<Integer> row = new ArrayList<>(colNum);
+            for (int i = 0; i < colNum; i++) {
+                row.add(1);
+            }
+            tria.add(row);
+            for (int c = 1; c < colNum - 1; c++) {
+                tria.get(r).set(c, tria.get(r - 1).get(c - 1) + tria.get(r - 1).get(c));
+            }
+            colNum++;
+        }
+        return tria.get(rowIndex);
+    }
+}
+------------------------------------------------Python 3----------------------------------------------------------
+class Solution:
+    def getRow(self, rowIndex: int) -> List[int]:
+        tria = [[] for _ in range(rowIndex + 1)]
+        colNum = 1
+        for r in range(rowIndex + 1):
+            row = [1] * colNum
+            tria[r] = row
+            for c in range(1, colNum - 1):
+                tria[r][c] = tria[r - 1][c - 1] + tria[r - 1][c]
+            colNum += 1
+        return tria[rowIndex]
+        

@@ -1,0 +1,78 @@
+----------------------C++------------------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        //this will be the final result that we will be returning, max values at each level of the tree
+        vector<int> maxLevelVal;
+        if(root == NULL)return maxLevelVal;
+        // it will be used to do Level Order traversal of the tree
+        queue<TreeNode*> levelQueue;
+        levelQueue.push(root);
+        while(!levelQueue.empty()){
+            int sz = levelQueue.size();
+            //here you are exploring current level nodes and equeueing their neighbors in the queue
+            //to store max value node at current level
+            int maxValNode = INT_MIN;
+            while(sz-->0){
+                TreeNode * currNode = levelQueue.front();
+                maxValNode = max(currNode->val, maxValNode);
+                levelQueue.pop();
+                //enqueue it's neighbors or say children
+                if(currNode->left != NULL){
+                    levelQueue.push(currNode->left);
+                }
+                if(currNode->right != NULL){
+                    levelQueue.push(currNode->right);
+                }
+            }
+            maxLevelVal.push_back(maxValNode);
+        }
+        return maxLevelVal;
+    }
+};
+--------------------------------------------------------Java------------------------------------------------------------------------------
+class Solution {
+    public List<Integer> largestValues(TreeNode root) {
+        List<Integer> maxLevelVal = new ArrayList<>();
+        if(root == null)return maxLevelVal;
+        Deque<TreeNode> levelQueue = new ArrayDeque<>();
+        levelQueue.offerLast(root);
+        while(!levelQueue.isEmpty()){
+            int sz = levelQueue.size();
+            int maxValNode = Integer.MIN_VALUE;
+            while(sz-->0){
+                TreeNode currNode = levelQueue.pollFirst();
+                maxValNode = Math.max(currNode.val, maxValNode);
+                if(currNode.left != null){
+                    levelQueue.offerLast(currNode.left);
+                }
+                if(currNode.right != null){
+                    levelQueue.offerLast(currNode.right);
+                }
+            }
+            maxLevelVal.add(maxValNode);
+        }
+        return maxLevelVal;
+    }
+}
+------------------------------------------Python 3----------------------------------------------------------------------------------
+class Solution:
+    def largestValues(self, root):
+        maxLevelVal = []
+        if root is None:
+            return maxLevelVal
+        levelQueue = []
+        levelQueue.append(root)
+        while levelQueue:
+            sz = len(levelQueue)
+            maxValNode = float('-inf')
+            while sz > 0:
+                currNode = levelQueue.pop(0)
+                maxValNode = max(currNode.val, maxValNode)
+                if currNode.left:
+                    levelQueue.append(currNode.left)
+                if currNode.right:
+                    levelQueue.append(currNode.right)
+                sz -= 1
+            maxLevelVal.append(maxValNode)
+        return maxLevelVal
