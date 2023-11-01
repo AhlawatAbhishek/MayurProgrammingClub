@@ -46,8 +46,9 @@ class Solution {
         //right side of the current root
         chooseNodes(root.right);
     }
-    ----------------------------------C++------------------------------------------------------------------------
-    /**
+}
+----------------------------------C++------------------------------------------------------------------------
+/**
  * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;
@@ -108,4 +109,3 @@ private:
         chooseNodes(root->right);
     }
 };
-}
