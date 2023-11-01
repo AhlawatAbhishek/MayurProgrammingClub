@@ -1,0 +1,49 @@
+--------------------------------Java---------------------------------------------------------
+class Solution {
+    private List<Integer> modes = null;
+    private int maxFreq = 0, freqCnt = 0, prevVal = 100001;
+    public int[] findMode(TreeNode root) {
+         modes = new ArrayList<>();
+         //finding out maxFreq 
+         calcMaxFreq(root);
+         //resetting the prevVal
+         prevVal = 100001;
+         //now you will choose all the nodes that are occuring maxFreq times 
+         chooseNodes(root);
+         return modes.stream().mapToInt(x -> x).toArray();
+    }
+    //The core logic of the solution is base upon this property of BST
+    //in order traversal of BST is sorted in increasing order
+    private void calcMaxFreq(TreeNode root){
+        if(root == null)return;
+        //left side of current root
+        calcMaxFreq(root.left);
+        //visit the root and do calculations for counting freq of current root
+        if(prevVal == root.val){
+            freqCnt++;
+        }else{
+            freqCnt = 1;
+            prevVal = root.val;
+        }
+        maxFreq = Math.max(freqCnt, maxFreq);
+        //right side of the current root
+        calcMaxFreq(root.right);
+    }
+    private void chooseNodes(TreeNode root){
+        if(root == null)return;
+        //left side of current root
+        chooseNodes(root.left);
+        //visit the root and do calculations for counting freq of current root
+        if(prevVal == root.val){
+            freqCnt++;
+        }else{
+            freqCnt = 1;
+            prevVal = root.val;
+        }
+        if(freqCnt == maxFreq){
+          modes.add(root.val);   
+        }
+        //right side of the current root
+        chooseNodes(root.right);
+    }
+}
