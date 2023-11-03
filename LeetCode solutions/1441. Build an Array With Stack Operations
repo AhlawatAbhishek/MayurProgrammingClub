@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<string> buildArray(vector<int>& target, int n) {
+        //taking 2 pointers one is pointing to the elements in the target array
+       int tIndx = 0;
+       vector<string> operations;
+       //another pointer is num which pointing to current value in the stream of integers given to us
+       for(int num = 1; num <= n && tIndx < target.size(); num++){
+           // for a match add only push to the operations array or say vector
+          if(num  == target[tIndx]){
+              operations.push_back("Push");
+              tIndx++;
+          }else{
+              //in case there is a mismatch then enqueue or say add push and pop both
+              operations.push_back("Push");
+              operations.push_back("Pop");
+          }
+       } 
+    //    and at last return operations array.
+       return operations;
+    }
+};
