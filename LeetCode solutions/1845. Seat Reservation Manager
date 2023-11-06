@@ -1,0 +1,45 @@
+Time Complexity: O(n*log n) 
+Space Complexity: O(n)
+--------------------------C++-------------------------------------------------------------
+class SeatManager {
+private:
+    priority_queue<int, vector<int>, greater<int>> seatRegis;    
+public:
+    SeatManager(int n) {
+        //enter the seat numbers that all are iniatlly unreserved
+        for(int seat = 1; seat <= n; seat++){
+            seatRegis.push(seat);
+        }
+    }
+    
+    int reserve() {
+        //remove the top most element of min-heap which is seatRegis
+        int seat =  seatRegis.top();
+        seatRegis.pop();
+        return seat;
+    }
+    
+    void unreserve(int seatNumber) {
+        seatRegis.push(seatNumber);
+    }
+};
+---------------------------------------------Java---------------------------------------------
+class SeatManager {
+    private PriorityQueue<Integer> seatRegis  = null;
+    public SeatManager(int n) {
+        seatRegis = new PriorityQueue<>();
+        //enter the seat numbers that all are iniatlly unreserved
+        for(int seat = 1; seat <= n; seat++){
+            seatRegis.offer(seat);
+        }
+    }
+    
+    public int reserve() {
+        //remove the top most element of min-heap which is seatRegis
+        return seatRegis.poll();
+    }
+    
+    public void unreserve(int seatNumber) {
+        seatRegis.offer(seatNumber);
+    }
+}
