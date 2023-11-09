@@ -1,0 +1,37 @@
+-------------------C++---------------------------------------------------------
+class Solution {
+public:
+    int countHomogenous(string s) {
+        int mod = 1e9 + 7, homStrCnt = 0;
+        int chrFreq = 0;
+        char prevChr = 'A';
+        for(auto curChr : s){
+           //if your previous character is equal to current character 
+           if(curChr == prevChr)chrFreq++;
+           //else you will reset you character frequency to one
+           else chrFreq = 1;
+           homStrCnt = (homStrCnt % mod + chrFreq % mod)%mod;
+           //updatin our previous character once we are done with
+           prevChr =  curChr;
+        }
+        return homStrCnt;
+    }
+};
+--------------------------------------Java-----------------------------------------
+class Solution {
+    public int countHomogenous(String s) {
+        int mod = 1000000007, homStrCnt = 0;
+        int chrFreq = 0;
+        char prevChr = 'A';
+        for(var curChr : s.toCharArray()){
+           //if your previous character is equal to current character 
+           if(curChr == prevChr)chrFreq++;
+           //else you will reset you character frequency to one
+           else chrFreq = 1;
+           homStrCnt = (homStrCnt % mod + chrFreq % mod)%mod;
+           //updatin our previous character once we are done with
+           prevChr =  curChr;
+        }
+        return homStrCnt;
+    }
+}
