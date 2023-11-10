@@ -1,0 +1,102 @@
+-------------------------C++----------------------------------------------------------
+class Solution {
+public:
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        //garph construction from given adjacentPairs 
+        unordered_map<int, vector<int>> graph;
+        //populate our graph
+        for(auto &prs : adjacentPairs){
+            //seperating out vertices in the current pair
+            int u = prs[0], v = prs[1];
+            //connect u and v in the graph as they are adjacentPairs 
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+        //to find out the vertice on the either side of the given graph that is representing an array
+        //it will be done by BFS
+        unordered_set<int> visitedVert;
+        queue<int> que;
+        //let's from zeroth pair in given adjacentPairs list
+        que.push(adjacentPairs[0][0]);
+        int lastVertVist = -1;
+        while(!que.empty()){
+            auto currVert = que.front();
+            // cout<<"currVert: "<<currVert<<endl;
+            //keep track of last vertex visited as it will be repsenting one of your extremes of the array once you are done with BFS
+            lastVertVist = currVert;
+            que.pop();
+            visitedVert.insert(currVert);
+            //explore the neighbors of each vertex in the given edge represented by currPair
+            for(auto neigh : graph[currVert]){
+              if(!visitedVert.count(neigh))  
+                que.push(neigh);
+            }
+        }
+        visitedVert.clear();
+        //now contructing the original array by running a DFS on graph starting from one of the extremes of the array
+        vector<int> orgArr;
+        
+        //DFS
+        buildArray(lastVertVist, graph, orgArr, visitedVert);
+        return orgArr;
+    }
+private:
+//DFS
+    void buildArray(int src, unordered_map<int, vector<int>> & graph, vector<int> & orgArr, unordered_set<int> &visitedVert){
+        if(visitedVert.count(src)){
+            return;
+        }
+        // cout<<src<<endl;
+        visitedVert.insert(src);
+        orgArr.push_back(src);
+        for(auto neigh : graph[src]){
+            if(!visitedVert.count(neigh))
+              buildArray(neigh, graph, orgArr, visitedVert);
+        }
+
+    }
+        
+};
+--------------------------------------------------JAVA------------------------------------------
+class Solution {
+    public int[] restoreArray(int[][] adjacentPairs) {
+
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for(var prs : adjacentPairs){
+            int u = prs[0], v = prs[1];
+            graph.putIfAbsent(u, new ArrayList<>());
+            graph.putIfAbsent(v, new ArrayList<>());
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+        HashSet<Integer> visitedVert = new HashSet<>();
+        Deque<Integer> que = new ArrayDeque<>();
+        que.offerLast(adjacentPairs[0][0]);
+        int lastVertVist = -1;
+        while(!que.isEmpty()){
+            var currVert = que.pollFirst();
+            lastVertVist = currVert;
+            visitedVert.add(currVert);
+            for(var neigh : graph.get(currVert)){
+              if(!visitedVert.contains(neigh))  
+                que.offerLast(neigh);
+            }
+        }
+        visitedVert.clear();
+        List<Integer> orgArr = new ArrayList<>();
+        buildArray(lastVertVist, graph, orgArr, visitedVert);
+        return orgArr.stream().mapToInt(x->x).toArray();
+    }
+    private void buildArray(int src, Map<Integer, List<Integer>> graph, List<Integer> orgArr, HashSet<Integer> visitedVert){
+        if(visitedVert.contains(src)){
+            return;
+        }
+        visitedVert.add(src);
+        orgArr.add(src);
+        for(var neigh : graph.get(src)){
+            if(!visitedVert.contains(neigh))
+              buildArray(neigh, graph, orgArr, visitedVert);
+        }
+
+    }
+}
