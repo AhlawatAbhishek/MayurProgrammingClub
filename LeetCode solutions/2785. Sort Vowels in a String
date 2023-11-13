@@ -1,0 +1,69 @@
+-------------------------------C++----------------------------------------------------------------------------------------------------------------------------
+//Time: O(n), n is length of given string s
+//Space: O(1), if you are ignoring the vowelFreq array
+class Solution {
+private: 
+    bool isVowel(char c){
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'A' || 
+c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    }
+public:
+    string sortVowels(string s) {
+        //store freq of vowels in increasing order of ascii values
+        vector<int> vowelFreq(256);
+        //populating the vowelFreq array or say vector
+        for(auto chr : s){
+            //if current character in the given string is a vowel then only count it's frequency
+           if(isVowel(chr)) 
+            vowelFreq[chr]++;
+        }
+        //take two pointer approach and start doing replacements
+        int freqIndx = 0;
+        //point freqIndx to a non zero freq value;
+        while(freqIndx < 256 && !vowelFreq[freqIndx])freqIndx++;
+        for(int strIndx = 0; strIndx < s.size(); strIndx++){
+            //do the replacement in case current character is a vowel
+            if(isVowel(s[strIndx])){
+                s[strIndx] = (char)(freqIndx);
+                if(--vowelFreq[freqIndx] == 0)freqIndx++;
+            }
+            //point freqIndx to a non zero freq value;
+            while(freqIndx < 256 && !vowelFreq[freqIndx])freqIndx++;
+        }
+        //return you given string after zero or more modification
+        return s;
+    }
+};
+------------------------------------------------Java----------------------------------------------------------------------------------------------------------------
+class Solution {
+    private boolean isVowel(char c){
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'A' || 
+c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    }
+    public String sortVowels(String str) {
+        char s[] = str.toCharArray();
+        //store freq of vowels in increasing order of ascii values
+        int vowelFreq[] = new int[256];
+        //populating the vowelFreq array or say vector
+        for(var chr : s){
+            //if current character in the given string is a vowel then only count it's frequency
+           if(isVowel(chr)) 
+            vowelFreq[chr]++;
+        }
+        //take two pointer approach and start doing replacements
+        int freqIndx = 0;
+        //point freqIndx to a non zero freq value;
+        while(freqIndx < 256 && vowelFreq[freqIndx] == 0)freqIndx++;
+        for(int strIndx = 0; strIndx < s.length; strIndx++){
+            //do the replacement in case current character is a vowel
+            if(isVowel(s[strIndx])){
+                s[strIndx] = (char)(freqIndx);
+                if(--vowelFreq[freqIndx] == 0)freqIndx++;
+            }
+            //point freqIndx to a non zero freq value;
+            while(freqIndx < 256 && vowelFreq[freqIndx] == 0)freqIndx++;
+        }
+        //return you given string after zero or more modification
+        return new String(s);
+    }
+}
