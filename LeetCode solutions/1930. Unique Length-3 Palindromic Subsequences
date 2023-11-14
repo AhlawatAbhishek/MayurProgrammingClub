@@ -1,0 +1,74 @@
+--------------------------------C++----------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int countPalindromicSubsequence(string s) {
+        //first and last occurence of each character in the given string
+        unordered_map<char, pair<int, int>> chrIndxMp;
+        int sz = s.size(), palCnt = 0;
+        for(int indx = 0; indx < sz; indx++){
+            //first and the last occurences of each character
+            char currChr = s[indx];
+            if(chrIndxMp.find(currChr) == chrIndxMp.end()){
+                //you are seeing the character for the first time in the string, traversing from left to right
+                chrIndxMp[currChr] = make_pair(indx, -1);
+            }else{
+                //you have seen this character earlier also
+                chrIndxMp[currChr].second = indx;
+            }
+        }
+        //number of palindromes of length 3, each character occuring twice or more times in the given stirng 's' will be contributing to
+        for(int chr = 'a'; chr <= 'z'; chr++){
+            char currChr = (char)(chr);
+            if(chrIndxMp.find(currChr) != chrIndxMp.end() && chrIndxMp[currChr].second != -1){
+                unordered_set<int> unqChrs;
+                //between the first and last occurences of the currChar you will be counting no of unique characters 
+                //that many number of unique palindromes of length 3 will be generate which will contain currChr as the first and last character 
+                int startIndx = chrIndxMp[currChr].first, endIndx = chrIndxMp[currChr].second;
+                for(int indx = startIndx+1; indx <= endIndx-1; indx++){
+                    unqChrs.insert(s[indx]);
+                }
+                //adding this number to the overall length 3 palindrom count
+                palCnt += unqChrs.size();
+            }
+        }
+        //at last you will be returning the palindrom count
+        return palCnt;
+    }
+};
+-----------------------------------------------------------Java--------------------------------------------------------------------------------------------------
+class Solution {
+    public int countPalindromicSubsequence(String str) {
+        char s[] = str.toCharArray();
+          //first and last occurence of each character in the given string
+        Map<Character, Pair<Integer, Integer>> chrIndxMp = new HashMap();
+        int sz = s.length, palCnt = 0;
+        for(int indx = 0; indx < sz; indx++){
+            //first and the last occurences of each character
+            char currChr = s[indx];
+            if(!chrIndxMp.containsKey(currChr)){
+                //you are seeing the character for the first time in the string, traversing from left to right
+                chrIndxMp.put(currChr, new Pair<Integer, Integer>(indx, -1));
+            }else{
+                //you have seen this character earlier also
+                chrIndxMp.put(currChr, new Pair<Integer, Integer>(chrIndxMp.get(currChr).getKey(), indx));
+            }
+        }
+        //number of palindromes of length 3, each character occuring twice or more times in the given stirng 's' will be contributing to
+        for(int chr = 'a'; chr <= 'z'; chr++){
+            char currChr = (char)(chr);
+            if(chrIndxMp.containsKey(currChr) && chrIndxMp.get(currChr).getValue() != -1){
+                Set<Character> unqChrs = new HashSet<>();
+                //between the first and last occurences of the currChar you will be counting no of unique characters 
+                //that many number of unique palindromes of length 3 will be generate which will contain currChr as the first and last character 
+                int startIndx = chrIndxMp.get(currChr).getKey(), endIndx = chrIndxMp.get(currChr).getValue();
+                for(int indx = startIndx+1; indx <= endIndx-1; indx++){
+                    unqChrs.add(s[indx]);
+                }
+                //adding this number to the overall length 3 palindrom count
+                palCnt += unqChrs.size();
+            }
+        }
+        //at last you will be returning the palindrom count
+        return palCnt;
+    }
+}
