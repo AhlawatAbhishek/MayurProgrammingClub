@@ -1,0 +1,35 @@
+-------------------------------------------------------C++---------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int maximumElementAfterDecrementingAndRearranging(vector<int>& arr) {
+       long long sz = arr.size();
+       //sort the array to greedily achieve max value possible in the array following constraints or rules
+       sort(arr.begin(), arr.end());
+       //prev Exp Num is initially set to 1 because it is mentioned that your first number should be one
+       long long indx = 0, prevExpNum = 1;
+       //then you will be updating your prevExpNum as you traverse the array from left to right after sorting it and
+       //starting from the '1'st index
+       for(indx = 1; indx < sz; indx++){
+               int currExpNum = prevExpNum + 1;
+               int actualNum = arr[indx];
+               //prevExpNum will be update to the max value possible for actualNum in the given array
+               prevExpNum = min(currExpNum, actualNum);
+       }
+       //then return the prevExpNum as it will carrying the max possible number in the given array after applying some operations to make it follow the given rules or constraints
+       return prevExpNum;
+    }
+};
+--------------------------------------------------------------------------------------Java----------------------------------------------------------------------------------------------------------
+class Solution {
+    public int maximumElementAfterDecrementingAndRearranging(int[] arr) {
+       int sz = arr.length;
+       Arrays.sort(arr);
+       long prevExpNum = 1;
+       for(int indx = 1; indx < sz; indx++){
+               long currExpNum = prevExpNum + 1;
+               long actualNum = arr[indx];
+               prevExpNum = Math.min(currExpNum, actualNum);
+       }
+       return (int)prevExpNum;
+    }
+}
