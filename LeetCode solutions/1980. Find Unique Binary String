@@ -1,0 +1,61 @@
+---------------------------------------------------------C++------------------------------------------------------------------
+class Solution {
+public:
+    string findDifferentBinaryString(vector<string>& nums) {
+        //this will be for a quick lookup of duplicates 
+        unordered_set<string> unqBnryStr;
+        for(auto &num : nums)unqBnryStr.insert(num);
+
+        //call a recursive function to generate binary string from any one of the string choosen from given
+        //nums array and replacing each character either by '1' or by '0' in that chosen string
+        //let's say we choose first string that is given to us in the nums array
+        genBnry(nums[0], unqBnryStr, 0);
+        return answer;
+    }
+private:
+    string answer = "";
+    void genBnry(string &currStr, unordered_set<string> unqBnryStr, int indx){
+        if(!unqBnryStr.count(currStr)){
+            answer = currStr;
+            return;
+        }
+        int len = currStr.size();
+        if(len == indx)return;
+        //do the replacements and make recursive calls
+        currStr[indx] = '1';
+        genBnry(currStr, unqBnryStr, indx + 1);
+        currStr[indx] = '0';
+        genBnry(currStr, unqBnryStr, indx + 1);
+    }    
+};
+------------------------------------------------------Java--------------------------------------------------------------------
+class Solution {
+    public String findDifferentBinaryString(String[] nums) {
+        Set<String> unqBnryStr = new HashSet<>();
+        for (String num : nums) {
+            unqBnryStr.add(num);
+        }
+        genBnry(nums[0], unqBnryStr, 0);
+        return answer;
+    }
+
+    private String answer = "";
+
+    private void genBnry(String currStr, Set<String> unqBnryStr, int indx) {
+        if (!unqBnryStr.contains(currStr)) {
+            answer = currStr;
+            return;
+        }
+        int len = currStr.length();
+        if (len == indx) {
+            return;
+        }
+        char[] currStrArr = currStr.toCharArray();
+        currStrArr[indx] = '1';
+        genBnry(new String(currStrArr), unqBnryStr, indx + 1);
+        currStrArr[indx] = '0';
+        genBnry(new String(currStrArr), unqBnryStr, indx + 1);
+    }
+}
+
+
