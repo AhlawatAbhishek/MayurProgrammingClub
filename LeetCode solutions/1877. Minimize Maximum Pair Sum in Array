@@ -1,0 +1,30 @@
+-----------------------------------------------------------------Java-----------------------------------------------------------------------------------------------
+class Solution {
+    public int minPairSum(int[] nums) {
+        Arrays.sort(nums);
+        //greedily making pairs to minimize maximum possible pair sum
+        //left pointer will be pointing to left most index and right pointer will be pointing to right most index of the sorted
+        //array
+        //we will move left and right pointers in opposite directions towards the center of the array
+        int left = 0, right = nums.length-1, pairSum = 0, maxPairSum = 0;
+        while(left < right){//while we are having atleat 2 elements
+           pairSum = nums[left++] + nums[right--];
+           maxPairSum = Math.max(maxPairSum, pairSum);
+        }
+        return maxPairSum;
+    }
+}
+--------------------------------------------------------------C++-------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int minPairSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int left = 0, right = nums.size()-1, pairSum = 0, maxPairSum = 0;
+        while(left < right){
+           pairSum = nums[left++] + nums[right--];
+           maxPairSum = max(maxPairSum, pairSum);
+        }
+        return maxPairSum;
+    }
+};
+
