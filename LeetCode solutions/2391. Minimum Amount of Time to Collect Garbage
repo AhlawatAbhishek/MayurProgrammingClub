@@ -1,0 +1,73 @@
+-------------------------------------------Java--------------------------------------------------------------
+class Solution {
+    public int garbageCollection(String[] garbage, int[] travel) {
+         //totalTimeToPick will be the return value for this function
+        int  totalTimeToPick = 0, sz = garbage.length;
+        //the house let's say truck for glass will be visiting last
+        Map<Character, Integer> lastHouseToVisit = new HashMap<>();
+        //prefix sum array of travel time which represent how much time is reuired to reach travelTime['indx'] will be the (indx + 1)th house
+        int travelTime[] = new int[sz-1];
+        //prefix sum
+        for(int indx = 0; indx < sz-1; indx++){
+           if(indx > 0) 
+            travelTime[indx] = travelTime[indx - 1] + travel[indx];
+           else 
+            travelTime[indx] = travel[indx]; 
+        } 
+        //simulating a grabage pick 
+        for(int indx = 0; indx < sz; indx++){
+            //each unit of grabage will require 1 min of time
+            int totalGrabUnits = garbage[indx].length();
+            totalTimeToPick += totalGrabUnits;
+            //for truck required we will update the last house that is needed to be visited starting from '0' th house
+            for(var grab : garbage[indx].toCharArray())lastHouseToVisit.put(grab, indx);
+        }
+
+        //time it will require for each truck to visit it's last house 
+        for(var pr : lastHouseToVisit.entrySet()){
+            int lastHouse = pr.getValue();
+            if(lastHouse != 0)
+             totalTimeToPick += travelTime[lastHouse - 1];
+        }
+        //return totalTimeToPick up garbage from all houses
+        return totalTimeToPick;
+    }
+}
+---------------------------------------------------------------------C++--------------------------------------------------------------------------
+//TC : O(n), n is size of garbage array
+//SC : O(n)
+class Solution {
+public:
+    int garbageCollection(vector<string>& garbage, vector<int>& travel) {
+        //totalTimeToPick will be the return value for this function
+        long long totalTimeToPick = 0, sz = garbage.size();
+        //the house let's say truck for glass will be visiting last
+        unordered_map<char, int> lastHouseToVisit;
+        //prefix sum array of travel time which represent how much time is reuired to reach travelTime['indx'] will be the (indx + 1)th house
+        vector<long long> travelTime(sz-1);
+        //prefix sum
+        for(int indx = 0; indx < sz-1; indx++){
+           if(indx > 0) 
+            travelTime[indx] = travelTime[indx - 1] + travel[indx];
+           else 
+            travelTime[indx] = travel[indx]; 
+        } 
+        //simulating a grabage pick 
+        for(int indx = 0; indx < sz; indx++){
+            //each unit of grabage will require 1 min of time
+            int totalGrabUnits = garbage[indx].size();
+            totalTimeToPick += totalGrabUnits;
+            //for truck required we will update the last house that is needed to be visited starting from '0' th house
+            for(auto grab : garbage[indx])lastHouseToVisit[grab] = indx;
+        }
+
+        //time it will require for each truck to visit it's last house 
+        for(auto &pr : lastHouseToVisit){
+            int lastHouse = pr.second;
+            if(lastHouse != 0)
+             totalTimeToPick += travelTime[lastHouse - 1];
+        }
+        //return totalTimeToPick up garbage from all houses
+        return totalTimeToPick;
+    }
+};
