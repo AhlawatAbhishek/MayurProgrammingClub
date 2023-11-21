@@ -1,0 +1,53 @@
+------------------------------------------------------C++---------------------------------------------------------------------------
+//TC: O(n), n is size of nums array given to you
+//SC: O(n)
+class Solution {
+public:
+    int countNicePairs(vector<int>& nums) {
+        //pairCnt will variable the you will be returning from your function
+        int pairCnt = 0, mod = 1e9 + 7;
+        //diffFreq will store the number of times you have seen a particular difference
+        unordered_map<int, long long> diffFreq;
+        for(int indx = 0; indx < nums.size(); indx++){
+            //according to the modified equation (nums[i] - rev(nums[i]) == nums[j] - rev(nums[j])), we will find the diff
+           long long diff = nums[indx] - findRev(nums[indx]);
+           //the number of time we have already seen the current diffrence will be the number of pairs that 'nums[indx]' can be contributing to
+           //so you will increament you pairCnt by that number
+           pairCnt = (pairCnt % mod + diffFreq[diff] % mod)%mod;
+           diffFreq[diff] = (diffFreq[diff] % mod + 1 % mod)%mod;
+        }
+        return pairCnt;
+    }
+private:
+    int findRev(int num){
+       int revNum = 0;
+       while(num > 0){
+           int digit = num % 10;
+           revNum = revNum * 10 + digit;
+           num /= 10;
+       }
+       return revNum;
+    }    
+};
+---------------------------------------------------------------Java-----------------------------------------------------------------------
+class Solution {
+    public int countNicePairs(int[] nums) {
+       int pairCnt = 0, mod = 1000000000 + 7;
+        Map<Integer, Integer> diffFreq = new HashMap<>();
+        for(int indx = 0; indx < nums.length; indx++){
+           int diff = nums[indx] - findRev(nums[indx]);
+           pairCnt = (pairCnt % mod + diffFreq.getOrDefault(diff, 0) % mod)%mod;
+           diffFreq.put(diff, diffFreq.getOrDefault(diff, 0) + 1);
+        }
+        return pairCnt;
+    }
+    private int findRev(int num){
+       int revNum = 0;
+       while(num > 0){
+           int digit = num % 10;
+           revNum = revNum * 10 + digit;
+           num /= 10;
+       }
+       return revNum;
+    }    
+}
