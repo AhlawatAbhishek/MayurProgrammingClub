@@ -1,0 +1,78 @@
+--------------------------C++-------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& nums) {
+        deque<pair<int, int>> queue;
+        int rows = nums.size(), cols = nums[0].size();
+        int indx = 0;
+        vector<int> result;
+        result.push_back(nums[0][0]);
+        queue.push_back(make_pair(0, 0));
+        while(!queue.empty()){
+            int sz = queue.size();
+            while(sz-- > 0){
+                auto currCell = queue.front();
+                queue.pop_front();
+                int currentRow = currCell.first, currentCell = currCell.second;
+                if(currentRow + 1 < rows && currentCell < nums[currentRow + 1].size() && nums[currentRow + 1][currentCell] != -1){
+                    queue.push_back(make_pair(currentRow + 1, currentCell));
+                    result.push_back(nums[currentRow + 1][currentCell]);
+                    nums[currentRow + 1][currentCell] = -1;
+                }
+                if(currentCell + 1 < nums[currentRow].size() && nums[currentRow][currentCell + 1] != -1){
+                    queue.push_back(make_pair(currentRow, currentCell + 1));
+                    result.push_back(nums[currentRow][currentCell + 1]);
+                    nums[currentRow][currentCell + 1] = -1;
+                }
+            }
+        }
+        return result;
+    }
+};
+------------------------------------------------Java-----------------------------------------------------------
+class Solution {
+    public int[] findDiagonalOrder(List<List<Integer>> nums) {
+        //this queue will be used for BFS
+        Deque<Pair<Integer, Integer>> queue = new ArrayDeque<>();
+        //storing the number of rows as it will not vary according to given input
+        int rows = nums.size();
+        int indx = 0;
+        List<Integer> result = new ArrayList<>();
+        //we are adding co-ordinates (row, col) of the top left cell (0, 0) to the queue and adding value at this 
+        //particular cell to result
+        result.add(nums.get(0).get(0));
+        queue.offerLast(new Pair<Integer, Integer>(0, 0));
+        //BFS
+        while(!queue.isEmpty()){
+           int sz = queue.size();
+           //till all the node of the current level which mean that whatever is in the queue at this is explored
+           //by explored we mean that we have visited all the neighbors of each of the cell in the queue 
+           while(sz-->0){
+               //taking out cells one by one from queue and if their neighbors are well within the bounds
+               //of the matrix and those neigbors are not visited prior, then we will add them to queue also
+               var currCell = queue.pollFirst();
+               int currentRow = currCell.getKey(), currentCol = currCell.getValue(); 
+               //each cell will be having 2 possible neighbors
+               //one directly below the current cell 
+               //we are checking cell directly below the current cell first because it will be comming before
+               //the cell immediate right to the current cell in diagonal order
+               if(currentRow + 1 < rows && currentCol < nums.get(currentRow + 1).size() && nums.get(currentRow + 1).get(currentCol) != -1){
+                   queue.offerLast(new Pair<Integer, Integer> (currentRow + 1, currentCol));
+                   //adding the value of the current cell to the result
+                   result.add(nums.get(currentRow+1).get(currentCol));
+                   //in order to avoid the particular cell (neighbor) to be added more than once in the queue
+                   //we will set the value of the this particular cell to -1
+                   nums.get(currentRow + 1).set(currentCol, -1);
+               }
+               //one immediate right to the current cell
+               if(currentCol + 1 < nums.get(currentRow).size() && nums.get(currentRow).get(currentCol + 1) != -1){
+                   queue.offerLast(new Pair<Integer, Integer>(currentRow, currentCol + 1));
+                   result.add(nums.get(currentRow).get(currentCol + 1));
+                   nums.get(currentRow).set(currentCol+1, -1);
+               }
+           }
+        }
+        //then return our result
+        return result.stream().mapToInt(x->x).toArray();
+    }
+}
