@@ -1,0 +1,33 @@
+---------------------C++-------------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int maxCoins(vector<int>& piles) {
+        sort(piles.begin(), piles.end());
+        int sz = piles.size(), myPtr = sz-2, bobPtr = 0; 
+        int myCoins = 0;
+        while(myPtr > bobPtr){
+            bobPtr++;
+            myCoins += piles[myPtr];
+            myPtr -= 2;
+        }
+        return myCoins;
+    }
+};
+---------------------Java-------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int maxCoins(int[] piles) {
+        //sorted the piles according to increasing number of coins in the piles
+        //this allow us to achieve maximum number of coins following the given rules
+        Arrays.sort(piles);
+        //Two pointer approach
+        int sz = piles.length, myPtr = sz-2, bobPtr = 0; 
+        int myCoins = 0;
+        while(myPtr > bobPtr){
+            bobPtr++;
+            //before moving the myPtr we will be taking the second maximum pile in the current triplet of piles
+            myCoins += piles[myPtr];
+            myPtr -= 2;
+        }
+        return myCoins;
+    }
+}
