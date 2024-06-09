@@ -1,0 +1,87 @@
+--------------------------------Java--------------------------------------------
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        
+        Map<String, List<String>> keyStringMap = new HashMap<>();
+        
+        for(String str : strs){
+            int[] charFreq = new int[26];
+            for(char chr : str.toCharArray()){
+               charFreq[chr - 'a']++;
+            }
+            
+            String strKey = makeKey(charFreq);
+            
+            if (!keyStringMap.containsKey(strKey)) {
+                keyStringMap.put(strKey, new ArrayList<>());
+            }
+            keyStringMap.get(strKey).add(str);
+        }
+        
+        List<List<String>> groups = new ArrayList<>();
+        for(List<String> group : keyStringMap.values()){
+            groups.add(group);
+        }
+        return groups;
+    }
+    
+    private String makeKey(int[] charFreq) {
+        StringBuilder key = new StringBuilder();
+        for (int indx = 0; indx < 26; indx++) {
+            if (charFreq[indx] > 0) {
+                key.append((char) ('a' + indx));
+                key.append(charFreq[indx]);
+            }
+        }
+        
+        Arrays.fill(charFreq, 0);
+        return key.toString();
+    }
+}
+--------------------------------C++--------------------------------------------
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        //this we used to form the groups w.r.t. key generated for each string
+        unordered_map<string, vector<string>> keyStringMp;
+        //this array or say vector will be used to make the frequency mapping of characters for every
+        //string in the give strs array or say vector
+        vector<int> charFreq(26);
+        for(auto & str : strs){
+            //building the frequency mapping for current string
+            for(auto chr : str){
+               charFreq[chr - 'a']++;
+            }
+            //passing this frequency mapping to make a key out of it for current string
+            const string &strKey = makeKey(charFreq);
+            //based upon keys we will doing grouping of strings
+            keyStringMp[strKey].push_back(str);  
+        }
+        //now we are just required to form a 2 D string vector or say array with help of keyStringMp
+        vector<vector<string>> groups;
+        for(auto &pr : keyStringMp){
+            vector<string> currGrp;
+            for(auto &str : pr.second){
+                currGrp.push_back(str);
+            }
+            groups.push_back(currGrp);
+        }
+        return groups;
+    }
+private:
+    string makeKey(vector<int> &charFreq){
+        string key = "";
+        for(int indx = 0; indx < 26; indx++){
+            //if current character is having a non zero frequency in the string
+            if(charFreq[indx] > 0){
+                key += (char)('a' + indx);
+                key += to_string(charFreq[indx]);
+            }
+        }
+        //clear this input array for reuse for other
+        for(int indx = 0; indx < 26; indx++){
+            charFreq[indx] = 0;
+        }
+        return key; 
+    }    
+};

@@ -1,0 +1,73 @@
+------------------------------------------Java-----------------------------------------------------------------------
+class Solution {
+
+    public int findLeastNumOfUniqueInts(int[] arr, int k) {
+
+        Map<Integer, Integer> freqMp = new HashMap<>(); 
+
+        for(var num : arr)freqMp.put(num, freqMp.getOrDefault(num, 0) + 1);
+
+        PriorityQueue<Integer> freqHeap = new PriorityQueue<>((a, b)->(freqMp.get(a) - freqMp.get(b)));
+
+        for(var num : freqMp.keySet()){
+
+            freqHeap.offer(num);
+
+        }
+
+        while(k-- > 0){
+
+            var num = freqHeap.poll();
+
+            int freq = freqMp.get(num);
+
+            // System.out.println("removing " + num + " of freq: " + freq);
+
+            freqMp.put(num, freq-1);
+
+            if(freq - 1 > 0){
+
+                freqHeap.offer(num);
+
+            }
+
+        }
+
+        return freqHeap.size();
+
+    }
+
+}
+
+
+
+-------------------------------C++--------------------------------------------------------------------------
+
+class Solution {
+public:
+    int findLeastNumOfUniqueInts(std::vector<int>& arr, int k) {
+        std::unordered_map<int, int> freqMap;
+        for (int num : arr) freqMap[num]++;
+
+        auto cmp = [&freqMap](int a, int b) { return freqMap[a] > freqMap[b]; };
+        std::priority_queue<int, std::vector<int>, decltype(cmp)> freqHeap(cmp);
+
+        for (auto& num : freqMap) {
+            freqHeap.push(num.first);
+        }
+
+        while (k-- > 0 && !freqHeap.empty()) {
+            int num = freqHeap.top();
+            freqHeap.pop();
+            if (--freqMap[num] == 0) {
+                freqMap.erase(num);
+            } else {
+                freqHeap.push(num);
+            }
+        }
+
+        return freqMap.size();
+    }
+};
+
+

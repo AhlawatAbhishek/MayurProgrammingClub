@@ -1,0 +1,39 @@
+----------------C++-----------------------------------------
+class Solution {
+public:
+    bool uniqueOccurrences(vector<int>& arr) {
+        //map of nums vs their frequencies in the given arr
+        unordered_map<int, int>numFreqMap;
+        for(auto num : arr)numFreqMap[num]++;
+        //then you will be populating unique frequency set and encounter some duplicate frequency, then you will return false;
+        unordered_set<int> unqFreq; 
+        for(auto &valnumFreqMapPr : numFreqMap){
+            int currnumFreqMap = valnumFreqMapPr.second;
+            if(unqFreq.count(currnumFreqMap)){
+              return false;
+            }
+            unqFreq.insert(currnumFreqMap);
+        }
+        //else you will be returning true
+        return true;
+    }
+};
+--------------------------------------Java-----------------------------
+class Solution {
+    public boolean uniqueOccurrences(int[] arr) {
+        //map of nums vs their frequencies in the given arr
+        Map<Integer, Integer>numFreqMap = new HashMap<>();
+        for(var num : arr)numFreqMap.put(num, numFreqMap.getOrDefault(num, 0)+1);
+        //then you will be populating unique frequency set and encounter some duplicate frequency, then you will return false;
+        Set<Integer> unqFreq = new HashSet<>(); 
+        for(var valnumFreqMapPr : numFreqMap.entrySet()){
+            int currnumFreqMap = valnumFreqMapPr.getValue();
+            if(unqFreq.contains(currnumFreqMap)){
+              return false;
+            }
+            unqFreq.add(currnumFreqMap);
+        }
+        //else you will be returning true
+        return true;
+    }
+}

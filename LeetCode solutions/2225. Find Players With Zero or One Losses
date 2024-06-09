@@ -1,0 +1,70 @@
+------------------------------C++----------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> findWinners(vector<vector<int>>& matches) {
+        //This data structure will help us to keep track of how may matches each participating player looses
+        //and all players will be stored in increasing of their 'IDs' or say names
+        //<player id, player points(initially set 0)> 
+        map<int, int> matchLostMp;
+        for(auto match : matches){
+           int winner = match[0], looser = match[1];
+           //we will simply put winner in map to ensure that each participating player is in the map
+           if(!matchLostMp.count(winner))
+            matchLostMp[winner] = 0;
+           //whenever a player looses a match his points will be decremented by one
+           matchLostMp[looser]--;
+        }
+        //these will be the two entries in results array
+        //i.e. players who haven't lost a single match
+        //and players who have lost exactly one match
+        vector<int> winners, loosers;
+        for(auto &lostMatchEntry : matchLostMp){
+            int lostCnt = lostMatchEntry.second, player = lostMatchEntry.first;
+            if(lostCnt == 0){
+                winners.push_back(player);
+            }else if(lostCnt == -1){
+                loosers.push_back(player);
+            }
+        }
+        //push_backing the above to vectors as entries in the res Arrayvector
+        vector<vector<int>> res;
+        res.push_back(winners);
+        res.push_back(loosers);
+        //then simpliy returing our result 
+        return res;
+    }
+};
+----------------------------------Java-----------------------------------------
+class Solution {
+    public List<List<Integer>> findWinners(int[][] matches) {
+        //This data structure will help us to keep track of how may matches each participating player looses
+        //and all players will be stored in increasing of their 'IDs' or say names
+        //<player id, player points(initially set 0)> 
+        Map<Integer, Integer> matchLostMp = new TreeMap<>();
+        for(var match : matches){
+           int winner = match[0], looser = match[1];
+           //we will simply put winner in map to ensure that each participating player is in the map
+           matchLostMp.put(winner, matchLostMp.getOrDefault(winner, 0));
+           //whenever a player looses a match his points will be decremented by one
+           matchLostMp.put(looser, matchLostMp.getOrDefault(looser, 0)-1);
+        }
+        //these will be the two entries in results array
+        //i.e. players who haven't lost a single match
+        //and players who have lost exactly one match
+        List<Integer> winners = new ArrayList<>(), loosers = new ArrayList<>();
+        for(var lostMatchEntry : matchLostMp.entrySet()){
+            int lostCnt = lostMatchEntry.getValue(), player = lostMatchEntry.getKey();
+            if(lostCnt == 0){
+                winners.add(player);
+            }else if(lostCnt == -1){
+                loosers.add(player);
+            }
+        }
+        //adding the above to lists as entries in the res ArrayList
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(winners);
+        res.add(loosers);
+        //then simpliy returing our result 
+        return res;
+    }
+}

@@ -1,0 +1,47 @@
+-------------------------------------C++---------------------------------------
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        //this is the data structure that will be storing indicies according to the increasing of values represented by them
+        //increasing monotonic stack
+        stack<int> indxStck;
+        int size = temperatures.size();
+        vector<int> answer(size);
+        for(int indx = 0; indx < size; indx++){
+            //for each temperature if the stack is not empty will be removing the entries in the stack which represent temperatures lesser than current temperature
+            int currTemp = temperatures[indx];
+            if(indxStck.empty()){
+                indxStck.push(indx);
+            }else{
+                while(!indxStck.empty() && temperatures[indxStck.top()] < currTemp){
+                    //for the indicies popped out of the stack we will add the difference of those indicies with current index corresponding to their places in answers array or say vector
+                    answer[indxStck.top()] = indx - indxStck.top();
+                    indxStck.pop();
+                }
+                indxStck.push(indx); 
+            }
+        }
+        return answer;
+    }
+};
+--------------------------------Java------------------------------------------
+import java.util.Stack;
+
+public class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+        Stack<Integer> indxStack = new Stack<>();
+        int size = temperatures.length;
+        int[] answer = new int[size];
+        for (int indx = 0; indx < size; indx++) {
+            int currTemp = temperatures[indx];
+            while (!indxStack.isEmpty() && temperatures[indxStack.peek()] < currTemp) {
+                answer[indxStack.peek()] = indx - indxStack.peek();
+                indxStack.pop();
+            }
+            indxStack.push(indx);
+        }
+        return answer;
+    }
+}
+
+

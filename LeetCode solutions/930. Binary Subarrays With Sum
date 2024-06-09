@@ -1,0 +1,35 @@
+----------------------------------Java-----------------------------------------
+class Solution {
+    public int numSubarraysWithSum(int[] nums, int goal) {
+      Map<Integer, Integer> prefSumFreqMp = new HashMap<>();
+      int prefSum = 0;
+      prefSumFreqMp.put(0, 1);
+      int subArrayCnt = 0;
+      for(var num : nums){
+          prefSum += num;
+          if(prefSumFreqMp.containsKey(prefSum - goal)){//whole logic of prefix sum + hasing relies on the repetition of this prefSum - goal value
+             subArrayCnt += prefSumFreqMp.get(prefSum - goal);
+          }
+          prefSumFreqMp.put(prefSum, prefSumFreqMp.getOrDefault(prefSum, 0)+1);
+      }   
+      return subArrayCnt;
+    }
+}
+------------------------------C++-----------------------------------------------class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        unordered_map<int, int> prefSumFreqMp;
+        int prefSum = 0;
+        prefSumFreqMp[0] = 1;
+        int subArrayCnt = 0;
+        for (int num : nums) {
+            prefSum += num;
+            if (prefSumFreqMp.find(prefSum - goal) != prefSumFreqMp.end()) {
+                subArrayCnt += prefSumFreqMp[prefSum - goal];
+            }
+            prefSumFreqMp[prefSum]++;
+        }   
+        return subArrayCnt;
+    }
+};
+

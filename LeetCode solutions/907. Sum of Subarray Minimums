@@ -1,0 +1,118 @@
+---------------------C++---------------------------------------------
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        //we will be returning minimum Sub Sum
+        long long minSubSum = 0, len = arr.size(), mod = 1e9 + 7;
+        //for each element in the array we will be nedding two indices i.e. index of previous lesser element and index of next lesser or equal element
+        vector<int> prevLesser(len, -1), nextLesserOrEqual(len, -1);
+        stack<int> indxStck;
+        //this is part for calculating next lesser or equal.
+        for(int indx = 0; indx < len; indx++){
+            if(indxStck.empty()){
+                indxStck.push(indx);
+            }else{
+                int currNum = arr[indx];
+                while(!indxStck.empty() && arr[indxStck.top()] >= currNum){
+                    int topIndx = indxStck.top();
+                    indxStck.pop();
+                    //for all the indicies that are popped out, for them current index is nextEqual or lesser
+                    //element's index
+                       nextLesserOrEqual[topIndx] = indx;  
+                }
+                indxStck.push(indx);
+            }
+        }
+        while(!indxStck.empty()){
+           int topIndx = indxStck.top();
+           indxStck.pop();
+           nextLesserOrEqual[topIndx] = len;
+        }
+        //this part calculating previous lesser //to avoid taking contributions of one sub array more than once we are skipping out equality condition here
+        for(int indx = len - 1; indx > -1; indx--){
+            if(indxStck.empty()){
+                indxStck.push(indx);
+            }else{
+                int currNum = arr[indx];
+                while(!indxStck.empty() && arr[indxStck.top()] > currNum){
+                    int topIndx = indxStck.top();
+                    indxStck.pop();
+                   
+                        prevLesser[topIndx] = indx;
+                }
+                indxStck.push(indx);
+            }
+        }
+        while(!indxStck.empty()){
+            int topIndx = indxStck.top();
+            indxStck.pop();
+            prevLesser[topIndx] = -1;
+        }
+
+        for(int indx = 0; indx < len; indx++){
+            int leftSize = 0, rightSize = 0;
+            rightSize = max(0, nextLesserOrEqual[indx]-indx-1);        
+            leftSize = max(0, indx - prevLesser[indx] - 1);
+            int times = leftSize + rightSize + (leftSize * rightSize)+1;
+            //taking contribution of current number toward our answer
+            minSubSum = ((minSubSum % mod) + ((arr[indx] % mod) * (times % mod))%mod )%mod;
+            
+        }
+        return minSubSum;
+    }
+};
+---------------------------------------Java------------------------------------class Solution {
+    public int sumSubarrayMins(int[] arr) {
+        long minSubSum = 0;
+        int len = arr.length;
+        long mod = 1000000007;
+
+        int prevLesser[] = new int[len], nextLesserOrEqual[] = new int[len];
+        Stack<Integer> indxStck = new Stack<>();
+
+        for (int indx = 0; indx < len; indx++) {
+            if (indxStck.empty()) {
+                indxStck.push(indx);
+            } else {
+                int currNum = arr[indx];
+                while (!indxStck.empty() && arr[indxStck.peek()] >= currNum) {
+                    int topIndx = indxStck.pop();
+                    nextLesserOrEqual[topIndx] = indx;
+                }
+                indxStck.push(indx);
+            }
+        }
+
+        while (!indxStck.empty()) {
+            int topIndx = indxStck.pop();
+            nextLesserOrEqual[topIndx] =  len;
+        }
+
+        for (int indx = len - 1; indx > -1; indx--) {
+            if (indxStck.empty()) {
+                indxStck.push(indx);
+            } else {
+                int currNum = arr[indx];
+                while (!indxStck.empty() && arr[indxStck.peek()] > currNum) {
+                    int topIndx = indxStck.pop();
+                    prevLesser[topIndx] = indx;
+                }
+                indxStck.push(indx);
+            }
+        }
+        while (!indxStck.empty()) {
+            int topIndx = indxStck.pop();
+            prevLesser[topIndx] = -1;
+        }
+        for (int indx = 0; indx < len; indx++) {
+            int leftSize = 0, rightSize = 0;
+            rightSize = Math.max(0, nextLesserOrEqual[indx] - indx - 1);
+            leftSize = Math.max(0, indx - prevLesser[indx] - 1);
+            int times = leftSize + rightSize + (leftSize * rightSize) + 1;
+
+            minSubSum = ((minSubSum % mod) + ((arr[indx] % mod) * (times % mod)) % mod) % mod;
+        }
+        return (int)minSubSum;
+
+    }
+}

@@ -1,0 +1,77 @@
+-------------------------------------------C++----------------------------------
+class Solution
+{
+public:
+    int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int k)
+    {
+        //building a graph<node, neighbors(neighName(int), dist of neigh from current node)>
+        unordered_map<long long, vector<pair<long, long>>> graph;
+        for (auto &fl : flights)
+        { 
+            int currSrc = fl[0], neigh = fl[1], neighDistFromSrc = fl[2];
+            graph[currSrc].push_back(make_pair(neigh, neighDistFromSrc));
+        }
+        vector<long long> distFromSource(n, INT_MAX);
+        queue<pair<long, long>> que;
+        long long minLen = INT_MAX, stops = 0;
+        //since we are currently on src so we will always push it's pair to our que first
+        que.push({src, 0});
+        while (!que.empty() && stops <= k)
+        {
+            int size = que.size();
+            while (size-- > 0)
+            {
+                auto currPr = que.front();
+                que.pop();
+                for (auto neigh : graph[currPr.first])
+                {
+                    //if you are having a shorter dist of neigh from current node then you will be pushing update pair for neigh in queue
+                   if(distFromSource[neigh.first] > currPr.second + neigh.second){
+                      distFromSource[neigh.first] = currPr.second + neigh.second;
+                      if(neigh.first == dst) 
+                       minLen = min(minLen, distFromSource[neigh.first]);
+                      que.push({neigh.first, distFromSource[neigh.first]});
+                   }
+                }
+            }
+            stops++;
+        }
+        return minLen == INT_MAX ? -1 : minLen;
+    }
+};
+----------------------------------Java----------------------------------------
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        // Building a graph<node, neighbors(neighName(int), dist of neigh from current node)>
+        Map<Integer, List<int[]>> graph = new HashMap<>();
+        for (int[] fl : flights) {
+            int currSrc = fl[0], neigh = fl[1], neighDistFromSrc = fl[2];
+            graph.computeIfAbsent(currSrc, key -> new ArrayList<>()).add(new int[]{neigh, neighDistFromSrc});
+        }
+        
+        int[] distFromSource = new int[n];
+        Arrays.fill(distFromSource, Integer.MAX_VALUE);
+        Queue<int[]> que = new LinkedList<>();
+        int minLen = Integer.MAX_VALUE, stops = 0;
+        // since we are currently on src so we will always push it's pair to our que first
+        que.offer(new int[]{src, 0});
+        while (!que.isEmpty() && stops <= k) {
+            int size = que.size();
+            while (size-- > 0) {
+                int[] currPr = que.poll();
+                for (int[] neigh : graph.getOrDefault(currPr[0], new ArrayList<>())) {
+                    // if you are having a shorter dist of neigh from current node then you will be pushing update pair for neigh in queue
+                    if (distFromSource[neigh[0]] > currPr[1] + neigh[1]) {
+                        distFromSource[neigh[0]] = currPr[1] + neigh[1];
+                        if (neigh[0] == dst)
+                            minLen = Math.min(minLen, distFromSource[neigh[0]]);
+                        que.offer(new int[]{neigh[0], distFromSource[neigh[0]]});
+                    }
+                }
+            }
+            stops++;
+        }
+        return minLen == Integer.MAX_VALUE ? -1 : minLen;
+    }
+}
+

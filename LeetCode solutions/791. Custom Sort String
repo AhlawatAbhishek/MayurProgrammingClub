@@ -1,0 +1,59 @@
+====================================C++========================================
+```
+class Solution {
+public:
+    string customSortString(string order, string s) {
+        unordered_map<char, int> sCharFreqMp;
+        for(auto currChr : s)sCharFreqMp[currChr]++;
+        string res = "";
+        
+        for(auto currChr : order){
+             if(sCharFreqMp.find(currChr) != sCharFreqMp.end()){
+                 int freq = sCharFreqMp[currChr];
+                 while(freq-->0)res+= currChr;
+                 sCharFreqMp[currChr] = 0;
+             }
+        }
+        for(auto currChr : s){
+            if(sCharFreqMp[currChr] != 0){
+                res += currChr;
+                sCharFreqMp[currChr]--;
+            }
+        }
+        return res;
+    }
+};
+```
+==============================================Java==============================
+```
+class Solution {
+    public String customSortString(String order, String s) {
+        Map<Character, Integer> sCharFreqMp = new HashMap<>();
+        for (char currChr : s.toCharArray()) {
+            sCharFreqMp.put(currChr, sCharFreqMp.getOrDefault(currChr, 0) + 1);
+        }
+        
+        StringBuilder res = new StringBuilder();
+        
+        for (char currChr : order.toCharArray()) {
+            if (sCharFreqMp.containsKey(currChr)) {
+                int freq = sCharFreqMp.get(currChr);
+                while (freq-- > 0) {
+                    res.append(currChr);
+                }
+                sCharFreqMp.put(currChr, 0);
+            }
+        }
+        
+        for (char currChr : s.toCharArray()) {
+            if (sCharFreqMp.get(currChr) != 0) {
+                res.append(currChr);
+                sCharFreqMp.put(currChr, sCharFreqMp.get(currChr) - 1);
+            }
+        }
+        
+        return res.toString();
+    }
+}
+
+```

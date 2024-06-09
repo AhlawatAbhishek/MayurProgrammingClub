@@ -1,0 +1,64 @@
+-------------------------------------------------Java---------------------------------------------------------------------
+class Solution {
+    public int numDecodings(String encodedString) {
+        char s[] = encodedString.toCharArray();
+        if(s[0] == '0')return 0;
+        int sz = s.length;
+        int noWaysAtIndx[] = new int[sz];
+        noWaysAtIndx[0] = 1;
+        for(int indx = 1; indx < sz; indx++){
+            char currC = s[indx], prevC = s[indx-1];
+            if(currC == '0' && !(prevC == '1' || prevC == '2')){
+                return  0;
+            }
+            int onesDigit = currC - '0', tensDigit = prevC - '0'; 
+            int number = tensDigit * 10 + onesDigit;
+            if(number >= 10 && number <= 26){
+                if(indx >= 2)
+                    noWaysAtIndx[indx] += noWaysAtIndx[indx-2];
+                else
+                    noWaysAtIndx[indx] = 1;    
+            }
+            if(number != 10 && number != 20){
+                noWaysAtIndx[indx] += noWaysAtIndx[indx-1];
+            }
+        }
+        return noWaysAtIndx[sz - 1];
+    }
+}
+----------------------------------------------------C++--------------------------------------------------------------------------
+class Solution {
+public:
+    int numDecodings(string s) {
+        //if the encoded string s starts with zero then there are no ways to decode it
+        if(s[0] == '0')return 0;
+        int sz = s.size();
+        //this array or say vector will be used to store result of states and also to form results of subsequent states
+        vector<int> noWaysAtIndx(sz);
+        //for the first character there will one way to decode it
+        noWaysAtIndx[0] = 1;
+        //populating your state array or say vector i.e. 'noWaysAtIndx' and forming the solutions of bigger sub-problems
+        for(int indx = 1; indx < sz; indx++){
+            char currC = s[indx], prevC = s[indx-1];
+            if(currC == '0' && !(prevC == '1' || prevC == '2')){
+                return  0;
+            }
+            int onesDigit = currC - '0', tensDigit = prevC - '0'; 
+            int number = tensDigit * 10 + onesDigit;
+            //this is case for double character grouping
+            if(number >= 10 && number <= 26){
+                if(indx >= 2)
+                //adding contributions of previous states to the current state
+                    noWaysAtIndx[indx] += noWaysAtIndx[indx-2];
+                else
+                    noWaysAtIndx[indx] = 1;    
+            }
+            //if we want to and can form a single character grouping
+            if(number != 10 && number != 20){
+                //adding contributions of previous states to the current state
+                noWaysAtIndx[indx] += noWaysAtIndx[indx-1];
+            }
+        }
+        return noWaysAtIndx[sz - 1];
+    }
+};

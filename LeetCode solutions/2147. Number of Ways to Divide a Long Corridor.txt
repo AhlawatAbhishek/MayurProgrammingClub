@@ -1,0 +1,37 @@
+---------------------------------------------------------C++---------------------------------------------------------
+class Solution {
+public:
+    int numberOfWays(string corridor) {
+        int seatCount = 0, sz = corridor.size(), mod = 1e9 + 7;
+        long long totalWays = 1, prevSeatIndx;
+        for(int indx = 0; indx < sz; indx++){
+            //increament the seat count if you encounter a seat in the corridor
+              if(corridor[indx] == 'S'){
+                 seatCount++;
+                 if(seatCount > 2 && seatCount % 2){//we have just passed a sandwiched group of plants which is eligible for placing partition before the current seat
+                     totalWays  = ((totalWays)%mod * (indx - prevSeatIndx) %mod)%mod;
+                 } 
+                 prevSeatIndx = indx; 
+              }
+        }
+        return (seatCount > 0 && seatCount % 2 == 0) ? totalWays : 0; 
+    }
+};
+---------------------------------------------------------Java--------------------------------------------------------
+class Solution {
+    public int numberOfWays(String corridor) {
+        int seatCount = 0, sz = corridor.length(), mod = 1000000007;
+        long totalWays = 1, prevSeatIndx = -1;
+        for(int indx = 0; indx < sz; indx++){
+            //increament the seat count if you encounter a seat in the corridor
+              if(corridor.charAt(indx) == 'S'){
+                 seatCount++;
+                 if(seatCount > 2 && seatCount % 2 == 1){//we have just passed a sandwiched group of plants which is eligible for placing partition before the current seat
+                     totalWays  = ((totalWays)%mod * (indx - prevSeatIndx) %mod)%mod;
+                 } 
+                 prevSeatIndx = indx; 
+              }
+        }
+        return (seatCount > 0 && seatCount % 2 == 0) ? (int)totalWays : 0; 
+    }
+}

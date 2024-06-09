@@ -1,0 +1,81 @@
+------------------------------------------C++----------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        int size = nums.size();
+        //sorting the nums array or say vector to find multiples of a number efficient as they will before that number while we are traversing from left to right
+        sort(nums.begin(), nums.end(), [](const int val1, const int val2)->bool{
+            return val1 > val2;
+        });
+        //this will store max length chain for each number that can be there if we start dfs with this number as source
+        vector<vector<int>> multChain(size);
+        int maxChainSize = 0;
+        for(int currIndx = 0; currIndx < size; currIndx++){
+            vector<int> currChain = {nums[currIndx]};
+            int maxPrevChainSize = 0;
+            int maxPrevChainIndx = -1;
+            //for every number you will find max size chain of it's multiples
+            for(int prevIndx = currIndx - 1; prevIndx > -1; prevIndx--){
+                int currChainSize = multChain[prevIndx].size();
+                if(maxPrevChainSize <  currChainSize && nums[prevIndx] % nums[currIndx] == 0){
+                      maxPrevChainSize  = currChainSize;
+                      maxPrevChainIndx = prevIndx;
+                }
+            }
+            if(maxPrevChainIndx != -1){
+                for(auto mult : multChain[maxPrevChainIndx]){
+                    currChain.push_back(mult);
+                }
+            }
+            //you will max length multiples chain for current number that possible
+            multChain[currIndx] = currChain;
+            maxChainSize = max(maxChainSize, (int)currChain.size());
+        }
+        for(auto &currChain : multChain){
+            if(maxChainSize == currChain.size())return currChain;
+        }
+        return {};
+    }    
+};
+--------------------------------------Java---------------------------------------------------------------------------
+class Solution {
+    public List<Integer> largestDivisibleSubset(int[] nums) {
+        int size = nums.length;
+        Arrays.sort(nums);
+        int left = 0, right = size-1;
+        while(left < right){
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            left++;
+            right--;
+        }
+        List<Integer> multChain[] = new ArrayList[size];
+        int maxChainSize = 0;
+        for (int currIndx = 0; currIndx < size; currIndx++) {
+            List<Integer> currChain = new ArrayList<>();
+            currChain.add(nums[currIndx]);
+            int maxPrevChainSize = 0;
+            int maxPrevChainIndx = -1;
+            for (int prevIndx = currIndx - 1; prevIndx > -1; prevIndx--) {
+                int currChainSize = multChain[prevIndx].size();
+            
+                if (maxPrevChainSize < currChainSize && nums[prevIndx] % nums[currIndx] == 0) {
+                    maxPrevChainSize = currChainSize;
+                    maxPrevChainIndx = prevIndx;
+                }
+            }
+            if (maxPrevChainIndx != -1) {
+                for(var mult : multChain[maxPrevChainIndx])currChain.add(mult);
+            }
+            multChain[currIndx] = (currChain);
+            maxChainSize = Math.max(maxChainSize, currChain.size());
+        }
+        for (List<Integer> currChain : multChain) {
+            if (maxChainSize == currChain.size()) return currChain;
+        }
+        return new ArrayList<>();
+    }
+}
+
+

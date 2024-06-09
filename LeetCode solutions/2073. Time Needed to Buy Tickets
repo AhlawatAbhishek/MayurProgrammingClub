@@ -1,0 +1,75 @@
+-----------------------------------------------------Approach 1----------------------------------------------------------
+
+------------------------------------------------------------------------Java-----------------------------------------------------------------------------
+
+class Solution {
+    public int timeRequiredToBuy(int[] tickets, int k) {
+        int size = tickets.length;
+        int timePassed = 0, indx = 0;
+        while(tickets[k] > 0){
+            if(tickets[indx] > 0){
+               tickets[indx]--;
+               timePassed++;
+            }
+            indx = (indx + 1) % size;
+        }
+        return timePassed;
+    }
+}
+-------------------------------------------------------------------------C++--------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int timeRequiredToBuy(vector<int>& tickets, int k) {
+        int size = tickets.size();
+        int timePassed = 0, indx = 0;
+        while (tickets[k] > 0) {
+            if (tickets[indx] > 0) {
+                tickets[indx]--;
+                timePassed++;
+            }
+            indx = (indx + 1) % size;
+        }
+        return timePassed;
+    }
+};
+
+-----------------------------------------------------------------------Approach 2----------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------Java-----------------------------------------------------------------------------
+class Solution {
+    public int timeRequiredToBuy(int[] tickets, int k) {
+        int size = tickets.length;
+        int timePassed = 0;
+        for(int indx = 0; indx < size; indx++){
+            int timeContri = 0;
+            if(indx <= k){
+                timeContri = Math.min(tickets[indx], tickets[k]);
+            }else{
+                timeContri = Math.min(tickets[indx], tickets[k] - 1);
+            }
+            timePassed += timeContri;
+        }
+        return timePassed;
+    }
+}
+-------------------------------------------------------------------------C++--------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int timeRequiredToBuy(vector<int>& tickets, int k) {
+        int size = tickets.size();
+        int timePassed = 0;
+        for (int indx = 0; indx < size; indx++) {
+            int timeContri = 0;
+            if (indx <= k) {
+                timeContri = min(tickets[indx], tickets[k]);
+            } else {
+                timeContri = min(tickets[indx], tickets[k] - 1);
+            }
+            timePassed += timeContri;
+        }
+        return timePassed;
+    }
+};
+
+
+
+

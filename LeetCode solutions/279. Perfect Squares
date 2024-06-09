@@ -1,0 +1,35 @@
+-------------------------------Java-------------------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int numSquares(int n) {
+        int[] sqReq = new int[n + 1];
+        Arrays.fill(sqReq, Integer.MAX_VALUE);
+        
+        sqReq[0] = 0;
+        
+        for (int currNum = 1; currNum <= n; currNum++) {
+            for (int prevNum = 1; prevNum * prevNum <= currNum; prevNum++) {
+                int prevStateContri = sqReq[currNum - prevNum * prevNum];
+                sqReq[currNum] = Math.min(sqReq[currNum], prevStateContri + 1);
+            }
+        }
+        return sqReq[n];
+    }
+}
+-----------------------------------------------------------C++----------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int numSquares(int n) {
+        //for every possible state value let consider infinite currNumber of perfect sq currNumbers required
+        vector<int> sqReq(n+1, INT_MAX);
+        //initalize currNumber of perfect sq currNumbers lesser than zero required to sum upto zero as zero
+        sqReq[0] = 0;
+        //here state is nothing but current value of target or say n
+        for(int currNum = 1; currNum <= n; currNum++){
+            for(int prevNum = 1; prevNum * prevNum <= currNum; prevNum++){
+                int prevStateContri = sqReq[currNum - prevNum * prevNum];
+                sqReq[currNum] = min(sqReq[currNum], prevStateContri + 1);
+            }
+        } 
+        return sqReq[n];
+    }
+};

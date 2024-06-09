@@ -1,0 +1,55 @@
+----------------------------C++------------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        //adding new interval
+        intervals.push_back(newInterval);
+        //sorting the intervals array according to end points in ascend. order in order to find overlap easily
+        sort(intervals.begin(), intervals.end(), [](const vector<int> & inter1, const vector<int> & inter2)->bool{
+            return inter1[1] < inter2[1];
+        });
+        //this will be the array that we will be returning
+        vector<vector<int>> res;
+        res.push_back(intervals[0]);
+        for(int indx = 1; indx < intervals.size(); indx++){
+            int currEnd = intervals[indx][1], currStart = intervals[indx][0];
+            while(res.size() > 0 && res[res.size()-1][1] >= currStart) { //if there is an overlap of current interval with existing values of intervals in res array
+                currEnd = max(res[res.size()-1][1], currEnd);
+                currStart = min(res[res.size()-1][0], currStart);
+                res.pop_back();
+            }
+            res.push_back({currStart, currEnd});
+            
+        }
+        return res;
+    }
+};
+-------------------------------Java---------------------------------------------
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> intervalList = new ArrayList<>();
+        for (int[] interval : intervals) {
+            intervalList.add(interval);
+        }
+        intervalList.add(newInterval);
+        
+        intervalList.sort((a, b) -> Integer.compare(a[1], b[1]));
+        
+        List<int[]> res = new ArrayList<>();
+        res.add(intervalList.get(0));
+        
+        for (int i = 1; i < intervalList.size(); i++) {
+            int currEnd = intervalList.get(i)[1];
+            int currStart = intervalList.get(i)[0];
+            while (res.size() > 0 && res.get(res.size() - 1)[1] >= currStart) {
+                currEnd = Math.max(res.get(res.size() - 1)[1], currEnd);
+                currStart = Math.min(res.get(res.size() - 1)[0], currStart);
+                res.remove(res.size() - 1);
+            }
+            res.add(new int[]{currStart, currEnd});
+        }
+        
+        return res.toArray(new int[res.size()][]);
+    }
+}
+

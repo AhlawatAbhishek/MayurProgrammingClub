@@ -1,0 +1,47 @@
+--------------------------Java-------------------------------------------------
+class Solution {
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        int size = hand.length;
+        if (size % groupSize != 0) return false;
+
+        Map<Integer, Integer> freqMp = new HashMap<>();
+        for (int cardVal : hand) {
+            freqMp.put(cardVal, freqMp.getOrDefault(cardVal, 0) + 1);
+        }
+
+        Arrays.sort(hand);
+        for (int cardVal : hand) {
+            if (freqMp.get(cardVal) == 0) continue;
+            for (int inc = 0; inc < groupSize; inc++) {
+                int currCardVal = cardVal + inc;
+                if (freqMp.getOrDefault(currCardVal, 0) == 0) return false;
+                freqMp.put(currCardVal, freqMp.get(currCardVal) - 1);
+            }
+        }
+
+        return true;
+    }
+}
+
+--------------------------C++-------------------------------------------------
+class Solution {
+public:
+    bool isNStraightHand(vector<int>& hand, int groupSize) {
+         int size = hand.size();
+         if(size % groupSize)return false;
+         unordered_map<int, int> freqMp;
+         for(auto cardVal : hand){
+            freqMp[cardVal]++;
+         }      
+         sort(hand.begin(), hand.end());
+         for(auto cardVal : hand){
+            if(freqMp[cardVal] == 0)continue;
+            for(int inc = 0; inc < groupSize; inc++){
+                int currCardVal = cardVal + inc;
+                if(freqMp[currCardVal] == 0)return false;
+                freqMp[currCardVal]--;
+            }
+         }
+         return true;
+    }
+};

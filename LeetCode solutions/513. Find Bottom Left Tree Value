@@ -1,0 +1,50 @@
+------------------------------Java---------------------------------------------
+class Solution {
+    public int findBottomLeftValue(TreeNode root) {
+        Deque<TreeNode> levelQue = new ArrayDeque<>();
+        levelQue.offerLast(root);
+        int leftNodeVal = root.val;
+        while(!levelQue.isEmpty()){
+            int currLevelSize = levelQue.size();
+            int orgSize = currLevelSize;
+            //processing nodes for current level only
+            while(currLevelSize-->0){
+                TreeNode currNode = levelQue.pollFirst();
+                if(orgSize-1 == currLevelSize)//it means that you are at the leftmost node of your
+                //current level
+                    leftNodeVal = currNode.val;
+                //check for whether currNode is having left and right children    
+                //and you will build you next level
+                if(currNode.left != null)levelQue.offerLast(currNode.left);
+                if(currNode.right != null)levelQue.offerLast(currNode.right);
+            }
+        }   
+        return leftNodeVal;
+    }
+}
+--------------------------------C++---------------------------------------------
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        queue<TreeNode*> levelQue;
+        levelQue.push(root);
+        int leftNodeVal = root->val;
+        while(!levelQue.empty()){
+            int currLevelSize = levelQue.size();
+            int orgSize = currLevelSize;
+            //processing nodes for current level only
+            while(currLevelSize-->0){
+                TreeNode * currNode = levelQue.front();
+                levelQue.pop();
+                if(orgSize-1 == currLevelSize)//it means that you are at the leftmost node of your
+                //current level
+                    leftNodeVal = currNode->val;
+                //check for whether currNode is having left and right children    
+                //and you will build you next level
+                if(currNode->left != NULL)levelQue.push(currNode->left);
+                if(currNode->right != NULL)levelQue.push(currNode->right);
+            }
+        }   
+        return leftNodeVal;
+    }
+};

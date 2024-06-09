@@ -1,0 +1,68 @@
+----------------------------------C++------------------------------------------
+class Solution {
+public:
+    int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        if(maxMove == 0)return 0;
+        //this structure will be used to store the results of each sub problem and use the results of smaller sub problems to build results of bigger sub problem
+        vector<vector<vector<int>>> pathCount(maxMove, vector<vector<int>>(m, vector<int>(n)));
+        int mod = 1e9 + 7;
+        //4 directions possible from current cell
+        int dirs[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        //for movNum we are considering different board, playgroud state
+        for(int movNum = 0; movNum < maxMove; movNum++){
+            for(int r = 0; r < m; r++){
+                for(int c = 0; c < n; c++){
+                    int prevStateContri = 0;
+                    for(auto dir : dirs){
+                        int prevR = dir[0] + r, prevC = c + dir[1];
+                        if(withInBound(prevR, prevC, m, n))
+                            prevStateContri = (prevStateContri % mod + ((movNum == 0) ?  0 : pathCount[movNum-1][prevR][prevC]) % mod) % mod;
+                        else //goal was to move ball outside the bound if the previous state is out grid bounday then we add 1 to previous state contri
+                            prevStateContri = (prevStateContri % mod + 1 % mod) % mod;    
+                    }
+                    //adding previous state contri to  current state 
+                    pathCount[movNum][r][c] = (pathCount[movNum][r][c] % mod +  prevStateContri % mod)%mod;     
+                }
+            }
+        }
+        //number of out of grid boundary paths leading to intial position of ball
+        return pathCount[maxMove-1][startRow][startColumn];
+    }
+private:
+     bool withInBound(int r, int c, int rows, int cols){
+         return  r < rows && c < cols  && r > -1 && c > -1;
+     }
+};
+------------------------------------------Java----------------------------------
+public class Solution {
+    private static final int MOD = 1000000007;
+    private int[][][] pathCount;
+    private int[][] dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    public int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
+        if (maxMove == 0) return 0;
+        pathCount = new int[maxMove][m][n];
+        for (int movNum = 0; movNum < maxMove; movNum++) {
+            for (int r = 0; r < m; r++) {
+                for (int c = 0; c < n; c++) {
+                    int prevStateContri = 0;
+                    for (int[] dir : dirs) {
+                        int prevR = dir[0] + r, prevC = c + dir[1];
+                        if (withInBound(prevR, prevC, m, n))
+                            prevStateContri = (prevStateContri + ((movNum == 0) ? 0 : pathCount[movNum - 1][prevR][prevC])) % MOD;
+                        else
+                            prevStateContri = (prevStateContri + 1) % MOD;
+                    }
+                    pathCount[movNum][r][c] = (pathCount[movNum][r][c] + prevStateContri) % MOD;
+                }
+            }
+        }
+        return pathCount[maxMove - 1][startRow][startColumn];
+    }
+
+    private boolean withInBound(int r, int c, int rows, int cols) {
+        return r >= 0 && r < rows && c >= 0 && c < cols;
+    }
+}
+
+

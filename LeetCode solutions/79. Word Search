@@ -1,0 +1,75 @@
+----------------------------------Java-----------------------------------------
+class Solution {
+    public boolean exist(char[][] board, String word) {
+        for(int r = 0; r < board.length; r++){
+            for(int c = 0; c < board[0].length; c++){
+               if(word.charAt(0) == board[r][c]) 
+                 if(isFound(board, 0, r, c, word) || word.length() == 1)return true;
+            }
+        }
+        return false;
+    }
+    private int dirs[][] = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+    private boolean isFound(char [][]board, int indx, int r, int c, String word){
+        int size = word.length();
+        if(indx == size)return true;
+        char tempChar = board[r][c];
+        board[r][c] = '*';
+        for(var dir : dirs){
+            int rNew = r + dir[0], cNew = c + dir[1];
+            if(areCodValid(rNew, cNew, board)){
+                if(indx + 1 == size || board[rNew][cNew] == word.charAt(indx+1)){
+                    if(isFound(board, indx+1, rNew, cNew, word)){
+                        return true;
+                    }
+                } 
+            }
+        }
+        board[r][c] = tempChar;
+        return false;
+
+    }
+    private boolean areCodValid(int r, int c, char board[][]){
+        return r > -1 && c > -1 && r < board.length && c < board[0].length;
+    }
+}
+---------------------------C++-------------------------------------------------
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        for(int r = 0; r < board.size(); r++){
+            for(int c = 0; c < board[0].size(); c++){
+                if(word[0] == board[r][c])
+                    if(isFound(board, 0, r, c, word) || word.length() == 1) return true;
+            }
+        }
+        return false;
+    }
+
+private:
+    vector<vector<int>> dirs = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}};
+
+    bool isFound(vector<vector<char>>& board, int indx, int r, int c, string & word) {
+        int size = word.length();
+        if(indx == size) return true;
+        char tempChar = board[r][c];
+        board[r][c] = '*';
+        for(auto &dir : dirs) {
+            int rNew = r + dir[0], cNew = c + dir[1];
+            if(areCodValid(rNew, cNew, board)) {
+                if(indx + 1 == size || board[rNew][cNew] == word[indx + 1]) {
+                    if(isFound(board, indx + 1, rNew, cNew, word)) {
+                        return true;
+                    }
+                } 
+            }
+        }
+        board[r][c] = tempChar;
+        return false;
+    }
+
+    bool areCodValid(int r, int c, vector<vector<char>>& board) {
+        return r > -1 && c > -1 && r < board.size() && c < board[0].size();
+    }
+};
+

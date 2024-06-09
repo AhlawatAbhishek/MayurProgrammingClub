@@ -1,0 +1,125 @@
+---------------------------------------------------Java--------------------------------------------------------------
+class Solution {
+    public int cherryPickup(int[][] grid) {
+        int rows = grid.length, cols = grid[0].length;
+        int[][][] cherCollec = new int[rows][cols][cols];
+        
+        for (int r = 0; r < rows; r++) {
+            for (int rb1Col = 0; rb1Col < cols; rb1Col++) {
+                for (int rb2Col = 0; rb2Col < cols; rb2Col++) {
+                    cherCollec[r][rb1Col][rb2Col] = Integer.MIN_VALUE;
+                }
+            }
+        }
+        
+        int[] dirs = {0, 1, -1};
+        
+        for (int r = 0; r < rows; r++) {
+            for (int rb1Col = 0; rb1Col < cols; rb1Col++) {
+                for (int rb2Col = 0; rb2Col < cols; rb2Col++) {
+                    if (r == 0) {
+                        cherCollec[r][0][cols - 1] = grid[0][0] + grid[0][cols - 1];
+                    } else {
+                        cherCollec[r][rb1Col][rb2Col] = (rb1Col == rb2Col) ? grid[r][rb1Col] : grid[r][rb1Col] + grid[r][rb2Col];
+                        int maxPrevStateContri = Integer.MIN_VALUE;
+                        
+                        for (int dir1 : dirs) {
+                            int prevRb1Col = dir1 + rb1Col;
+                            
+                            for (int dir2 : dirs) {
+                                int prevRb2Col = dir2 + rb2Col;
+                                
+                                if (isValidCol(prevRb1Col, cols) && isValidCol(prevRb2Col, cols)) {
+                                    maxPrevStateContri = Math.max(maxPrevStateContri, cherCollec[r - 1][prevRb1Col][prevRb2Col]);
+                                }
+                            }
+                        }
+                        
+                        if (maxPrevStateContri != Integer.MIN_VALUE) {
+                            cherCollec[r][rb1Col][rb2Col] += maxPrevStateContri;
+                        } else {
+                            cherCollec[r][rb1Col][rb2Col] = Integer.MIN_VALUE;
+                        }
+                    }
+                }
+            }
+        }
+        
+        int maxCher = 0;
+        
+        for (int[] lastRowComb : cherCollec[rows - 1]) {
+            for (int combVal : lastRowComb) {
+                maxCher = Math.max(maxCher, combVal);
+            }
+        }
+        
+        return maxCher;
+    }
+    
+    private boolean isValidCol(int c, int cols) {
+        return c > -1 && c < cols;
+    }
+}
+
+-----------------------------------------------C++--------------------------------------------------------------------
+class Solution {
+public:
+    int cherryPickup(vector<vector<int>>& grid) {
+        int rows = grid.size(), cols = grid[0].size();
+        //the dynamic programming structure we are using to store results for intermidiate states and build solutions of
+        //bigger states by using solutions of smaller states
+        vector<vector<vector<int>>> cherCollec(rows, vector<vector<int>>(cols, (vector<int>(cols, 0))));
+        for(int r = 0; r < rows; r++){
+          for(int rb1Col = 0; rb1Col < cols; rb1Col++){
+              for(int rb2Col = 0; rb2Col < cols; rb2Col++){
+                    cherCollec[r][rb1Col][rb2Col] = INT_MIN;
+                }
+            }
+        }
+        //three options of columns for robots one row below the current row
+        int dirs[3] = {0, 1, -1}; 
+        //populating our DP structure
+        for(int r = 0; r < rows; r++){//for each there can be (cols * cols) number of combination for values of columns on which robot 1 and robot 2 is present
+          for(int rb1Col = 0; rb1Col < cols; rb1Col++){
+              for(int rb2Col = 0; rb2Col < cols; rb2Col++){
+                  //you are at first row
+                  if(r == 0){
+                      cherCollec[r][0][cols-1] = grid[0][0] + grid[0][cols-1];
+                  }else{
+                      //taking contributions to current state from previous states
+                      //current state
+                                                                //both robots at same cell     // at differnt cell
+                      cherCollec[r][rb1Col][rb2Col] = (rb1Col == rb2Col) ? (grid[r][rb1Col]) : (grid[r][rb1Col] + grid[r][rb2Col]);
+                      int maxPrevStateContri = INT_MIN;
+                      for(auto dir : dirs){
+                          int prevRb1Col = dir + rb1Col; 
+                          for(auto dir : dirs){
+                             int prevRb2Col = dir + rb2Col;
+                             if(isValidCol(prevRb1Col, cols) && isValidCol(prevRb2Col, cols)){//both robots within grid boundaries
+
+                                 maxPrevStateContri = max(maxPrevStateContri, cherCollec[r-1][prevRb1Col][prevRb2Col]);
+                             }
+                          }
+                      }
+                      if(maxPrevStateContri != INT_MIN)
+                        cherCollec[r][rb1Col][rb2Col] += maxPrevStateContri;
+                      else//if there is no previous state possible which could have you to come on current state
+                      //then you will mark current state as impossible to reach
+                        cherCollec[r][rb1Col][rb2Col] = INT_MIN;
+                  }
+              }
+          }
+        }
+        int maxCher = 0;
+        for(auto &lastRowComb : cherCollec[rows-1]){
+            for(auto combVal : lastRowComb){
+                maxCher = max(maxCher, combVal);
+            }
+        }
+        return maxCher;
+    }
+private:
+    bool isValidCol(int c, int cols){//this function ensures both robots are withing grid boundaries
+        return c > -1 && c < cols;
+    }    
+};

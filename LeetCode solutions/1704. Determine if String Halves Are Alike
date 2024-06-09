@@ -1,0 +1,55 @@
+------------------------------C++-------------------------------------------------
+class Solution {
+public:
+    bool halvesAreAlike(string s) {
+
+        int sz = s.size();
+        //convert the string into lower case for simplicity
+        transform(s.begin(), s.end(), s.begin(), ::tolower); 
+        //use the substring method to get two equals halves of the string
+        string firstHlf = s.substr(0, sz/2);
+        string scndHlf = s.substr(sz/2, sz/2);
+        //then we will count the number of vowels in both halves
+        int vCnt1 = countVow(firstHlf);
+        int vCnt2 = countVow(scndHlf);
+        //check the equality of the two vowel counts
+        return vCnt1 == vCnt2;
+    }
+ private:   
+    //method to count vowels in a string
+    int countVow(string str){
+        int vCnt = 0;
+        for(auto chr : str){
+            if(chr == 'a' || chr == 'e' || chr == 'i' || chr == 'o' || chr == 'u'){
+                vCnt++;
+            }
+        }
+        return vCnt;
+    }
+};
+-----------------------------------Java---------------------------------------
+class Solution {
+    public boolean halvesAreAlike(String s) {
+        int sz = s.length();
+        //convert the string into lower case for simplicity
+        s  = s.toLowerCase();
+        //use the substring method to get two equals halves of the string
+        String firstHlf = s.substring(0, sz/2);
+        String scndHlf = s.substring(sz/2, sz);
+        //then we will count the number of vowels in both halves
+        int vCnt1 = countVow(firstHlf);
+        int vCnt2 = countVow(scndHlf);
+        //check the equality of the two vowel counts
+        return vCnt1 == vCnt2;
+    }
+    //method to count vowels in a string
+    private int countVow(String str){
+        int vCnt = 0;
+        for(var chr : str.toCharArray()){
+            if(chr == 'a' || chr == 'e' || chr == 'i' || chr == 'o' || chr == 'u'){
+                vCnt++;
+            }
+        }
+        return vCnt;
+    }
+}

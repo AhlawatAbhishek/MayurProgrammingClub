@@ -1,0 +1,121 @@
+-----------------------------Apporach 1---------------------------------------
+---------------Java----------------
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+         ListNode newHead = reverse(head);
+         if(n == 1)return reverse(newHead.next);//whether the node to be removed is last node or not
+         ListNode curr = head;
+         for(curr = newHead; curr != null && n-1 > 1; curr = curr.next){//one node previous to the node to be removed
+           n--;
+         }
+         curr.next = curr.next.next;//update the link
+         return reverse(newHead);
+    }
+    private ListNode reverse(ListNode head){
+              ListNode curr = head, prev = null;
+              while(curr != null){
+                  ListNode next = curr.next;
+                  curr.next = prev;
+                  prev = curr;
+                  curr = next;
+              }
+              return prev;
+    }
+}
+----------------------C++--------------------------------------------------
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* newHead = reverse(head);
+        
+        // Whether the node to be removed is the last node or not
+        if (n == 1) {
+            return reverse(newHead->next);
+        }
+        
+        ListNode* curr = newHead;
+        // Move curr to one node previous to the node to be removed
+        for (int i = 1; i < n - 1; i++) {
+            curr = curr->next;
+        }
+        // Update the link
+        curr->next = curr->next->next;
+        
+        return reverse(newHead);
+    }
+    
+    ListNode* reverse(ListNode* head) {
+        ListNode* curr = head;
+        ListNode* prev = nullptr;
+        
+        while (curr != nullptr) {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+};
+-------------------------------------------------Approach 2---------------------
+-------------C++---------------------------------------
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode *slow = head, *fast = head;
+        //giving fast pointer a head start of n nodes
+        while(fast != NULL && n-->0){
+            fast = fast->next;
+        }
+        //if the node to removed is head
+        if(fast == NULL)return head->next;
+        //you continue below process till your fast pointer reaches last node
+        while(fast->next != NULL){
+            fast = fast->next;
+            slow = slow->next;
+        }
+        //slow will be pointing to one node previous to the node that is to be removed
+        slow->next = slow->next->next;
+        return head;
+    }
+};
+------------------------------Java----------------------------------------
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode slow = dummy, fast = dummy;
+        
+        // Giving fast pointer a head start of n nodes
+        while (fast != null && n-- > 0) {
+            fast = fast.next;
+        }
+        
+        // If the node to be removed is head
+        if (fast == null) {
+            return head.next;
+        }
+        
+        // You continue below process till your fast pointer reaches last node
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        
+        // Slow will be pointing to one node previous to the node that is to be removed
+        slow.next = slow.next.next;
+        
+        return dummy.next;
+    }
+}

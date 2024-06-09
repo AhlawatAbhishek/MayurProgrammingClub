@@ -1,0 +1,98 @@
+// C++ Solution---------------------------------------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+        if(n == 1) return {0}; 
+        vector<int> conDeg(n);
+        unordered_map<int, vector<int>> graph;
+        
+        for(auto &edg : edges){
+            conDeg[edg[0]]++;
+            conDeg[edg[1]]++;
+            graph[edg[0]].push_back(edg[1]);
+            graph[edg[1]].push_back(edg[0]);
+        }
+        
+        queue<int> levelQ;
+        
+        for(int node = 0; node < n; node++){
+            if(conDeg[node] == 1){
+                levelQ.push(node);
+            }    
+        }
+        
+        int nodesLeft = n;
+        vector<int> res;
+        
+        while(!levelQ.empty()){
+            int size = levelQ.size(), nodesRmd = size;
+            nodesLeft -= nodesRmd;
+            
+            while(size-- > 0){
+                int currNode = levelQ.front();
+                levelQ.pop();
+                
+                if(nodesLeft == 0) res.push_back(currNode);
+                
+                for(auto neigh : graph[currNode]){
+                    if(--conDeg[neigh] == 1){
+                        levelQ.push(neigh);          
+                    }
+                }
+            }
+        }
+        
+        return res; 
+    }
+};
+
+// Java Solution----------------------------------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        if (n == 1) return Collections.singletonList(0);
+        
+        int[] conDeg = new int[n];
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        
+        for (int i = 0; i < n; i++) conDeg[i] = 0;
+        
+        for (int[] edge : edges) {
+            conDeg[edge[0]]++;
+            conDeg[edge[1]]++;
+            graph.computeIfAbsent(edge[0], k -> new ArrayList<>()).add(edge[1]);
+            graph.computeIfAbsent(edge[1], k -> new ArrayList<>()).add(edge[0]);
+        }
+        
+        Deque<Integer> levelQ = new ArrayDeque<>();
+        for (int node = 0; node < n; node++) {
+            if (conDeg[node] == 1) {
+                levelQ.offerLast(node);
+            }
+        }
+        
+        int nodesLeft = n;
+        List<Integer> res = new ArrayList<>();
+        
+        while (!levelQ.isEmpty()) {
+            int size = levelQ.size();
+            int nodesRmd = size;
+            nodesLeft -= nodesRmd;
+            
+            while (size-- > 0) {
+                int currNode = levelQ.pollFirst();
+                
+                if (nodesLeft == 0) res.add(currNode);
+                
+                for (int neigh : graph.getOrDefault(currNode, new ArrayList<>())) {
+                    if (--conDeg[neigh] == 1) {
+                        levelQ.offerLast(neigh);
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+}
+

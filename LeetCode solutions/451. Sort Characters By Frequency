@@ -1,0 +1,57 @@
+------------------------C++-----------------------------------------------------
+class Solution {
+public:
+    string frequencySort(string s) {
+        //populating the freq array where each character's ascii value is mapped to index
+        vector<int> freq(256);
+        for(auto chr : s){
+            freq[chr]++;
+        }
+        vector<pair<int, char>> freqPairs;
+        //traversing over freq array and populating freqPairs array
+        for(int indx = 0; indx < 256; indx++){
+            if(freq[indx] > 0){
+                freqPairs.push_back(make_pair(freq[indx], (char)(indx)));
+            }
+        }
+        //sorting freqPairs array or say vector w.r.t frequencies of each character
+        sort(freqPairs.begin(), freqPairs.end(), [](const pair<int, char> &p1, const pair<int, char> &p2)->bool{
+            return p1.first > p2.first;
+        });
+        //then we will be adding each character freq number of times to res string
+        string res = "";
+        for(auto & pr : freqPairs){
+           int chrFreq = pr.first;
+           while(chrFreq-- > 0) 
+            res += pr.second;
+        }
+        return res;
+    }
+};
+----------------------------------Java------------------------------------------
+import java.util.*;
+
+public class Solution {
+    public String frequencySort(String s) {
+        int[] freq = new int[256];
+        for(char chr : s.toCharArray()){
+            freq[chr]++;
+        }
+        List<Map.Entry<Character, Integer>> freqPairs = new ArrayList<>();
+        for(int indx = 0; indx < 256; indx++){
+            if(freq[indx] > 0){
+                freqPairs.add(new AbstractMap.SimpleEntry<>((char)indx, freq[indx]));
+            }
+        }
+        Collections.sort(freqPairs, (Map.Entry<Character, Integer> p1, Map.Entry<Character, Integer> p2) -> p2.getValue().compareTo(p1.getValue()));
+        StringBuilder res = new StringBuilder();
+        for(Map.Entry<Character, Integer> pr : freqPairs){
+            int chrFreq = pr.getValue();
+            while(chrFreq-- > 0) 
+                res.append(pr.getKey());
+        }
+        return res.toString();
+    }
+}
+
+

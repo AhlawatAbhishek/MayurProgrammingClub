@@ -1,0 +1,51 @@
+---------------------------------------Java------------------------------------
+class Solution {
+    public int findMaxLength(int[] nums) {
+        int left = 0, right = 0, len = nums.length;
+        //converting each zero in nums array to -1
+        for(int indx = 0; indx < len; indx++){
+           if(nums[indx] == 0) 
+            nums[indx]  = -1;
+        }
+        //goal is zero here
+        int prefSum = 0;
+        Map<Integer, Integer> prefSumIndxMp = new HashMap<>();//it will be storing the value of index at which a particular value of prefix sum was seen for the first time.
+        prefSumIndxMp.put(0, -1);
+        int maxSubLen = 0;
+        for(int indx = 0; indx < len; indx++){
+            prefSum += nums[indx];
+            //search the first occurence of (prefix sum -goal) in map
+            if(prefSumIndxMp.containsKey(prefSum - 0)){
+                maxSubLen = Math.max(maxSubLen, indx - prefSumIndxMp.get(prefSum - 0));
+            }
+            if(!prefSumIndxMp.containsKey(prefSum))prefSumIndxMp.put(prefSum, indx);
+        }
+        return maxSubLen;
+    }
+}
+--------------------------C++-------------------------------------------------
+class Solution {
+public:
+    int findMaxLength(vector<int>& nums) {
+        int left = 0, right = 0, len = nums.size();
+        for(int indx = 0; indx < len; indx++){
+            if(nums[indx] == 0) 
+                nums[indx]  = -1;
+        }
+        int prefSum = 0;
+        unordered_map<int, int> prefSumIndxMp;
+        prefSumIndxMp[0] = -1;
+        int maxSubLen = 0;
+        for(int indx = 0; indx < len; indx++){
+            prefSum += nums[indx];
+            if(prefSumIndxMp.find(prefSum - 0) != prefSumIndxMp.end()){
+                maxSubLen = max(maxSubLen, indx - prefSumIndxMp[prefSum - 0]);
+            }
+            if(prefSumIndxMp.find(prefSum) == prefSumIndxMp.end()) {
+                prefSumIndxMp[prefSum] = indx;
+            }
+        }
+        return maxSubLen;
+    }
+};
+

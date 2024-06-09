@@ -1,0 +1,34 @@
+-------------------------C++--------------------------------------------
+//TC : O(n), n is the number of steps
+//SC : O(n), n is the number of steps
+class Solution {
+public:
+    int climbStairs(int n) {
+        //Use this data structure to store the results of intermidate state and form the solution of bigger state using them and avoiding extra work in case of overlapping sub problems
+        vector<int> noOfWays(n + 1);
+        //to reach the first step or zeroth step there is only one way
+        noOfWays[0] = noOfWays[1] = 1;
+        //then we will be building our solution starting from second step
+        for(int steps = 2; steps < n + 1; steps++){
+            //we are adding contribution of previous states to the current state
+            //current state   prev state 1         prev state 2
+            noOfWays[steps] = noOfWays[steps-1] + noOfWays[steps-2];
+        }
+        //then simply we will be returing the number of ways to reach the nth stair
+        return noOfWays[n];
+    }
+};
+-----------------------------------Java--------------------------------------
+class Solution {
+    public int climbStairs(int n) {
+        int  noOfWays[] = new int[n + 1];
+     
+        noOfWays[0] = noOfWays[1] = 1;
+      
+        for(int steps = 2; steps < n + 1; steps++){
+            noOfWays[steps] = noOfWays[steps-1] + noOfWays[steps-2];
+        }
+     
+        return noOfWays[n];
+    }
+}

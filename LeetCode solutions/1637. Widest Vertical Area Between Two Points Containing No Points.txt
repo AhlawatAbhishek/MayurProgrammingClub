@@ -1,0 +1,31 @@
+-----------------------------------------C++------------------------------------------------------
+class Solution {
+public:
+    int maxWidthOfVerticalArea(vector<vector<int>>& points) {
+        //since we are not concerned with the y co ordinate so we will only focus on x co-ordinate of each point
+        //and we will be sorting this points array according to x coordinate in ascending order
+        sort(points.begin(), points.end(), [](const vector<int> &p1, const vector<int>&p2)->bool{
+            return p1[0] < p2[0];
+        });
+        int maxWidth = 0, sz = points.size();
+        //then for each pair of consecutive points we will find the width and update maxWidth
+        for(int indx = 0; indx < sz-1; indx++){
+           vector<int> & point1 = points[indx], &point2 = points[indx+1]; 
+           maxWidth = max(maxWidth, point2[0] - point1[0]);
+        }
+        //then we will return maxWidth
+        return maxWidth;
+    }
+};
+-------------------------------------------Java-------------------------------------------------------------
+class Solution {
+    public int maxWidthOfVerticalArea(int[][] points) {
+        Arrays.sort(points, (p1, p2)->(p1[0]-p2[0]));
+        int maxWidth = 0, sz = points.length;
+        for(int indx = 0; indx < sz-1; indx++){
+           int [] point1 = points[indx], point2 = points[indx+1]; 
+           maxWidth = Math.max(maxWidth, point2[0] - point1[0]);
+        }
+        return maxWidth;
+    }
+}

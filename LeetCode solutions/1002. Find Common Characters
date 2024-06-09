@@ -1,0 +1,51 @@
+------------------------Java-------------------------------------------------
+class Solution {
+    public List<String> commonChars(String[] words) {
+        int freqMin[] = new int[26];
+        int freqCurr[] = new int[26];
+        Arrays.fill(freqMin, Integer.MAX_VALUE);
+        for(var word : words){
+            Arrays.fill(freqCurr, 0);
+            for(var chr : word.toCharArray()){
+                freqCurr[chr - 'a']++;
+            }
+            for(int indx = 0; indx < 26; indx++){
+                freqMin[indx] = Math.min(freqMin[indx], freqCurr[indx]);    
+            }
+        }
+        List<String> res = new ArrayList<>();
+        for(int indx = 0; indx < 26; indx++){
+            if(freqMin[indx] > 0)
+                res.addAll(Collections.nCopies(freqMin[indx], (char)(indx + 'a') + ""));
+        }
+        return res;
+    }
+}
+
+----------------------C++-----------------------------------------------------
+class Solution {
+public:
+    vector<string> commonChars(vector<string>& words) {
+        vector<int> freqMin(26, INT_MAX);
+        vector<int> freqCurr(26, 0);
+        
+        for(const string& word : words) {
+            fill(freqCurr.begin(), freqCurr.end(), 0);
+            for(char chr : word) {
+                freqCurr[chr - 'a']++;
+            }
+            for(int indx = 0; indx < 26; indx++) {
+                freqMin[indx] = min(freqMin[indx], freqCurr[indx]);
+            }
+        }
+        
+        vector<string> res;
+        for(int indx = 0; indx < 26; indx++) {
+            if(freqMin[indx] > 0) {
+                res.insert(res.end(), freqMin[indx], string(1, char(indx + 'a')));
+            }
+        }
+        return res;
+    }
+};
+

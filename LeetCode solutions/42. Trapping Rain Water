@@ -1,0 +1,49 @@
+-----------------------------------------------------C++-----------------------------------------------------------------------
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int size = height.size();
+        vector<int> leftSideMax(size), rightSideMax(size);
+
+        for (int indx = 0; indx < size; indx++) {
+            if (indx == 0)
+                leftSideMax[indx] = height[indx];
+            else
+                leftSideMax[indx] = max(leftSideMax[indx - 1], height[indx]);
+        }
+
+        for (int indx = size - 1; indx >= 0; indx--) {
+            if (indx == size - 1)
+                rightSideMax[indx] = height[indx];
+            else
+                rightSideMax[indx] = max(rightSideMax[indx + 1], height[indx]);
+        }
+
+        int totalWater = 0;
+        for (int indx = 0; indx < size; indx++) {
+            totalWater += min(leftSideMax[indx], rightSideMax[indx]) - height[indx];
+        }
+
+        return totalWater;
+    }
+};
+
+-------------------------------------------------Java--------------------------------------------------------------------------
+class Solution {
+    public int trap(int[] height) {
+        int size = height.length, leftSideMax[] = new int[size], rightSideMax[] = new int[size];
+        for(int indx = 0; indx < size; indx++){
+            if(indx == 0)leftSideMax[indx] = height[indx];
+            else leftSideMax[indx] = Math.max(leftSideMax[indx-1], height[indx]);
+        }
+        for(int indx = size - 1; indx > -1; indx--){
+            if(indx == size - 1)rightSideMax[indx] = height[indx];
+            else rightSideMax[indx] = Math.max(rightSideMax[indx+1], height[indx]);
+        }
+        int totalWater = 0;
+        for(int indx = 0; indx < size; indx++){
+            totalWater += Math.min(leftSideMax[indx], rightSideMax[indx]) - height[indx];
+        }
+        return totalWater;
+    }
+}

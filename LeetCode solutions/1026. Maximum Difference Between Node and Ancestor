@@ -1,0 +1,92 @@
+---------------------------------C++--------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    int maxDiff = 0;
+public: 
+    int maxAncestorDiff(TreeNode* root) {
+         //DFS (a link will be provided in description of the video)
+         findMaxDiff(root);
+         //so we will be updating maxDiff as we do a DFS tarversal of the tree
+         return maxDiff;
+    }
+private: 
+    pair<int, int> findMaxDiff(TreeNode * root){
+        if(root == NULL){
+            //pair -> (minValue, maxValue)
+            return make_pair(INT_MAX, INT_MIN);
+        }
+        //current root's value which will be denoting current ancestor or say value of a
+        int rootVal = root->val;
+        //then you will be recurse for the left sub-tree and find the pair(minValue, maxValue) in that sub-tree
+        auto prLeft = findMaxDiff(root->left);
+        //you will be doing similar thing for right sub-tree.
+        auto prRight = findMaxDiff(root->right);
+        //returing updated pair(minValue, maxValue) w.r.t to current root node
+        auto prRet = make_pair(rootVal, rootVal);
+        //also will be updating maxDiff here
+        if(!(prLeft.first == INT_MAX && prLeft.second == INT_MIN)){//this is just check to ensure that we are not updating value w.r.t. to a null node
+            int leftDiff = max(abs(rootVal - prLeft.first), abs(rootVal - prLeft.second));
+            maxDiff = max(maxDiff, leftDiff);
+            prRet.first = min(rootVal, prLeft.first);
+            prRet.second = max(rootVal, prLeft.second);
+        }
+        if(!(prRight.first == INT_MAX && prRight.second == INT_MIN)){
+            int rightDiff = max(abs(rootVal - prRight.first), abs(rootVal - prRight.second));
+            maxDiff = max(maxDiff, rightDiff);
+            prRet.first = min(prRet.first, prRight.first);
+            prRet.second = max(prRet.second, prRight.second);
+        }
+        //at last will be returing updated pair(minValue, maxValue) for the current root node to it's ancestors
+        return prRet;
+    }
+};
+-----------------------------------Java------------------------------------
+class Solution {
+    private int maxDiff = 0;
+    public int maxAncestorDiff(TreeNode root) {
+        //DFS (a link will be provided in description of the video)
+         findMaxDiff(root);
+         //so we will be updating maxDiff as we do a DFS tarversal of the tree
+         return maxDiff;
+    }
+    private Pair<Integer, Integer> findMaxDiff(TreeNode  root){
+        if(root == null){
+            //pair . (minValue, maxValue)
+            return new Pair<Integer, Integer>(Integer.MAX_VALUE, Integer.MIN_VALUE);
+        }
+        //current root's value which will be denoting current ancestor or say value of a
+        int rootVal = root.val;
+        //then you will be recurse for the left sub-tree and find the pair(minValue, maxValue) in that sub-tree
+        var prLeft = findMaxDiff(root.left);
+        //you will be doing similar thing for right sub-tree.
+        var prRight = findMaxDiff(root.right);
+        //returing updated pair(minValue, maxValue) w.r.t to current root node
+        int minValue = rootVal, maxValue = rootVal;
+        //also will be updating maxDiff here
+        if(!(prLeft.getKey() == Integer.MAX_VALUE && prLeft.getValue() == Integer.MIN_VALUE)){//this is just check to ensure that we are not updating value w.r.t. to a null node
+            int leftDiff = Math.max(Math.abs(rootVal - prLeft.getKey()), Math.abs(rootVal - prLeft.getValue()));
+            maxDiff = Math.max(maxDiff, leftDiff);
+            minValue = Math.min(rootVal, prLeft.getKey());
+            maxValue = Math.max(rootVal, prLeft.getValue());
+        }
+        if(!(prRight.getKey() == Integer.MAX_VALUE && prRight.getValue() == Integer.MIN_VALUE)){
+            int rightDiff = Math.max(Math.abs(rootVal - prRight.getKey()), Math.abs(rootVal - prRight.getValue()));
+            maxDiff = Math.max(maxDiff, rightDiff);
+            minValue = Math.min(minValue, prRight.getKey());
+            maxValue = Math.max(maxValue, prRight.getValue());
+        }
+        //at last will be returing updated pair(minValue, maxValue) for the current root node to it's ancestors
+        return new Pair<Integer, Integer>(minValue, maxValue);
+    }
+}

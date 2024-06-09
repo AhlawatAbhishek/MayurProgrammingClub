@@ -1,0 +1,29 @@
+----------------------------------------------C++------------------------------------------------------------------
+class Solution {
+public:
+    TreeNode* removeLeafNodes(TreeNode* root, int target) {
+        if(root == NULL)return NULL;
+        TreeNode *leftNode = removeLeafNodes(root->left, target);
+        TreeNode *rightNode = removeLeafNodes(root->right, target);
+        root->left = leftNode;
+        root->right = rightNode;
+        if(leftNode == NULL && rightNode == NULL && root->val == target){
+            return NULL;
+        }
+        return root;
+    }
+};
+-----------------------------------------------------Java----------------------------------------------------------------
+class Solution {
+    public TreeNode removeLeafNodes(TreeNode root, int target) {
+        if(root == null)return null;
+        TreeNode leftNode = removeLeafNodes(root.left, target);
+        TreeNode rightNode = removeLeafNodes(root.right, target);
+        root.left = leftNode;
+        root.right = rightNode;
+        if(leftNode == null && rightNode == null && root.val == target){
+            return null;
+        }
+        return root;
+    }
+}

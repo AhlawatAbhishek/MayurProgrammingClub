@@ -1,0 +1,49 @@
+------------------------------Java--------------------------------------
+class Solution {
+    public int minOperations(int[] nums) {
+        int sz = nums.length, delOps = 0;
+       //to store frequencies of all the unique elements
+       Map<Integer, Integer> freqMap = new HashMap<>();
+       for(var num : nums)freqMap.put(num, freqMap.getOrDefault(num, 0)+1);
+       //Try to use second operation as much as you can.
+       for(var pr : freqMap.entrySet()){ 
+           int ops = 0, numFreq = pr.getValue(), threeOps = numFreq / 3;
+           //if there is an element with frequency one
+           if(numFreq == 1)return -1;
+           if(numFreq % 3 == 0)ops += threeOps;
+           else if(numFreq % 3 == 1){
+               if(numFreq - 4 > 0)ops += threeOps-1 + 2;
+               else ops += numFreq / 2;
+           }
+           else ops+= threeOps + 1;
+           delOps += ops;
+       }
+       //no of ops required to empty the array
+       return delOps;
+    }
+}
+---------------------------C++--------------------------------------------
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+       int sz = nums.size(), delOps = 0;
+       //to store frequencies of all the unique elements
+       unordered_map<int, int> freqMap;
+       for(auto num : nums)freqMap[num]++;
+       //Try to use second operation as much as you can.
+       for(auto & pr : freqMap){ 
+           int ops = 0, numFreq = pr.second, threeOps = numFreq / 3;
+           //if there is an element with frequency one
+           if(numFreq == 1)return -1;
+           if(numFreq % 3 == 0)ops += threeOps;
+           else if(numFreq % 3 == 1){
+               if(numFreq - 4 > 0)ops += threeOps-1 + 2;
+               else ops += numFreq / 2;
+           }
+           else ops+= threeOps + 1;
+           delOps += ops;
+       }
+       //no of ops required to empty the array
+       return delOps;
+    }
+};

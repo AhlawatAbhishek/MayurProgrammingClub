@@ -1,0 +1,45 @@
+----------------------------Java-----------------------------------------------
+class Solution {
+    public long countSubarrays(int[] nums, int k) {
+        int left = 0, right = 0, size = nums.length;
+        int maxEle = Integer.MIN_VALUE;
+        int maxEleCnt = 0;
+        long subArrCnt = 0;
+        for (int num : nums) {
+            maxEle = Math.max(maxEle, num);
+        }
+        while (right < size) {
+            if (nums[right++] == maxEle) {
+                maxEleCnt++;
+            }
+            while (maxEleCnt == k) {
+                if (nums[left++] == maxEle) {
+                    maxEleCnt--;
+                }
+            }
+            subArrCnt += left;
+        }
+        return subArrCnt;
+    }
+}
+
+-----------------------------C++-----------------------------------------------
+class Solution {
+public:
+    long long countSubarrays(vector<int>& nums, int k) {
+        int left = 0, right = 0, size = nums.size();
+        int maxEle = *max_element(nums.begin(), nums.end());
+        int maxEleCnt = 0;
+        long long subArrCnt = 0;
+        while(right < size){
+           if(nums[right++] == maxEle){
+               maxEleCnt++;
+           }
+           while(maxEleCnt == k){
+              if(nums[left++] == maxEle)maxEleCnt--;
+           }
+           subArrCnt += left;
+        }
+        return subArrCnt;
+    }
+};

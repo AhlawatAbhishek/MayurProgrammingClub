@@ -1,0 +1,53 @@
+-----------------------------C++-----------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> divideArray(vector<int>& nums, int k) {
+         int size = nums.size();
+         //sorting the input array to check for the contraints for each segment easily 
+         //and therefore forming the segment
+         sort(nums.begin(), nums.end());
+         //this is what we will return if are able to divide the array following constraints
+         vector<vector<int>> segments;
+         for(int indx = 0; indx < size;){
+             vector<int> currSeg;
+             //if last element is having a difference of more than k with first element of 
+            //  the current segment then this is not a valid segment and array cannot 
+            // be divided into valid segments
+             if(nums[indx + 2] - nums[indx] > k){
+               vector<vector<int>> emptySeg;
+               return emptySeg;
+             }
+             int segSize = 3;
+             while(segSize-->0){
+               currSeg.push_back(nums[indx++]);
+             }
+             segments.push_back(currSeg);
+         }
+         return segments;
+    }
+};
+
+-------------------------------Java---------------------------------------------
+class Solution {
+    public int[][] divideArray(int[] nums, int k) {
+          int size = nums.length;
+        Arrays.sort(nums);
+        List<List<Integer>> segments = new ArrayList<>();
+        for (int indx = 0; indx < size; ) {
+            List<Integer> currSeg = new ArrayList<>();
+            if (nums[indx + 2] - nums[indx] > k) {
+                return new int[][]{};
+            }
+            int segSize = 3;
+            while (segSize-- > 0) {
+                currSeg.add(nums[indx++]);
+            }
+            segments.add(currSeg);
+        }
+        int result[][] = new int[size/3][3], streamIndx = 0;
+        for(var seg : segments){
+            result[streamIndx++] = seg.stream().mapToInt(x->x).toArray();
+        }
+        return result;
+    }
+}

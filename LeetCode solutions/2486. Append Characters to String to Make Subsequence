@@ -1,0 +1,27 @@
+-------------------------C++--------------------------------------------
+class Solution {
+public:
+    int appendCharacters(string s, string t) {
+        int sIndx = 0, tIndx = 0, sSize = s.size(), tSize = t.size();
+        while(sIndx < sSize && tIndx < tSize){
+            if(s[sIndx] == t[tIndx]){
+                tIndx++;
+            }
+            sIndx++;
+        }
+        return tSize - tIndx;
+    }
+};
+-------------------------------Java-----------------------------------------
+class Solution {
+    public int appendCharacters(String s, String t) {
+        int sIndx = 0, tIndx = 0, sSize = s.length(), tSize = t.length();
+        while(sIndx < sSize && tIndx < tSize){
+            if(s.charAt(sIndx) == t.charAt(tIndx)){
+                tIndx++;
+            }
+            sIndx++;
+        }
+        return tSize - tIndx;
+    }
+}

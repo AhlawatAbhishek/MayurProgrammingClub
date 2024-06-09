@@ -1,0 +1,36 @@
+------------------------------C++-----------------------------------------------
+\class Solution {
+public:
+    int maxSubarrayLength(vector<int>& nums, int k) {
+        int left = 0, right = 0, size = nums.size();
+        int maxLen = 0;
+        unordered_map<int, int> freqMp;
+        while(right < size){
+            freqMp[nums[right]]++;
+            while(left <= right && freqMp[nums[right]] > k){//this is case when there is an element having frequency greater than k
+                freqMp[nums[left++]]--; //shrinking the window size
+            }
+            //update maximum length possible with current good sub array length
+            maxLen = max(maxLen, right++ - left + 1);
+        }
+        return maxLen;
+    }
+};
+------------------------------Java----------------------------------------------
+class Solution {
+    public int maxSubarrayLength(int[] nums, int k) {
+        int left = 0, right = 0, size = nums.length;
+        int maxLen = 0;
+        HashMap<Integer, Integer> freqMap = new HashMap<>();
+        while (right < size) {
+            freqMap.put(nums[right], freqMap.getOrDefault(nums[right], 0) + 1);
+            while (left <= right && freqMap.get(nums[right]) > k) {
+                freqMap.put(nums[left], freqMap.get(nums[left]) - 1);
+                left++;
+            }
+            maxLen = Math.max(maxLen, right++ - left + 1);
+        }
+        return maxLen;
+    }
+}
+

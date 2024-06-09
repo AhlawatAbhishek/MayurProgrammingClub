@@ -1,0 +1,49 @@
+-------------------------------------------Java-------------------------------------------------------------------
+class Solution {
+    public int countSubstrings(String s) {
+        int size = s.length(), psCnt = 0;
+        
+        for(int right = 0; right < size; right++){
+            psCnt += countPalin(s, right, right);
+            if(right + 1 < size)
+                psCnt += countPalin(s, right, right + 1);
+        }
+        return psCnt;
+    }
+
+    private int countPalin(String s, int left, int right){
+        int psCnt = 0, size = s.length();
+        while(left > -1 && right < size && s.charAt(left) == s.charAt(right)){
+            if(s.charAt(left--) == s.charAt(right++)) psCnt++;
+        }
+        return psCnt;
+    }    
+}
+
+-----------------------------------------C++----------------------------------------------------------------------
+class Solution {
+public:
+    int countSubstrings(string s) {
+        int size = s.size(), psCnt = 0;
+        //for each value of right or say index while we are traversing from left to right
+        for(int right = 0; right < size; right++){
+            //we will be considering two types of palindormes -- even and odd length palindromes
+            // and we will be forming then by adding one character both right and left side of it simult.
+            //we will be doing so till both characters that we are appending simult. are equal
+            //this one is for odd length palindrome
+            psCnt += countPalin(s, right, right);
+            if(right + 1 < size)
+            //this one is for even length palindrome
+                psCnt += countPalin(s, right, right + 1);
+        }
+        return psCnt;
+    }
+private:
+    int countPalin(string & s, int left, int right){
+        int psCnt = 0, size = s.size();
+        while(left > -1 &&  right < size && s[left] == s[right]){
+            if(s[left--] == s[right++])psCnt++;
+        }
+        return psCnt;
+    }    
+};

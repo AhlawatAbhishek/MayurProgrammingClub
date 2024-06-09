@@ -1,0 +1,54 @@
+-----------------------------------------------C++-----------------------------------------------------------------------
+class Solution {
+public:
+    vector<vector<int>> onesMinusZeros(vector<vector<int>>& grid) {
+        int rows = grid.size(), cols = grid[0].size();
+        vector<int> rowSum(rows), colSum(cols);
+        vector<vector<int>> diff(rows, vector<int>(cols, 0));
+        //calculating rowsum and column sum matricies
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                  rowSum[r] += grid[r][c];
+            }
+        }
+
+        for(int c = 0; c < cols; c++){
+            for(int r = 0; r < rows; r++){
+                  colSum[c] += grid[r][c];
+            }
+        }
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c < cols; c++){
+                diff[r][c] = (2 * (rowSum[r] + colSum[c])) - rows - cols; 
+            }
+        }
+        return diff;
+    }
+};
+
+-----------------------------------------------Java-----------------------------------------------------------------------
+class Solution {
+    public int[][] onesMinusZeros(int[][] grid) {
+        int rows = grid.length, cols = grid[0].length;
+        int rowSum[] = new int[rows], colSum[] = new int[cols];
+        int diff[][] = new int[rows][cols];
+        //calculating rowsum and column sum gridricies
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                  rowSum[r] += grid[r][c];
+            }
+        }
+
+        for(int c = 0; c < cols; c++){
+            for(int r = 0; r < rows; r++){
+                  colSum[c] += grid[r][c];
+            }
+        }
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c < cols; c++){
+                diff[r][c] = (2 * (rowSum[r] + colSum[c])) - rows - cols; 
+            }
+        }
+        return diff;
+    }
+}

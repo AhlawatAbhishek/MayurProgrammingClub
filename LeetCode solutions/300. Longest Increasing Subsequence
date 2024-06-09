@@ -1,0 +1,54 @@
+-----------------------C++----------------------------------------
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int len = 1;
+        //forming your LIS on the fly while traversing your input array from left to right
+        vector<int> lis;
+        //adding the very first element
+        lis.push_back(nums[0]);
+        
+        for(auto num : nums){
+            //based upon the fact that adding an element to current LIS will increase it's length
+            //or not
+            //if the current element were to be inserted in the LIS what the insertion index would have been
+            //Binary Search -> lower_bound -> O(log n)
+            int insertionIndx = lower_bound(lis.begin(), lis.end(), num) - lis.begin();
+            if(insertionIndx == len){//either be adding that element to LIS and increasing the length variable
+                len++;
+                lis.push_back(num);
+            }else{
+                //or we do a replacement in order to ensure that the current state of LIS is most optimal one
+                lis[insertionIndx] = num;
+            }
+        }
+        // for(auto num : lis){
+        //     cout<<num<<" ";
+        // }
+        // cout<<"\n";
+        //then you will be returing the length of LIS
+        return len;
+    }
+};
+---------------------------Java-------------------------------------------
+class Solution {
+    public int lengthOfLIS(int[] nums) {
+       int len = 1, sz = nums.length;
+       int lis[] = new int[sz];
+        lis[0] = nums[0];
+        for(var num : nums){
+            int indx = Arrays.binarySearch(lis, 0, len, num);
+            if(indx < 0){
+                indx++;
+                indx *= -1;
+            }
+            if(indx == len){    
+                len++;
+                lis[indx] = num;
+            }else{
+                lis[indx] = num;
+            }
+        }
+        return len; 
+    }
+}

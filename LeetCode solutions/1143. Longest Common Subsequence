@@ -1,0 +1,41 @@
+-----------------------------C++---------------------------------------------
+// TC : O(len1 * len2)
+// SC:  O(len1 * len2)
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int len1 = text1.size(), len2 = text2.size();
+        //this will used to store the results of intermidate states(to avoid extra work in case of overlapping sub - problems) and form the solution of bigger sub problems based upon solution of smaller problems
+        vector<vector<int>> lcs(len1, vector<int>(len2));
+        for(int indx1 = 0; indx1 < len1; indx1++){
+            for(int indx2 = 0; indx2 < len2; indx2++){
+              //in case of a mis match  
+              lcs[indx1][indx2] = max(((indx1-1 > -1) ? lcs[indx1-1][indx2] : 0), ((indx2 - 1 > -1) ? lcs[indx1][indx2-1] : 0));
+              //if the characters present at current state are matching
+              if(text1[indx1] == text2[indx2]) 
+                           //take matching character                                                  //exclude matching char
+               lcs[indx1][indx2] = max(1 + ((indx1 -1 > -1 && indx2 - 1 > -1) ? lcs[indx1-1][indx2-1] : 0), lcs[indx1][indx2]);
+            }
+        }
+        return lcs[len1-1][len2 -1];
+    }
+};
+---------------------------------Java------------------------------------------
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int len1 = text1.length(), len2 = text2.length();
+        //this will used to store the results of intermidate states(to avoid extra work in case of overlapping sub - problems) and form the solution of bigger sub problems based upon solution of smaller problems
+        int lcs[][] = new int[len1][len2];
+        for(int indx1 = 0; indx1 < len1; indx1++){
+            for(int indx2 = 0; indx2 < len2; indx2++){
+              //in case of a mis match  
+              lcs[indx1][indx2] = Math.max(((indx1-1 > -1) ? lcs[indx1-1][indx2] : 0), ((indx2 - 1 > -1) ? lcs[indx1][indx2-1] : 0));
+              //if the characters present at current state are matching
+              if(text1.charAt(indx1) == text2.charAt(indx2)) 
+                           //take matching character                                                  //exclude matching char
+               lcs[indx1][indx2] = Math.max(1 + ((indx1 -1 > -1 && indx2 - 1 > -1) ? lcs[indx1-1][indx2-1] : 0), lcs[indx1][indx2]);
+            }
+        }
+        return lcs[len1-1][len2 -1];
+    }
+}

@@ -1,0 +1,71 @@
+----------------------------------------C++-------------------------------------
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        //only numbers will be present in this data structure and it will operate in LIFO manner
+        stack<int> operands;
+        for(auto & token : tokens){
+            if(isSpecialChar(token)){//current token is a operator
+            //pop first and second element from operand stack and apply operation on them and then push the result
+            //to operand stack
+                int secondEle = operands.top();
+                operands.pop();
+                int firstEle = operands.top();
+                operands.pop();
+                operands.push(applyOp(firstEle, secondEle, token));
+            }else{//you are having a number at your hand, then you will push it into operand stack
+                operands.push(stoi(token));
+            }
+        }
+        //whatever is left in operand stack is your result 
+        return operands.top();
+    }
+private:
+    bool isSpecialChar(string token){
+        if(token == "*" || token == "/" || token == "-" || token == "+")return true;
+        return false;
+    }
+    int applyOp(int firstEle, int secondEle, string token){
+        if(token == "*")return firstEle * secondEle;
+        else if(token == "/")return firstEle / secondEle;
+        else if(token == "-")return firstEle - secondEle;
+        else return firstEle + secondEle;
+    }    
+};
+--------------------------------------Java---------------------------------------
+public class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> operands = new Stack<>();
+        for(String token : tokens){
+            if(isSpecialChar(token)){
+                int secondEle = operands.pop();
+                int firstEle = operands.pop();
+                operands.push(applyOp(firstEle, secondEle, token));
+            }else{
+                operands.push(Integer.parseInt(token));
+            }
+        }
+        return operands.peek();
+    }
+
+    private boolean isSpecialChar(String token){
+        return "*".equals(token) || "/".equals(token) || "-".equals(token) || "+".equals(token);
+    }
+
+    private int applyOp(int firstEle, int secondEle, String token){
+        switch (token) {
+            case "*":
+                return firstEle * secondEle;
+            case "/":
+                return firstEle / secondEle;
+            case "-":
+                return firstEle - secondEle;
+            case "+":
+                return firstEle + secondEle;
+            default:
+                throw new IllegalArgumentException("Invalid operation");
+        }
+    }
+}
+
+

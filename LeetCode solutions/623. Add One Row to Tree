@@ -1,0 +1,98 @@
+C++:
+```cpp
+class Solution {
+public:
+    TreeNode* addOneRow(TreeNode* root, int val, int depth) {
+        int currDepth = 1;
+        if(depth == currDepth){
+            TreeNode* newRoot = new TreeNode(val);
+            newRoot->left = root;
+            return newRoot;
+        }
+        queue<TreeNode*> levelQ;
+        levelQ.push(root);
+        while(!levelQ.empty()){
+            int size = levelQ.size();
+            while(size-->0){
+                TreeNode *currNode = levelQ.front();
+                levelQ.pop();
+                if(currDepth == depth-1){
+                    TreeNode * leftNew = new TreeNode(val);
+                    TreeNode * rightNew = new TreeNode(val);
+                    if(currNode->left != NULL){
+                        leftNew->left = currNode->left;
+                    }
+                    currNode->left = leftNew;
+                    if(currNode->right !=  NULL)
+                    {
+                        rightNew->right = currNode->right;
+                    }
+                    currNode->right =  rightNew;
+                    levelQ.push(leftNew);
+                    levelQ.push(rightNew);
+
+                }else{
+                    if(currNode->left != NULL){
+                        levelQ.push(currNode->left);
+                    }
+                    if(currNode->right != NULL){
+                        levelQ.push(currNode->right);
+                    }
+                }
+            }
+            currDepth++;
+        }
+        return root;
+    }
+};
+```
+
+Java:
+```java
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+class Solution {
+    public TreeNode addOneRow(TreeNode root, int val, int depth) {
+        int currDepth = 1;
+        if (depth == currDepth) {
+            TreeNode newRoot = new TreeNode(val);
+            newRoot.left = root;
+            return newRoot;
+        }
+        Deque<TreeNode> levelQ = new ArrayDeque<>();
+        levelQ.offerLast(root);
+        while (!levelQ.isEmpty()) {
+            int size = levelQ.size();
+            while (size-- > 0) {
+                TreeNode currNode = levelQ.pollFirst();
+                if (currDepth == depth - 1) {
+                    TreeNode leftNew = new TreeNode(val);
+                    TreeNode rightNew = new TreeNode(val);
+                    if (currNode.left != null) {
+                        leftNew.left = currNode.left;
+                    }
+                    currNode.left = leftNew;
+                    if (currNode.right != null) {
+                        rightNew.right = currNode.right;
+                    }
+                    currNode.right = rightNew;
+                    levelQ.offerLast(leftNew);
+                    levelQ.offerLast(rightNew);
+                } else {
+                    if (currNode.left != null) {
+                        levelQ.offerLast(currNode.left);
+                    }
+                    if (currNode.right != null) {
+                        levelQ.offerLast(currNode.right);
+                    }
+                }
+            }
+            currDepth++;
+        }
+        return root;
+    }
+}
+```
+
+

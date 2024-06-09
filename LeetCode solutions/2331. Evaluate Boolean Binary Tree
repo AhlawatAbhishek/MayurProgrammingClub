@@ -1,0 +1,35 @@
+--------------------------------------------------C++------------------------------------------------------------------
+class Solution {
+public:
+    bool evaluateTree(TreeNode* root) {
+        if(root->left == NULL && root->right == NULL){
+           return (bool)root->val;
+        }
+        if(root->val == 2){
+            bool leftVal = evaluateTree(root->left);
+            if(leftVal == true)return true;
+            return evaluateTree(root->right);
+        }else{
+            bool leftVal = evaluateTree(root->left);
+            if(leftVal == false)return false;
+            return evaluateTree(root->right);
+        }
+    }
+};
+----------------------------------------------Java----------------------------------------------------------------------------
+class Solution {
+    public boolean evaluateTree(TreeNode root) {
+        if(root.left == null && root.right == null){
+           return   (root.val == 1);
+        }
+        if(root.val == 2){
+            boolean leftVal = evaluateTree(root.left);
+            if(leftVal == true)return true;
+            return evaluateTree(root.right);
+        }else{
+            boolean leftVal = evaluateTree(root.left);
+            if(leftVal == false)return false;
+            return evaluateTree(root.right);
+        }
+    }
+}

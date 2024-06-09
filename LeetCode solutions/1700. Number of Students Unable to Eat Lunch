@@ -1,0 +1,103 @@
+----------------------------------------------------------------------Approach 1---------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------Java---------------------------------------------------------------
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        int sandPtr = 0, stdPtr = 0, size = students.length;
+        while(sandPtr < size){
+            if(sandwiches[sandPtr] == students[stdPtr]){
+                students[stdPtr] = -1;
+                stdPtr = (stdPtr + 1 ) % size;
+                sandPtr++;
+            }else{
+                int checkWithCnt  = 0;
+                while(checkWithCnt < size && students[stdPtr] != sandwiches[sandPtr]){
+                    stdPtr = (stdPtr + 1 ) % size;
+                    checkWithCnt++;
+                }
+                if(checkWithCnt == size)break;
+            }
+        }
+        return size - sandPtr;
+    }
+}
+------------------------------------------------------------C++-----------------------------------------------------------------
+class Solution {
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        int sandPtr = 0, stdPtr = 0, size = students.size();
+        while (sandPtr < size) {
+            if (sandwiches[sandPtr] == students[stdPtr]) {
+                students[stdPtr] = -1;
+                stdPtr = (stdPtr + 1) % size;
+                sandPtr++;
+            } else {
+                int checkWithCnt = 0;
+                while (checkWithCnt < size && students[stdPtr] != sandwiches[sandPtr]) {
+                    stdPtr = (stdPtr + 1) % size;
+                    checkWithCnt++;
+                }
+                if (checkWithCnt == size) break;
+            }
+        }
+        return size - sandPtr;
+    }
+};
+
+
+----------------------------------------------------------------------Approach 2---------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------Java---------------------------------------------------------------
+class Solution {
+    public int countStudents(int[] students, int[] sandwiches) {
+        int size = students.length;
+        int zeroSandNeed = 0, oneSandNeed = 0;
+        
+        for (int sandNeed : students) {
+            if (sandNeed == 0) {
+                zeroSandNeed++;
+            } else {
+                oneSandNeed++;
+            }
+        }
+        
+        for (int indx = 0; indx < size; indx++) {
+            if (sandwiches[indx] == 1) {
+                if (oneSandNeed == 0) {
+                    return size - indx;
+                }
+                oneSandNeed--;
+            } else {
+                if (zeroSandNeed == 0) {
+                    return size - indx;
+                }
+                zeroSandNeed--;
+            }
+        }
+        
+        return 0;
+    }
+}
+
+
+------------------------------------------------------------C++-----------------------------------------------------------------
+class Solution {
+public:
+    int countStudents(vector<int>& students, vector<int>& sandwiches) {
+        int size = students.size(), zeroSandNeed = 0, oneSandNeed = 0;
+        for(auto sandNeed : students){
+            if(sandNeed == 0)zeroSandNeed++;
+            else oneSandNeed++;
+        }
+        for(int indx = 0; indx < size; indx++){
+            if(sandwiches[indx] == 1){
+                if(oneSandNeed == 0)return size - indx;
+                oneSandNeed--;
+            }else{
+                if(zeroSandNeed == 0)return size - indx;
+                zeroSandNeed--;
+            }
+        }
+        return 0;
+    }
+};
+
+

@@ -1,0 +1,69 @@
+----------------------------------------------C++-------------------------------
+class Solution {
+public:
+    vector<int> sequentialDigits(int low, int high) {
+        //it will store all possible sequential numbers
+        vector<string> seq;
+        for(int startNum = 1; startNum < 9; startNum++){
+            //here we forming sequences
+            formseq("", startNum, seq);
+        }
+        vector<long long> nums;
+        cout<<"nums size: "<<seq.size() << endl;
+        //filter out only the number required which are within the range
+        for(auto num : seq){
+            long long currNum = stoll(num);
+            if(currNum >= low && currNum <= high)nums.push_back(currNum);
+        }
+        
+        sort(nums.begin(), nums.end());
+        vector<int> res;
+        for(auto num : nums)res.push_back((int)num);
+        return res;
+    }
+private:
+    void formseq(string num, int currDig, vector<string>& seq){
+        if(currDig == 10){
+            seq.push_back(num);
+            return;
+        }
+        if(num.size())//if current number is having atleast one digit
+            seq.push_back(num);//since all intermidiate numbers till current digit is not equal to are also sequential
+            //numbers so we will be adding them also 
+        num += to_string(currDig);
+        formseq(num, currDig+1, seq);
+    }     
+};
+---------------------------------------Java-------------------------------------
+class Solution {
+    public List<Integer> sequentialDigits(int low, int high) {
+        List<String> seq = new ArrayList<>();
+        for (int startNum = 1; startNum < 9; startNum++) {
+            formseq("", startNum, seq);
+        }
+        List<Long> nums = new ArrayList<>();
+        
+        for (String num : seq) {
+            long currNum = Long.parseLong(num);
+            if (currNum >= low && currNum <= high) nums.add(currNum);
+        }
+        Collections.sort(nums);
+        List<Integer> res = new ArrayList<>();
+        for (long num : nums) res.add((int) num);
+        return res;
+    }
+
+    private void formseq(String num, int currDig, List<String> seq) {
+        if (currDig == 10) {
+            seq.add(num);
+            return;
+        }
+        if (!num.isEmpty())
+            seq.add(num);
+
+        num += Integer.toString(currDig);
+        formseq(num, currDig + 1, seq);
+    }
+}
+
+

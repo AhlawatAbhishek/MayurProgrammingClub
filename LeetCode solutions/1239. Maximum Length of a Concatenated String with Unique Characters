@@ -1,0 +1,61 @@
+----------------------------------C++-------------------------------------------
+class Solution {
+public:
+    int maxLength(vector<string>& arr) {
+        int len = arr.size();
+        int maxLen = 0;
+        for(int mask = 0; mask <= (1 << len) - 1; mask++){//each mask's binary representation will represent one sub seq
+           string newStr = "";
+           //for generating current sub seq and string formed by concatination of it's characters
+           for(int indx = 0; indx < len; indx++){
+             if((mask & (1 << indx)) != 0) //this index will be present in current sub seq if this condition holds true
+              newStr += arr[indx];
+           }
+           if(isValid(newStr) && newStr.size() > 0){
+              maxLen = max(maxLen, (int)newStr.size());
+           }
+        }
+        return maxLen;
+    }
+private:
+    bool isValid(string newStr){
+        vector<char> freq(26);
+        for(auto c : newStr){
+            if(freq[c - 'a']++ > 0)return false;
+        }
+        return true;
+    }    
+};
+---------------------------------Java------------------------------------------
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public int maxLength(List<String> arr) {
+        int len = arr.size();
+        int maxLen = 0;
+        for (int mask = 0; mask <= (1 << len) - 1; mask++) {
+            String newStr = "";
+
+            for (int indx = 0; indx < len; indx++) {
+                if ((mask & (1 << indx)) != 0)
+                    newStr += arr.get(indx);
+            }
+            if (isValid(newStr) && newStr.length() > 0) {
+                maxLen = Math.max(maxLen, newStr.length());
+            }
+        }
+        return maxLen;
+    }
+
+    private boolean isValid(String newStr) {
+        int[] freq = new int[26];
+        for (char c : newStr.toCharArray()) {
+            if (freq[c - 'a']++ > 0)
+                return false;
+        }
+        return true;
+    }
+}
+
+

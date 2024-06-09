@@ -1,0 +1,56 @@
+------------------------------------------C++----------------------------------
+class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        //this freqBucket array will help us to maintain number in sorted order
+        vector<int> freqBucket(10000 + 1);
+        //populate your freqBucket while traversing nums array from left to right
+        for(auto num : nums){
+            if(num < 0){//curr number is negative number in input array 'nums'
+                freqBucket[num * -1]++;
+            }else freqBucket[num]++;
+        }
+        vector<int> res;
+        //now we will build our results array
+        for(int num = 0; num < freqBucket.size(); num++){
+            if(freqBucket[num] > 0){
+               int numFreq = freqBucket[num]; 
+               while(numFreq-->0) 
+                res.push_back(num * num);
+            }
+        }
+        return res;
+    }
+-------------------------------Java---------------------------------------------
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        int[] freqBucket = new int[10000 + 1];
+        
+        for (int num : nums) {
+            if (num < 0) {
+                freqBucket[-num]++;
+            } else {
+                freqBucket[num]++;
+            }
+        }
+        
+        List<Integer> resList = new ArrayList<>();
+        
+        for (int num = 0; num < freqBucket.length; num++) {
+            if (freqBucket[num] > 0) {
+                int numFreq = freqBucket[num];
+                while (numFreq-- > 0) {
+                    resList.add(num * num);
+                }
+            }
+        }
+        
+        int[] res = new int[resList.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = resList.get(i);
+        }
+        
+        return res;
+    }
+}
+

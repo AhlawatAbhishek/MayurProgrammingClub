@@ -1,0 +1,100 @@
+--------------------------------------------C++---------------------------------------------------------------------------
+class Solution {
+public: 
+  int knightDialer(int n) {
+    vector < vector < vector < int >>> dialerComb(n, vector < vector < int >> (4, vector < int > (3, 0)));
+    int mod = 1000000007;
+    for (int r = 0; r < 4; r++) {
+      fill(dialerComb[0][r].begin(), dialerComb[0][r].end(), 1);
+    }
+    for(int movNo = 0; movNo < n; movNo++){
+            dialerComb[movNo][3][0] = dialerComb[movNo][3][2] = -1;
+        }
+        //8 possible directions in which knigh can move
+        int dirs[8][2] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+        //starting from second move for '2nd' digit of a n-digit phone number starting from left to right direciton
+        //for each digit you will be having one board or say dialpad
+        for(int movNo = 1; movNo < n; movNo++){
+            for(int r = 0; r < 4; r++){
+                for(int c = 0; c < 3; c++){
+                    //for red cells in the board or dial-pad for current digit, you will not do any calculations
+                    if (dialerComb[movNo][r][c] == -1)continue;
+                    //for the blue cells in the board or dial-pad for current digit you will add contributions of previous digit's locations
+                    for(auto dir : dirs){
+                        //for each cell there could have been 8 possible previous cells from which you could have ended in 
+                        //the current cell
+                        int prevRow = r + dir[0], prevCol = c + dir[1];
+                        //if the previous cells are valid one in terms of them being blue and not red, then you will proceed and the contributions of those cells to the current state cells
+                        if(isSafe(dialerComb, prevRow, prevCol, movNo-1)){
+                             dialerComb[movNo][r][c] = (dialerComb[movNo][r][c] % mod +  dialerComb[movNo-1][prevRow][prevCol] % mod)%mod;
+                        }
+                    }
+                }
+            }
+        }
+        //n-1th board or say dail-pad will represent nth digit and for all unique Phone number you all add the value of n-1th 
+        //dail-pad or say board
+        int unqPhnNum = 0;
+        for(int r = 0; r < 4; r++){
+            for(int c = 0; c < 3; c++){
+                 if(dialerComb[n-1][r][c] == -1)continue;
+                 unqPhnNum =  (unqPhnNum % mod + dialerComb[n-1][r][c] % mod)%mod;
+            }
+        }
+        return unqPhnNum;
+    }
+    bool isSafe(vector < vector < vector < int >>> & dialerComb, int prevRow, int prevCol, int movNo){
+        return movNo  > -1 && prevRow < 4 && prevCol < 3  && prevRow > -1 && prevCol > -1 && dialerComb[movNo][prevRow][prevCol] != -1;
+    }
+};
+-----------------------------------------------------Java---------------------------------------------------------------------
+class Solution {
+    public int knightDialer(int n) {
+        //so for each digit in a n-digit phone number you will be having one dialer or say board
+        int dialerComb[][][] = new int[n][4][3], mod = 1000000007;
+        //initially for zeroth board or say dailer you can place your knight at any one of the blue cells
+        //here we have already made the first move
+        for(int r = 0; r < 4; r++){
+            Arrays.fill(dialerComb[0][r], 1);
+        }
+        //for each of the board or say dialer red cells are marked -1 identification
+        for(int movNo = 0; movNo < n; movNo++){
+            dialerComb[movNo][3][0] = dialerComb[movNo][3][2] = -1;
+        }
+        //8 possible directions in which knigh can move
+        int dirs[][] = {{2, 1}, {2, -1}, {-2, 1}, {-2, -1}, {1, 2}, {1, -2}, {-1, 2}, {-1, -2}};
+        //starting from second move for '2nd' digit of a n-digit phone number starting from left to right direciton
+        //for each digit you will be having one board or say dialpad
+        for(int movNo = 1; movNo < n; movNo++){
+            for(int r = 0; r < 4; r++){
+                for(int c = 0; c < 3; c++){
+                    //for red cells in the board or dial-pad for current digit, you will not do any calculations
+                    if (dialerComb[movNo][r][c] == -1)continue;
+                    //for the blue cells in the board or dial-pad for current digit you will add contributions of previous digit's locations
+                    for(var dir : dirs){
+                        //for each cell there could have been 8 possible previous cells from which you could have ended in 
+                        //the current cell
+                        int prevRow = r + dir[0], prevCol = c + dir[1];
+                        //if the previous cells are valid one in terms of them being blue and not red, then you will proceed and the contributions of those cells to the current state cells
+                        if(isSafe(dialerComb, prevRow, prevCol, movNo-1)){
+                             dialerComb[movNo][r][c] = (dialerComb[movNo][r][c] % mod +  dialerComb[movNo-1][prevRow][prevCol] % mod)%mod;
+                        }
+                    }
+                }
+            }
+        }
+        //n-1th board or say dail-pad will represent nth digit and for all unique Phone number you all add the value of n-1th 
+        //dail-pad or say board
+        int unqPhnNum = 0;
+        for(int r = 0; r < 4; r++){
+            for(int c = 0; c < 3; c++){
+                 if(dialerComb[n-1][r][c] == -1)continue;
+                 unqPhnNum =  (unqPhnNum % mod + dialerComb[n-1][r][c] % mod)%mod;
+            }
+        }
+        return unqPhnNum;
+    }
+    boolean isSafe(int [][][]dialerComb, int prevRow, int prevCol, int movNo){
+        return movNo  > -1 && prevRow < 4 && prevCol < 3  && prevRow > -1 && prevCol > -1 && dialerComb[movNo][prevRow][prevCol] != -1;
+    }    
+}

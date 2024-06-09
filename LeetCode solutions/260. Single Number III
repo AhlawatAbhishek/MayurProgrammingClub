@@ -1,0 +1,35 @@
+------------------Java---------------------------------------------------------
+class Solution {
+    public int[] singleNumber(int[] nums) {
+        int aXorb = 0;
+        for(var num : nums) aXorb ^= num;
+        int lsDiffBit = (aXorb & (~(aXorb-1)));
+        int firstNum = 0, secondNum = 0;
+        for(var num : nums){
+            if((lsDiffBit & num) != 0){
+                firstNum ^= num;
+            }else{
+                secondNum ^= num;
+            }
+        } 
+        return new int[]{firstNum, secondNum};
+    }
+}
+-------------------------C++----------------------------------------------------
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int aXorb = 0;
+        for(auto num : nums) aXorb ^= num;
+        long long lsDiffBit = (aXorb & (~(1ll * aXorb-1)));
+        int firstNum = 0, secondNum = 0;
+        for(auto num : nums){
+            if((lsDiffBit & num) != 0){
+                firstNum ^= num;
+            }else{
+                secondNum ^= num;
+            }
+        } 
+        return {firstNum, secondNum};
+    }
+};

@@ -1,0 +1,46 @@
+----------------------------C++----------------------------------------------
+class Solution {
+private:
+     int pathCnt = 0;
+public:
+    int pseudoPalindromicPaths (TreeNode* root) {
+       countPaths(root, 0);
+       return pathCnt;
+    }
+private:
+    void countPaths(TreeNode * root, int currPath){
+        if(root == NULL)return;
+        //if it is a leaf node
+        if(root->left == NULL && root->right == NULL){
+            //setting bit corresponding to current value of root
+            currPath ^= (1 << root->val);
+            //we are checking if atmost one bit is set in the currPath at each leaf node;
+            if((currPath & (currPath - 1)) == 0)pathCnt++;
+        }
+        currPath ^= (1 << root->val);
+        countPaths(root->left, currPath);
+        countPaths(root->right, currPath);
+    }    
+};
+----------------------------------Java-------------------------------------------
+class Solution {
+    private int pathCnt = 0;
+
+    public int pseudoPalindromicPaths(TreeNode root) {
+        countPaths(root, 0);
+        return pathCnt;
+    }
+
+    private void countPaths(TreeNode root, int currPath) {
+        if (root == null) return;
+
+        if (root.left == null && root.right == null) {
+            currPath ^= (1 << root.val);
+
+            if ((currPath & (currPath - 1)) == 0) pathCnt++;
+        }
+        currPath ^= (1 << root.val);
+        countPaths(root.left, currPath);
+        countPaths(root.right, currPath);
+    }
+}

@@ -1,0 +1,58 @@
+----------------------------------------Java--------------------------------------------
+class Solution {
+        public int[] kthSmallestPrimeFraction(int[] arr, int k) {
+            int len = arr.length, numerator = -1, denominator = -1, fractionPosCovered = 0;
+            double left = 0, right = 1;
+            while(fractionPosCovered != k) {
+                fractionPosCovered = 0;
+                double mid = left + (right - left) /2.0, maxFracValue = 0.0;
+                for(int numeratorIndx = 0, denoIndx = 1; numeratorIndx < len; numeratorIndx++) {
+                    while(denoIndx < len && arr[numeratorIndx] > mid * arr[denoIndx])
+                        denoIndx++;
+                    int currFracPos = len - denoIndx;    
+                    if (denoIndx == len || (fractionPosCovered += currFracPos) > k)
+                        break;
+                    if (arr[numeratorIndx] > maxFracValue * arr[denoIndx]) {
+                        maxFracValue = arr[numeratorIndx] * 1.0 / arr[denoIndx] ;
+                        numerator = arr[numeratorIndx];
+                        denominator = arr[denoIndx];
+                    }
+                }
+                if (fractionPosCovered > k)
+                    right = mid;
+                else 
+                    left = mid;
+            }
+            return new int[] {numerator, denominator};
+        }
+}
+---------------------------------------------C++-----------------------------------------------------------------
+class Solution {
+public:
+    vector<int> kthSmallestPrimeFraction(vector<int>& arr, int k) {
+        int len = arr.size(), numerator = -1, denominator = -1, fractionPosCovered = 0;
+        double left = 0, right = 1;
+        while(fractionPosCovered != k) {
+            fractionPosCovered = 0;
+            double mid = left + (right - left) / 2.0, maxFracValue = 0.0;
+            for(int numeratorIndx = 0, denoIndx = 1; numeratorIndx < len; numeratorIndx++) {
+                while(denoIndx < len && arr[numeratorIndx] > mid * arr[denoIndx])
+                    denoIndx++;
+                int currFracPos = len - denoIndx;    
+                if (denoIndx == len || (fractionPosCovered += currFracPos) > k)
+                    break;
+                if (arr[numeratorIndx] > maxFracValue * arr[denoIndx]) {
+                    maxFracValue = arr[numeratorIndx] * 1.0 / arr[denoIndx] ;
+                    numerator = arr[numeratorIndx];
+                    denominator = arr[denoIndx];
+                }
+            }
+            if (fractionPosCovered > k)
+                right = mid;
+            else 
+                left = mid;
+        }
+        return {numerator, denominator};
+    }
+};
+

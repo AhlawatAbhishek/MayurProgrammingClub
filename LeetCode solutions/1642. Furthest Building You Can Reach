@@ -1,0 +1,58 @@
+------------------------------------C++------------------------------------------------------------------------------
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        
+        priority_queue<int, vector<int>, greater<int>> largestJumps;
+        int size = heights.size();
+        for(int indx = 0; indx < size - 1; indx++){
+            int jumpReq = heights[indx + 1] - heights[indx];
+            if(jumpReq > 0){
+                if(largestJumps.size() < ladders){
+                    largestJumps.push(jumpReq);
+                }else{
+                    int minJumpValueInHeap = largestJumps.empty() ? 0 : largestJumps.top();
+                    if(!largestJumps.empty() && minJumpValueInHeap < jumpReq){
+                        bricks -= largestJumps.top();
+                        largestJumps.pop();
+                        largestJumps.push(jumpReq);
+                    }else{
+                        bricks -= jumpReq;
+                    }
+                    
+                    if(bricks < 0) return indx;
+                }
+            }
+        }
+        return size-1;
+    }
+};
+---------------------------------------------Java--------------------------------------------------------------------
+class Solution {
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        //it will store 'ladders' number of largest running height differences 
+        PriorityQueue<Integer> largestJumps = new PriorityQueue<>();
+        int size = heights.length;
+        for(int indx = 0; indx < size - 1; indx++){
+            int jumpReq = heights[indx + 1] - heights[indx];
+            if(jumpReq > 0){
+                if(largestJumps.size() < ladders){
+                    largestJumps.add(jumpReq);
+                }else{
+                    int minJumpValueInHeap = largestJumps.peek();
+                    if(!largestJumps.isEmpty() && minJumpValueInHeap < jumpReq){
+                        bricks -= largestJumps.poll();
+                        largestJumps.add(jumpReq);
+                    }else{
+                        bricks -= jumpReq;
+                    }
+                    //whenever the number of bricks is not sufficient, then you will terminate you search of furthest building
+                    if(bricks < 0) return indx;
+                }
+            }
+        }
+        return size-1;
+    }
+}
+
+

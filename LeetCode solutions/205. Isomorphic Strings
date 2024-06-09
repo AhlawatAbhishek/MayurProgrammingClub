@@ -1,0 +1,82 @@
+----------------------------------------------Java------------------------------
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        int tCharMp[]  = new int[256];
+        int sCharMp[]  = new int[256];
+        Arrays.fill(sCharMp, -1);
+        Arrays.fill(tCharMp, -1);
+        int freqMp[] = new int[256];
+        for(var chr : s.toCharArray()){
+            freqMp[chr]++;
+        }
+        int size = s.length();
+        for(int indx = 0; indx < size; indx++){
+            char sChar = s.charAt(indx), tChar = t.charAt(indx);
+            int tIndx = tChar;
+            int sIndx = sChar;
+
+            //t's character mapped to s character
+            if(tCharMp[tIndx] == -1){
+                tCharMp[tIndx] = sChar;
+            }else{
+                if(tCharMp[tIndx] != sChar)return false;
+            }
+            //s character mapped to t's character
+            if(sCharMp[sIndx] == -1){
+                sCharMp[sIndx] = tChar;
+            }else{
+                if(sCharMp[sIndx] != tChar)return false;
+            }
+        }  
+        // frequency check      
+        for(var chr : t.toCharArray()){
+            int indx = tCharMp[chr];
+            if(--freqMp[indx] < 0)return false;
+
+        }
+        return true;
+    }
+}
+-------------------------------C++----------------------------------------------
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int tCharMp[256];
+        int sCharMp[256];
+        int freqMp[256];
+        for (int i = 0; i < 256; i++) {
+            sCharMp[i] = -1;
+            tCharMp[i] = -1;
+            freqMp[i] = 0;
+        }
+        for (char chr : s) {
+            freqMp[chr]++;
+        }
+        int size = s.size();
+        for (int indx = 0; indx < size; indx++) {
+            char sChar = s[indx], tChar = t[indx];
+            int tIndx = tChar;
+            int sIndx = sChar;
+
+            // t's character mapped to s character
+            if (tCharMp[tIndx] == -1) {
+                tCharMp[tIndx] = sChar;
+            } else {
+                if (tCharMp[tIndx] != sChar) return false;
+            }
+            // s character mapped to t's character
+            if (sCharMp[sIndx] == -1) {
+                sCharMp[sIndx] = tChar;
+            } else {
+                if (sCharMp[sIndx] != tChar) return false;
+            }
+        }
+        // frequency check
+        for (char chr : t) {
+            int indx = tCharMp[chr];
+            if (--freqMp[indx] < 0) return false;
+        }
+        return true;
+    }
+};
+

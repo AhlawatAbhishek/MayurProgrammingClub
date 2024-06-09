@@ -1,0 +1,46 @@
+-----------------------C++-----------------------------------------------
+class Solution {
+public:
+    int minSteps(string s, string t) {
+        vector<int> freq(26);
+        //populating freq array with character frequencies of s which act as standard frequencies
+        for(auto chr : s){
+            freq[chr - 'a']++;
+        }
+        //then we will be matching character frequencies of t with respect to standard frequencies
+        for(auto chr : t){
+            if(freq[chr - 'a'] > 0){//only taking into consideration the characters present in standards and finding out deficiency
+                freq[chr - 'a']--;
+            }
+        }
+        //return the total deficiency which will be equal to number of minimum steps required to make t anagram of s
+        int deficiency = 0;
+        for(int indx = 0; indx < 26; indx++){
+            if(freq[indx] != 0)deficiency += freq[indx];
+        }
+        return deficiency;
+    }
+};
+-------------------------------Java--------------------------------------------
+class Solution {
+    public int minSteps(String s, String t) {
+        int freq[] = new int[26];
+        //populating freq array with character frequencies of s which act as standard frequencies
+        for(var chr : s.toCharArray()){
+            freq[chr - 'a']++;
+        }
+        //then we will be matching character frequencies of t with respect to standard frequencies
+        for(var chr : t.toCharArray()){
+            if(freq[chr - 'a'] > 0){//only taking into consideration the characters present in standards and finding out deficiency
+                freq[chr - 'a']--;
+            }
+        }
+        //return the total deficiency which will be equal to number of minimum steps required to make t anagram of s
+        int deficiency = 0;
+        for(int indx = 0; indx < 26; indx++){
+            if(freq[indx] != 0)deficiency += freq[indx];
+        }
+        return deficiency;
+        
+    }
+}

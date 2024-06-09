@@ -1,0 +1,71 @@
+----------------------------------------------C++-------------------------------------------------------------------
+class Solution {
+private:
+    int maxGold = 0;
+    vector<vector<int>> dirs = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+public:
+    int getMaximumGold(vector<vector<int>>& grid) {
+        int row = grid.size(), col = grid[0].size();
+        for (int r = 0; r < row; r++) {
+            for (int c = 0; c < col; c++) {
+                if (grid[r][c] != 0) {
+                    dfs(grid, r, c, 0);
+                }
+            }
+        }
+        return maxGold;
+    }
+
+private:
+    void dfs(vector<vector<int>>& grid, int r, int c, int totalGold) {
+        if (!isSafe(grid, r, c)) {
+            maxGold = max(maxGold, totalGold);
+            return;
+        }
+        int goldVal = grid[r][c];
+        totalGold += grid[r][c];
+        grid[r][c] = 0;
+        for (auto& dir : dirs) {
+            int newR = r + dir[0], newC = c + dir[1];
+            dfs(grid, newR, newC, totalGold);
+        }
+        grid[r][c] = goldVal;
+    }
+
+    bool isSafe(vector<vector<int>>& grid, int r, int c) {
+        return r < grid.size() && c < grid[0].size() && r > -1 && c > -1 && grid[r][c] != 0;
+    }
+};
+---------------------------------------------------------Java------------------------------------------------------------------------
+class Solution {
+    private int maxGold = 0;
+    public int getMaximumGold(int[][] grid) {
+        int row = grid.length, col = grid[0].length;
+        for(int r = 0; r <  row; r++){
+            for(int c = 0; c < col; c++){
+              if(grid[r][c] != 0)  
+               dfs(grid, r, c, 0);
+            }
+        }
+        return maxGold;
+    }
+    private int dirs[][] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+    private void dfs(int grid[][], int r, int c, int totalGold){
+        if(!isSafe(grid, r, c)){
+            maxGold = Math.max(maxGold, totalGold);
+            return;
+        }
+        int goldVal = grid[r][c];
+        totalGold += grid[r][c];
+        grid[r][c] = 0;
+        for(var dir : dirs){
+            int newR = r + dir[0], newC = c + dir[1];    
+            dfs(grid, newR, newC, totalGold);
+        }
+        grid[r][c] = goldVal;
+    }
+    private boolean isSafe(int grid[][], int r, int c){
+        return r < grid.length && c < grid[0].length && r > -1 && c > -1 && grid[r][c] != 0;
+    }
+}

@@ -1,0 +1,35 @@
+--------------------------------------------Java--------------------------------------------------------
+class Solution {
+    public int minOperations(int[] nums, int k) {
+        int totalXor = 0;
+        for(var num : nums){
+            totalXor ^= num;
+        }
+        int opsReq = 0;
+        for(int bitPos = 0; bitPos < 31; bitPos++){
+            int mask = 1 << bitPos;
+            if((totalXor & mask) != (k & mask)){
+                opsReq++;
+            }
+        }
+        return opsReq;
+    }
+}
+--------------------------------------------C++-------------------------------------------------------------
+class Solution {
+public:
+    int minOperations(vector<int>& nums, int k) {
+        int totalXor = 0;
+        for(auto num : nums){
+            totalXor ^= num;
+        }
+        int opsReq = 0;
+        for(int bitPos = 0; bitPos < 31; bitPos++){
+            int mask = 1 << bitPos;
+            if((totalXor & mask) != (k & mask)){
+                opsReq++;
+            }
+        }
+        return opsReq;
+    }
+};

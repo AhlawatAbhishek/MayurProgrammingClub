@@ -1,0 +1,38 @@
+-------------------------------Java------------------------------------------
+public class Solution {
+    public int lengthOfLastWord(String s) {
+        int currLen = 0, lastLen = 0;
+        for (char chr : s.toCharArray()) {
+            if (chr == ' ') {
+                if (currLen > 0) {
+                    lastLen = currLen;
+                }
+                currLen = 0;
+            } else {
+                currLen++;
+            }
+        }
+        if (currLen > 0) {
+            lastLen = currLen;
+        }
+        return lastLen;
+    }
+}
+
+--------------------------------C++--------------------------------------------
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+         int currLen = 0, lastLen = 0;
+         for(auto chr : s){
+            if(chr == ' '){
+              if(currLen > 0)  
+                lastLen = currLen;  
+              currLen = 0;
+            }else currLen++;
+         }
+         if(currLen > 0)  
+                lastLen = currLen;
+         return lastLen;
+    }
+};

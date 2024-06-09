@@ -1,0 +1,42 @@
+-----------------------------------------------------------Java------------------------------------------------------------------------
+class Solution {
+    public int[] deckRevealedIncreasing(int[] deck) {
+        Arrays.sort(deck);
+        Deque<Integer> cardQ = new ArrayDeque<>();
+        int size = deck.length;
+        for (int indx = size - 1; indx > -1; indx--) {
+            if (!cardQ.isEmpty()) {
+                cardQ.offerLast(cardQ.pollFirst());
+            }
+            cardQ.offerLast(deck[indx]);
+        }
+        for (int indx = 0; indx < size; indx++) {
+            deck[indx] = cardQ.pollLast();
+        }
+        return deck;
+    }
+}
+
+
+----------------------------------------------------------C++------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> deckRevealedIncreasing(vector<int>& deck) {
+        sort(deck.begin(), deck.end());
+        queue<int> cardQ;
+        int size = deck.size();
+        for(int indx = size - 1; indx > -1; indx--){
+            if(!cardQ.empty()){
+              cardQ.push(cardQ.front());
+              cardQ.pop();   
+            }
+            cardQ.push(deck[indx]);
+        }
+        for(int indx = size-1; indx > -1; indx--){
+            deck[indx] = cardQ.front();
+            cardQ.pop();
+        }
+        return deck;
+
+    }
+};

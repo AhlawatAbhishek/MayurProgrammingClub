@@ -1,0 +1,41 @@
+------------------------C++-------------------------------------------------class Solution {
+public:
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int sz = arr.size();
+        //it will be used to store the results of states, and sol/res of bigger states from smallest state results/sols
+        //what will be the maximum sum possible if we place ending partition at particular index
+        vector<int> sumState(sz);
+        //then we will be populating our state array or vector by using state transition equation.
+        for(int currIndx = 0; currIndx < arr.size(); currIndx++){
+            int maxTillNow = arr[currIndx];
+            //this is the part where we are moving the slider to left starting from current index
+            for(int prevIndx = currIndx; prevIndx > max(-1, currIndx - k); prevIndx--){
+                //what is the maximum element in the current segment
+                maxTillNow = max(maxTillNow, arr[prevIndx]);
+                int segLen = currIndx - prevIndx + 1;
+                int prevSegContri = ((prevIndx - 1 > -1) ? sumState[prevIndx-1] : 0);
+                int currentSegContri = (maxTillNow * segLen);
+                sumState[currIndx] = max(prevSegContri + currentSegContri, sumState[currIndx]);
+            }
+        }
+        return sumState[sz-1];
+    }
+};
+--------------------------------Java--------------------------------------------
+class Solution {
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int sz = arr.length;
+        int [] sumState = new int[sz];
+        for(int currIndx = 0; currIndx < arr.length; currIndx++){
+            int maxTillNow = arr[currIndx];
+            for(int prevIndx = currIndx; prevIndx > Math.max(-1, currIndx - k); prevIndx--){
+                maxTillNow = Math.max(maxTillNow, arr[prevIndx]);
+                int segLen = currIndx - prevIndx + 1;
+                int prevSegContri = ((prevIndx - 1 > -1) ? sumState[prevIndx-1] : 0);
+                int currentSegContri = (maxTillNow * segLen);
+                sumState[currIndx] = Math.max(prevSegContri + currentSegContri, sumState[currIndx]);
+            }
+        }
+        return sumState[sz-1];
+    }
+}

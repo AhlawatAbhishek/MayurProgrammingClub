@@ -1,0 +1,155 @@
+Time complexity: 
+ O(n), n is the number of nodes in the tree, this complexity because each node will be visited only once in DFS and once in BFS
+
+Space Complexity:
+ O(n), this is in case if the binary tree is skewed which leads to consumption of this much recursive stack space in DFS
+---------------------------------Java--------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private TreeNode startNode = null;
+    public int amountOfTime(TreeNode root, int start) {
+        //this is the variable that will be returned at the end.
+        int timePassed = 0;
+        //this is the data structure that will be used for level order traversal or say BFS
+        Deque<Integer> infected = new ArrayDeque<>();
+        //this is the data structure that will be used to make bi directional edges for each node.
+        //one for left child, one for right child and one for it's parent.
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        //this function is used to build the graph. DFS---(Link in description of video)
+        buildGraph(root, graph, start);
+
+        //Level order traversal implementation 
+        infected.push(startNode.val);
+        Set<Integer> infSprd = new HashSet<>();
+        infSprd.add(startNode.val);
+        while(!infected.isEmpty()){
+            int sz = infected.size(), sprdCnt = 0;
+            while(sz-->0){
+                var currInfNode = infected.pollFirst();
+                if(graph.containsKey(currInfNode))
+                    for(var neigh : graph.get(currInfNode)){
+                        if(!infSprd.contains(neigh)){
+                            sprdCnt++;
+                            infSprd.add(neigh);
+                            infected.offerLast(neigh);
+                        }
+                    }
+            }
+            timePassed++;
+        }
+        
+        return timePassed-1;
+    } 
+    private void buildGraph(TreeNode root, Map<Integer, List<Integer>> graph, int startVal){
+        if(root == null)return;
+        int rootVal = root.val;
+        //
+        if(rootVal == startVal)startNode = root;
+        //make bi direction edges in case the current node is not null and is having children
+        if(root.left != null){
+            int leftVal = root.left.val;
+            graph.putIfAbsent(rootVal, new ArrayList<>());
+            graph.putIfAbsent(leftVal, new ArrayList<>());
+            graph.get(rootVal).add(leftVal);
+            graph.get(leftVal).add(rootVal);
+            //recurse for the sub-tree of those children
+            buildGraph(root.left, graph, startVal);
+        }
+        if(root.right != null){
+            int rightVal = root.right.val;
+            graph.putIfAbsent(rootVal, new ArrayList<>());
+            graph.putIfAbsent(rightVal, new ArrayList<>());
+            graph.get(rootVal).add(rightVal);
+            graph.get(rightVal).add(rootVal);
+            buildGraph(root.right, graph, startVal);
+        }
+        
+    }
+}
+----------------------------C++-----------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:   
+//  this is the first infected node at time '0'
+    TreeNode * startNode = NULL;
+public:
+    int amountOfTime(TreeNode* root, int start) {
+        //this is the variable that will be returned at the end.
+        int timePassed = 0;
+        //this is the data structure that will be used for level order traversal or say BFS
+        queue<int> infected;
+        //this is the data structure that will be used to make bi directional edges for each node.
+        //one for left child, one for right child and one for it's parent.
+        unordered_map<int, vector<int>> graph;
+        //this function is used to build the graph. DFS---(Link in description of video)
+        buildGraph(root, graph, start);
+
+        //Level order traversal implementation 
+        infected.push(startNode->val);
+        unordered_set<int> infSprd;
+        infSprd.insert(startNode->val);
+        while(!infected.empty()){
+            int sz = infected.size(), sprdCnt = 0;
+            while(sz-->0){
+                auto currInfNode = infected.front();
+                infected.pop();
+                for(auto neigh : graph[currInfNode]){
+                    if(!infSprd.count(neigh)){
+                        sprdCnt++;
+                        infSprd.insert(neigh);
+                        infected.push(neigh);
+                    }
+                }
+            }
+            timePassed++;
+        }
+        
+        return timePassed-1;
+    } 
+private:     
+    void buildGraph(TreeNode * root, unordered_map<int, vector<int>> & graph, int startVal){
+        if(root == NULL)return;
+        int rootVal = root->val;
+        //
+        if(rootVal == startVal)startNode = root;
+        //make bi direction edges in case the current node is not NULL and is having children
+        if(root->left != NULL){
+            int leftVal = root->left->val;
+            graph[rootVal].push_back(leftVal);
+            graph[leftVal].push_back(rootVal);
+            //recurse for the sub-tree of those children
+            buildGraph(root->left, graph, startVal);
+        }
+        if(root->right != NULL){
+            int rightVal = root->right->val;
+            graph[rootVal].push_back(rightVal);
+            graph[rightVal].push_back(rootVal);
+            buildGraph(root->right, graph, startVal);
+        }
+        
+    }
+};

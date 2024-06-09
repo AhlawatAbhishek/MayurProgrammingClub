@@ -1,0 +1,69 @@
+-----------------------------C++------------------------------------------------
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        unordered_map<int, unordered_set<int>> trustMp;
+        //the above map will help to check trusts among persons
+        for(auto tPair : trust){
+            int person = tPair[0], trustedPerson = tPair[1];
+            // cout<<"Person: "<<person<<" TrustedPerson: "<<trustedPerson<<endl;
+            trustMp[person].insert(trustedPerson);
+        }
+
+        //-------Searching for town judge candidate----------------------
+        int leftPer = 1, rightPer = n;
+        while(leftPer < rightPer){
+            // cout<<"leftPer: "<<leftPer<<" rightPer: "<<rightPer<<endl;
+            if(trustMp[leftPer].count(rightPer) != 0){
+                leftPer++;
+            }else rightPer--;
+        }
+        //-----------check if this candidate is indeed town judge or not--------------------------
+        int cand = leftPer, candTrustNumber = 0;
+        for(auto & tPair : trust){
+            if(tPair[0] == cand){//if candidate is trusting someone then his trustScore decrease
+                candTrustNumber--;
+            }else if(tPair[1] == cand){//if someone is trusting candidate
+                candTrustNumber++;
+            }
+        }
+        // cout<<"leftPer: "<<leftPer<<" rightPer: "<<rightPer<<endl;
+        // cout<<"Trust Cand "<<leftPer<<endl;
+        return (candTrustNumber == n-1) ? cand : -1;
+    }
+};
+------------------------------------Java---------------------------------------
+class Solution {
+    public int findJudge(int n, int[][] trust) {
+        HashMap<Integer, HashSet<Integer>> trustMp = new HashMap<>();
+        
+        for(int[] tPair : trust){
+            int person = tPair[0], trustedPerson = tPair[1];
+            
+            trustMp.computeIfAbsent(person, k -> new HashSet<>()).add(trustedPerson);
+        }
+        
+        int leftPer = 1, rightPer = n;
+        while(leftPer < rightPer){
+            
+            if(trustMp.getOrDefault(leftPer, new HashSet<>()).contains(rightPer)){
+                leftPer++;
+            }else rightPer--;
+        }
+        
+        int cand = leftPer, candTrustNumber = 0;
+        for(int[] tPair : trust){
+            if(tPair[0] == cand){
+                candTrustNumber--;
+            }else if(tPair[1] == cand){
+                candTrustNumber++;
+            }
+        }
+        
+        return (candTrustNumber == n-1) ? cand : -1;
+    }
+}
+
+
+
+

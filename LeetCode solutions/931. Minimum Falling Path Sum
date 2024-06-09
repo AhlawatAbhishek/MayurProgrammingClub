@@ -1,0 +1,45 @@
+------------------------------C++----------------------------------------------
+// TC : O(n * n), n is the number of rows in matrix
+// SC : O(n * n)
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        //intializing row and cols variables
+        int rows = matrix.size(), cols = rows;
+        //this data structure will be used to store the results of overlapping sub-problems and use them to form the results of bigger sub problems and avoid extra work
+        vector<vector<int>> pathSum(rows, vector<int>(cols));
+        //the we will be populating our pathSum vector or say
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(r == 0){//if it is the first row, then pick one element form this row.
+                    pathSum[0][c] = matrix[r][c];
+                }else{//if it's not the first row you will be taking minimum of the  contributions from previous states and adding it to current state and value of cell at current state
+                //current state     current cell val    previous states
+                    pathSum[r][c] = matrix[r][c] + min(pathSum[r-1][c], min(((c-1 > -1) ? pathSum[r-1][c-1] : INT_MAX), (c+1 < cols) ? pathSum[r-1][c+1] : INT_MAX));
+                }
+            }
+        }
+        //at last you will be returning what is minimum sum at last row
+        return *min_element(pathSum[rows-1].begin(), pathSum[rows-1].end());
+    }
+};
+-----------------------------------Java---------------------------------------
+class Solution {
+    public int minFallingPathSum(int[][] matrix) {
+        int rows = matrix.length, cols = rows;
+        int pathSum[][] = new int[rows][cols];
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(r == 0){
+                    pathSum[0][c] = matrix[r][c];
+                }else{
+                    pathSum[r][c] = matrix[r][c] + Math.min(pathSum[r-1][c], Math.min(((c-1 > -1) ? pathSum[r-1][c-1] : Integer.MAX_VALUE), (c+1 < cols) ? pathSum[r-1][c+1] : Integer.MAX_VALUE));
+                }
+            }
+        }
+        int minPathSum = Integer.MAX_VALUE;
+        for(var pSum : pathSum[rows-1])minPathSum = Math.min(minPathSum, pSum);
+        return minPathSum;
+        
+    }
+}

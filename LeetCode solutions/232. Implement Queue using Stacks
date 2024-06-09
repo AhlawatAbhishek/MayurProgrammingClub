@@ -1,0 +1,85 @@
+----------------------------------------------------------------------------C++---------------------------------------------------------------------------
+class MyQueue {
+private:
+    stack<int> pushStack, popCumPeekStack;
+    void checkpopCumPeekStack(){
+        if(popCumPeekStack.empty()){//if this is the case then borrow all of the elements form pushStack or inputStack
+            while(!pushStack.empty()){
+                popCumPeekStack.push(pushStack.top());
+                pushStack.pop();
+            }
+        }
+    }   
+public:
+    MyQueue() {
+    }
+    
+    void push(int x) {
+        pushStack.push(x);
+    }
+    
+    int pop() {
+        checkpopCumPeekStack();
+        int retItem = popCumPeekStack.top();
+        popCumPeekStack.pop();
+        return retItem;
+    }
+    
+    int peek() {
+        checkpopCumPeekStack();
+        return popCumPeekStack.top();
+    }
+    
+    bool empty() {
+        return pushStack.empty() && popCumPeekStack.empty();
+    }
+};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue* obj = new MyQueue();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->peek();
+ * bool param_4 = obj->empty();
+ */
+--------------------------------------------------------------Java-------------------------------------------------------------------------------
+import java.util.Stack;
+
+public class MyQueue {
+    private Stack<Integer> pushStack, popCumPeekStack;
+
+    public MyQueue() {
+        pushStack = new Stack<>();
+        popCumPeekStack = new Stack<>();
+    }
+
+    private void checkpopCumPeekStack() {
+        if (popCumPeekStack.isEmpty()) {
+            while (!pushStack.isEmpty()) {
+                popCumPeekStack.push(pushStack.peek());
+                pushStack.pop();
+            }
+        }
+    }
+
+    public void push(int x) {
+        pushStack.push(x);
+    }
+
+    public int pop() {
+        checkpopCumPeekStack();
+        return popCumPeekStack.pop();
+    }
+
+    public int peek() {
+        checkpopCumPeekStack();
+        return popCumPeekStack.peek();
+    }
+
+    public boolean empty() {
+        return pushStack.isEmpty() && popCumPeekStack.isEmpty();
+    }
+}
+
+
