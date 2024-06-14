@@ -1,0 +1,89 @@
+----------------------Simple Sorting Approach--------------------------------
+-----------------Java-------------------------------
+class Solution {
+    public int minIncrementForUnique(int[] nums) {
+        Arrays.sort(nums);
+        int movs = 0;
+        int expected = nums[0];
+        
+        for (int num : nums) {
+            if (num < expected) {
+                movs += expected - num;
+            } else {
+                expected = num;
+            }
+            expected++;
+        }
+        
+        return movs;
+    }
+}
+---------------------C++------------------------------------
+class Solution {
+public:
+    int minIncrementForUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int movs = 0;
+        int expected = nums[0];
+        
+        for (int num : nums) {
+            if (num < expected) {
+                movs += expected - num;
+            } else {
+                expected = num;
+            }
+            expected++;
+        }
+        
+        return movs;
+    }
+};
+
+-----------------------Counting Sort Approach-----------------------------------
+-----------------C++---------------------------
+class Solution {
+public:
+    int minIncrementForUnique(vector<int>& nums) {
+        int maxEle = *max_element(nums.begin(), nums.end());
+        vector<int> freqMp(maxEle + nums.size());
+        for(auto num : nums){
+            freqMp[num]++;
+        }
+        int movs = 0;
+        for(int num = 0; num < freqMp.size(); num++){
+            int freq = freqMp[num];
+            if(freq > 1){
+                freq--;
+                freqMp[num] = 1;
+                movs += freq;
+                freqMp[num + 1] += freq;
+            }
+        }
+        return movs;
+    }
+};
+------------------------------Java--------------------------------------
+class Solution {
+    public int minIncrementForUnique(int[] nums) {
+        int maxEle = Arrays.stream(nums).max().getAsInt();
+        int[] freqMp = new int[maxEle + nums.length];
+        
+        for (int num : nums) {
+            freqMp[num]++;
+        }
+        
+        int movs = 0;
+        for (int num = 0; num < freqMp.length; num++) {
+            int freq = freqMp[num];
+            if (freq > 1) {
+                freq--;
+                freqMp[num] = 1;
+                movs += freq;
+                freqMp[num + 1] += freq;
+            }
+        }
+        
+        return movs;
+    }
+}
+
