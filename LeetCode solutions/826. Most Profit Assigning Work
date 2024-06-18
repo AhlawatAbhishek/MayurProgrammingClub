@@ -1,0 +1,86 @@
+-----------------------Java----------------------------------------------------
+class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+        int diffLen = difficulty.length, wLen = worker.length;
+        int diffProf[][] = new int[diffLen][2];
+        for(int indx = 0; indx < diffLen; indx++){
+            diffProf[indx][0] = difficulty[indx];
+            diffProf[indx][1] = profit[indx]; 
+        }
+        Arrays.sort(diffProf, (a, b)->(a[0] - b[0]));
+        int maxProfTill[] = new int[diffLen];
+        for(int indx = 0; indx < diffLen; indx++){
+            maxProfTill[indx] = Math.max(((indx > 0) ? (maxProfTill[indx-1]) : 0), diffProf[indx][1]);
+        }
+        int totalProf = 0;
+        for(int wIndx = 0; wIndx < wLen; wIndx++){
+            int maxDiffIndx = findMaxDiffJob(diffProf, worker[wIndx]);
+            if(maxDiffIndx != -1){
+                 totalProf += maxProfTill[maxDiffIndx];                
+            }
+        }
+        return totalProf;
+    }
+    private int findMaxDiffJob(int diffProf[][], int workerCap){
+        int left = 0, right = diffProf.length-1;
+        int ansIndx = -1;
+        while(left <= right){
+            int midIndx = left + (right - left) / 2;
+            if(workerCap >= diffProf[midIndx][0]){
+                ansIndx = midIndx;
+                left = midIndx + 1;
+            }else{
+                right = midIndx - 1;
+            }
+        }
+        return ansIndx;
+    }
+}
+------------------------------C++-----------------------------------------------
+class Solution {
+public:
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        int diffLen = difficulty.size(), wLen = worker.size();
+        vector<pair<int, int>> diffProf(diffLen);
+        
+        for(int indx = 0; indx < diffLen; indx++){
+            diffProf[indx] = {difficulty[indx], profit[indx]};
+        }
+        
+        sort(diffProf.begin(), diffProf.end(), [](const pair<int, int>& a, const pair<int, int>& b) {
+            return a.first < b.first;
+        });
+        
+        vector<int> maxProfTill(diffLen);
+        for(int indx = 0; indx < diffLen; indx++){
+            maxProfTill[indx] = max((indx > 0 ? maxProfTill[indx - 1] : 0), diffProf[indx].second);
+        }
+        
+        int totalProf = 0;
+        for(int wIndx = 0; wIndx < wLen; wIndx++){
+            int maxDiffIndx = findMaxDiffJob(diffProf, worker[wIndx]);
+            if(maxDiffIndx != -1){
+                 totalProf += maxProfTill[maxDiffIndx];                
+            }
+        }
+        
+        return totalProf;
+    }
+    
+private:
+    int findMaxDiffJob(const vector<pair<int, int>>& diffProf, int workerCap){
+        int left = 0, right = diffProf.size() - 1;
+        int ansIndx = -1;
+        while(left <= right){
+            int midIndx = left + (right - left) / 2;
+            if(workerCap >= diffProf[midIndx].first){
+                ansIndx = midIndx;
+                left = midIndx + 1;
+            } else {
+                right = midIndx - 1;
+            }
+        }
+        return ansIndx;
+    }
+};
+
