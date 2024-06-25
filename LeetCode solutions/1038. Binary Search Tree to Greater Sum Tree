@@ -1,0 +1,37 @@
+-------------------------------Java--------------------------------------------
+class Solution {
+    int currSum = 0;
+    public TreeNode bstToGst(TreeNode root) {
+        bstToGstHelper(root);
+        return root;
+    }
+    private void bstToGstHelper(TreeNode root){
+        if(root == null)return;
+        bstToGstHelper(root.right);
+        int rootVal = root.val;
+        root.val += currSum;
+        currSum += rootVal;
+        bstToGstHelper(root.left);
+    }
+}
+--------------------------------C++--------------------------------------------
+class Solution {
+public:
+    int currSum = 0;
+
+    TreeNode* bstToGst(TreeNode* root) {
+        bstToGstHelper(root);
+        return root;
+    }
+
+private:
+    void bstToGstHelper(TreeNode* root) {
+        if (root == nullptr) return;
+        bstToGstHelper(root->right);
+        int rootVal = root->val;
+        root->val += currSum;
+        currSum += rootVal;
+        bstToGstHelper(root->left);
+    }
+};
+
