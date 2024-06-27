@@ -1,0 +1,54 @@
+-----------------Approach 1-----------------------------------------
+-----------------Java---------------------------------------
+class Solution {
+    public int findCenter(int[][] edges) {
+        Map<Integer, Integer> freqMp = new HashMap<>();
+        for(var ed : edges){
+            freqMp.put(ed[0], freqMp.getOrDefault(ed[0], 0)+1);
+            freqMp.put(ed[1], freqMp.getOrDefault(ed[1], 0)+1);
+        } 
+        int maxFreq = 0, maxFreqVert = 0;
+        for(var entry : freqMp.entrySet()){
+           int vertFreq = entry.getValue(), vertValue = entry.getKey(); 
+           if(maxFreq < vertFreq){
+              maxFreqVert = vertValue;
+              maxFreq = vertFreq;
+           }
+        }
+        return maxFreqVert; 
+    }
+}
+----------------------------C++------------------------------------
+class Solution {
+public:
+    int findCenter(vector<vector<int>>& edges) {
+        unordered_map<int, int> freqMp;
+        for(auto & ed : edges){
+            freqMp[ed[0]]++;
+            freqMp[ed[1]]++;
+        } 
+        int maxFreq = 0, maxFreqVert = 0;
+        for(auto & pr : freqMp){
+           int vertFreq = pr.second, vertValue = pr.first; 
+           if(maxFreq < vertFreq){
+              maxFreqVert = vertValue;
+              maxFreq = vertFreq;
+           }
+        }
+        return maxFreqVert; 
+    }
+};
+-----------------Approach 2-----------------------------------------
+----------------C++------------------------------
+class Solution {
+public:
+    int findCenter(vector<vector<int>>& edges) {
+        return (edges[0][0] == edges[1][1] || edges[0][0] == edges[1][0]) ? edges[0][0] : edges[0][1];
+    }
+};
+-----------------Java-----------------------------------------------
+class Solution {
+    public int findCenter(int[][] edges) {
+         return (edges[0][0] == edges[1][1] || edges[0][0] == edges[1][0]) ? edges[0][0] : edges[0][1];
+    }
+}
