@@ -1,0 +1,77 @@
+----------------------------------Java-----------------------------------------
+class Solution {
+    public int minDifference(int[] nums) {
+        int size = nums.length;
+        if (size <= 4) {
+            return 0;
+        }
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b)->(b - a));
+        for (var num : nums) {
+            maxHeap.offer(num);
+            if (maxHeap.size() > 4) {
+                maxHeap.poll();
+            }
+            minHeap.offer(num);
+            if (minHeap.size() > 4) {
+                minHeap.poll();
+            }
+        }
+        List<Integer> minFour = new ArrayList<>(maxHeap);
+        List<Integer> maxFour = new ArrayList<>(minHeap);
+        Collections.sort(minFour);
+        Collections.sort(maxFour);
+        int minDif = Integer.MAX_VALUE;
+        for (int indx = 0; indx < 4; indx++) {
+            int currDiff = maxFour.get(indx) - minFour.get(indx);
+            minDif = Math.min(minDif, currDiff);
+        }
+        return minDif;
+    }
+}
+-------------------------------C++----------------------------------------------
+class Solution {
+public:
+    int minDifference(vector<int>& nums) {
+        int size = nums.size();
+        if (size <= 4) {
+            return 0;
+        }
+        
+        priority_queue<int, vector<int>, greater<int>> minHeap;
+        priority_queue<int> maxHeap;
+        
+        for (int num : nums) {
+            maxHeap.push(num);
+            if (maxHeap.size() > 4) {
+                maxHeap.pop();
+            }
+            minHeap.push(num);
+            if (minHeap.size() > 4) {
+                minHeap.pop();
+            }
+        }
+        
+        vector<int> minFour, maxFour;
+        while (!maxHeap.empty()) {
+            minFour.push_back(maxHeap.top());
+            maxHeap.pop();
+        }
+        while (!minHeap.empty()) {
+            maxFour.push_back(minHeap.top());
+            minHeap.pop();
+        }
+        
+        sort(minFour.begin(), minFour.end());
+        sort(maxFour.begin(), maxFour.end());
+        
+        int minDif = INT_MAX;
+        for (int i = 0; i < 4; ++i) {
+            int currDiff = maxFour[i] - minFour[i];
+            minDif = min(minDif, currDiff);
+        }
+        
+        return minDif;
+    }
+};
+
