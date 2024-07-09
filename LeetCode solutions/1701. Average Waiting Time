@@ -1,0 +1,33 @@
+--------------------------Java--------------------------------------------------
+class Solution {
+    public double averageWaitingTime(int[][] customers) {
+        long timePassed = 0;
+        double totalWaitTime = 0;
+        for(var entry : customers){
+            long arrival = entry[0], timeToCook = entry[1];
+            if(timePassed == 0)timePassed = arrival;
+            long waitTime = timeToCook + ((arrival <= timePassed) ? (timePassed - arrival) : 0);
+            timePassed = Math.max(timePassed, arrival);
+            timePassed += timeToCook;
+            totalWaitTime += waitTime;
+        }
+        return (totalWaitTime / customers.length);
+    }
+}
+------------------------------C++-----------------------------------------------
+class Solution {
+public:
+    double averageWaitingTime(vector<vector<int>>& customers) {
+        long long timePassed = 0;
+        double totalWaitTime = 0;
+        for(auto & entry : customers){
+            long long arrival = entry[0], timeToCook = entry[1];
+            if(timePassed == 0)timePassed = arrival;
+            long long waitTime = timeToCook + ((arrival <= timePassed) ? (timePassed - arrival) : 0);
+            timePassed = max(timePassed, arrival);
+            timePassed += timeToCook;
+            totalWaitTime += waitTime;
+        }
+        return (totalWaitTime / customers.size());
+    }
+};
