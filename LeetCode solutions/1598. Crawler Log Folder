@@ -1,0 +1,35 @@
+--------------------------C++----------------------------------------------
+class Solution {
+public:
+    int minOperations(vector<string>& logs) {
+        int dirCnt = 0;
+        for(auto  & op : logs){
+            int opSize = op.size();
+            if(op=="../"){
+                if(dirCnt>0)dirCnt--;
+            }else if(op=="./"){
+                continue;
+            }else{
+                dirCnt++;
+            }
+        }
+        return dirCnt; 
+    }
+};
+------------------------------Java--------------------------------------------
+class Solution {
+    public int minOperations(String[] logs) {
+        int dirCnt = 0;
+        for(var op : logs){
+            int opSize = op.length();
+            if(op.equals("../")){
+                if(dirCnt>0)dirCnt--;
+            }else if(op.equals("./")){
+                continue;
+            }else{
+                dirCnt++;
+            }
+        }
+        return dirCnt; 
+    }
+}
