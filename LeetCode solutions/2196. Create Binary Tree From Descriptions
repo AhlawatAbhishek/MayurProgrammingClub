@@ -1,0 +1,57 @@
+------------------------Java---------------------------
+class Solution {
+    public TreeNode createBinaryTree(int[][] descriptions) {
+         Map<Integer, Integer> inDeg = new HashMap<>();
+         Map<Integer, TreeNode> valueNodeMp = new HashMap<>();
+         for(var des : descriptions){
+            int parent = des[0], child = des[1];
+            var isLeftChild = (des[2] == 1) ? true : false;
+            inDeg.putIfAbsent(parent, 0);
+            inDeg.put(child, inDeg.getOrDefault(child, 0)-1);
+            valueNodeMp.putIfAbsent(parent, new TreeNode(parent));
+            valueNodeMp.putIfAbsent(child, new TreeNode(child));
+            if(isLeftChild){
+                valueNodeMp.get(parent).left = valueNodeMp.get(child);
+            }else valueNodeMp.get(parent).right = valueNodeMp.get(child);
+         }
+         for(var entry : inDeg.entrySet()){
+             if(entry.getValue() == 0)return valueNodeMp.get(entry.getKey());
+         }
+         return null;
+         
+    }
+}
+------------------------C++----------------------------
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_map<int, int> inDeg;
+        unordered_map<int, TreeNode*> valueNodeMp;
+
+        for (auto& des : descriptions) {
+            int parent = des[0], child = des[1];
+            bool isLeftChild = (des[2] == 1);
+
+            if (inDeg.find(parent) == inDeg.end()) inDeg[parent] = 0;
+            inDeg[child]--;
+
+            if (valueNodeMp.find(parent) == valueNodeMp.end()) 
+                valueNodeMp[parent] = new TreeNode(parent);
+            if (valueNodeMp.find(child) == valueNodeMp.end()) 
+                valueNodeMp[child] = new TreeNode(child);
+
+            if (isLeftChild) {
+                valueNodeMp[parent]->left = valueNodeMp[child];
+            } else {
+                valueNodeMp[parent]->right = valueNodeMp[child];
+            }
+        }
+
+        for (auto& entry : inDeg) {
+            if (entry.second == 0) 
+                return valueNodeMp[entry.first];
+        }
+
+        return nullptr;
+    }
+};
