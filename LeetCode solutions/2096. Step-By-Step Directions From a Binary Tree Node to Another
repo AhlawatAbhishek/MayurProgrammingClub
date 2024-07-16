@@ -1,0 +1,125 @@
+------------------------Java-----------------------------
+class Solution {
+    private TreeNode startNode = null, destNode = null;
+    private Deque<Character> pathStck = new ArrayDeque<>();
+    private StringBuilder shortestPath = new StringBuilder();
+    private Set<TreeNode> visited = new HashSet<>();
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        Map<TreeNode, TreeNode> parentGraph = new HashMap<>();
+        buildParentGraph(root, parentGraph, startValue, destValue);
+        findPath(startNode, parentGraph);
+        return shortestPath.toString();
+    }
+    private void findPath(TreeNode currNode, Map<TreeNode, TreeNode> parentGraph){
+        if(currNode == null || visited.contains(currNode)){
+            return;
+        }
+        if(currNode == destNode){
+            while(!pathStck.isEmpty()){
+                shortestPath.append(pathStck.pollFirst());
+            }
+            return;
+        }
+        visited.add(currNode);
+        if(currNode.left != null){
+            pathStck.offerLast('L');
+            findPath(currNode.left, parentGraph);
+            pathStck.pollLast();
+
+        }
+        if(currNode.right != null){
+            pathStck.offerLast('R');
+            findPath(currNode.right, parentGraph);
+            pathStck.pollLast();
+        }
+        if(parentGraph.containsKey(currNode) && !visited.contains(parentGraph.get(currNode))){
+            pathStck.offerLast('U');
+            findPath(parentGraph.get(currNode), parentGraph);
+        }
+        
+
+    }
+    private void buildParentGraph(TreeNode root, Map<TreeNode, TreeNode> parentGraph, int startValue, int destValue){
+        if(root == null)return;
+        if(root.val == startValue){
+            startNode = root;
+        }
+        if(root.val == destValue){
+            destNode = root;
+        }
+        if(root.left != null){
+            parentGraph.put(root.left, root);
+            buildParentGraph(root.left, parentGraph, startValue, destValue);
+        }
+        if(root.right != null){
+            parentGraph.put(root.right, root);
+            buildParentGraph(root.right, parentGraph, startValue, destValue);
+        }
+    }
+}
+------------------------C++------------------------------
+class Solution {
+private:
+    TreeNode* startNode = nullptr;
+    TreeNode* destNode = nullptr;
+    deque<char> pathStck;
+    string shortestPath;
+    unordered_set<TreeNode*> visited;
+
+public:
+    string getDirections(TreeNode* root, int startValue, int destValue) {
+        unordered_map<TreeNode*, TreeNode*> parentGraph;
+        buildParentGraph(root, parentGraph, startValue, destValue);
+        findPath(startNode, parentGraph);
+        return shortestPath;
+    }
+
+private:
+    void findPath(TreeNode* currNode, unordered_map<TreeNode*, TreeNode*>& parentGraph) {
+        if (!currNode || visited.count(currNode)) {
+            return;
+        }
+        if (currNode == destNode) {
+            while (!pathStck.empty()) {
+                shortestPath += pathStck.front();
+                pathStck.pop_front();
+            }
+            return;
+        }
+        visited.insert(currNode);
+        if (currNode->left) {
+            pathStck.push_back('L');
+            findPath(currNode->left, parentGraph);
+            if(!pathStck.empty())
+                pathStck.pop_back();
+        }
+        if (currNode->right) {
+            pathStck.push_back('R');
+            findPath(currNode->right, parentGraph);
+            if(!pathStck.empty())
+                pathStck.pop_back();
+        }
+        if (parentGraph.count(currNode) && !visited.count(parentGraph[currNode])) {
+            pathStck.push_back('U');
+            findPath(parentGraph[currNode], parentGraph);
+        }
+    }
+
+    void buildParentGraph(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& parentGraph, int startValue, int destValue) {
+        if (!root) return;
+        if (root->val == startValue) {
+            startNode = root;
+        }
+        if (root->val == destValue) {
+            destNode = root;
+        }
+        if (root->left) {
+            parentGraph[root->left] = root;
+            buildParentGraph(root->left, parentGraph, startValue, destValue);
+        }
+        if (root->right) {
+            parentGraph[root->right] = root;
+            buildParentGraph(root->right, parentGraph, startValue, destValue);
+        }
+    }
+};
