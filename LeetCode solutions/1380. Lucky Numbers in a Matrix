@@ -1,0 +1,57 @@
+---------------------C++--------------------------------
+class Solution {
+public:
+    vector<int> luckyNumbers (vector<vector<int>>& matrix) {
+        int rows = matrix.size(),  cols = matrix[0].size();
+        vector<int> luckyNums;
+        for(int r = 0; r < rows; r++){
+            int minRowVal = INT_MAX, minValCol = -1;
+            for(int c = 0; c < cols; c++){
+                int currVal = matrix[r][c];
+                if(minRowVal > currVal){
+                    minRowVal = currVal;
+                    minValCol = c;
+                }       
+            }
+            bool isMinRowValLucky = true;
+            for(int row = 0; row < rows; row++){
+                if(minRowVal < matrix[row][minValCol]){
+                    isMinRowValLucky =false;
+                    break;
+                }
+            }
+            if(isMinRowValLucky){
+                luckyNums.push_back(minRowVal);
+            }
+        }
+        return luckyNums;
+    }
+};
+------------------------Java-----------------------------
+class Solution {
+    public List<Integer> luckyNumbers (int[][] matrix) {
+        int rows = matrix.length,  cols = matrix[0].length;
+        List<Integer> luckyNums = new ArrayList<>();
+        for(int r = 0; r < rows; r++){
+            int minRowVal = Integer.MAX_VALUE, minValCol = -1;
+            for(int c = 0; c < cols; c++){
+                int currVal = matrix[r][c];
+                if(minRowVal > currVal){
+                    minRowVal = currVal;
+                    minValCol = c;
+                }       
+            }
+            boolean isMinRowValLucky = true;
+            for(int row = 0; row < rows; row++){
+                if(minRowVal < matrix[row][minValCol]){
+                    isMinRowValLucky =false;
+                    break;
+                }
+            }
+            if(isMinRowValLucky){
+                luckyNums.add(minRowVal);
+            }
+        }
+        return luckyNums;
+    }
+}
