@@ -1,0 +1,35 @@
+------------------Java----------------------------------
+class Solution {
+    public String[] sortPeople(String[] names, int[] heights) {
+        Map<Integer, String> heightNameMp = new HashMap<>();
+        int size = names.length;
+        for(int indx = 0; indx < size; indx++){
+            heights[indx] *= -1;
+            heightNameMp.put(heights[indx], names[indx]);
+        }
+        Arrays.sort(heights);
+        String sortedNames[] = new String[size];
+        for(int indx = 0; indx < size; indx++){
+            sortedNames[indx] = heightNameMp.get(heights[indx]);
+        }
+        return sortedNames;
+    }
+}
+------------------C++------------------------------------
+class Solution {
+public:
+    vector<string> sortPeople(vector<string>& names, vector<int>& heights) {
+        unordered_map<int, string> heightNameMp;
+        int size = names.size();
+        for(int indx = 0; indx < size; indx++){
+            heights[indx] *= -1;
+            heightNameMp[heights[indx]] = names[indx];
+        }
+        sort(heights.begin(), heights.end());
+        vector<string> sortedNames(size);
+        for(int indx = 0; indx < size; indx++){
+            sortedNames[indx] = heightNameMp[heights[indx]];
+        }
+        return sortedNames;
+    }
+};
