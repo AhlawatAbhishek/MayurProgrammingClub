@@ -1,0 +1,23 @@
+-------------------------------------------------Java-----------------------------------------------------------
+class Solution {
+    public int countSeniors(String[] details) {
+        int seniorsCnt = 0;
+        for(var detail : details){
+            int age = (detail.charAt(11) - '0') * 10 + (detail.charAt(12) - '0');
+            if(age > 60)seniorsCnt++;
+        }
+        return seniorsCnt;
+    }
+}
+------------------------------------------C++-------------------------------------------------------------------------
+class Solution {
+public:
+    int countSeniors(vector<string>& details) {
+        int seniorsCnt = 0;
+        for(auto & detail : details){
+            int age = (detail[11] - '0') * 10 + (detail[12] - '0');
+            if(age > 60)seniorsCnt++;
+        }
+        return seniorsCnt;
+    }
+};
