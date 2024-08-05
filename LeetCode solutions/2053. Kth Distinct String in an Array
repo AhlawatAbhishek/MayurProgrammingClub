@@ -1,0 +1,25 @@
+--------------------------------------Java------------------------------------------------------------
+class Solution {
+    public String kthDistinct(String[] arr, int k) {
+       Map<String, Integer> strFreqMp = new HashMap<>();
+       for(var str : arr)strFreqMp.put(str, strFreqMp.getOrDefault(str, 0) + 1); 
+       for(var str : arr){
+        if(strFreqMp.get(str) == 1)k--;
+        if(k == 0)return str;
+       }
+       return "";
+    }
+}
+----------------------------C++------------------------------------------------------------------------
+class Solution {
+public:
+    string kthDistinct(vector<string>& arr, int k) {
+       unordered_map<string, int> strFreqMp;
+       for(auto &str : arr)strFreqMp[str]++; 
+       for(auto &str : arr){
+        if(strFreqMp[str] == 1)k--;
+        if(k == 0)return str;
+       }
+       return "";
+    }
+};
