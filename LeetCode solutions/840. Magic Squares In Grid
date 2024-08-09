@@ -1,0 +1,86 @@
+------------------------------------------------Java-------------------------------------------------------
+class Solution {
+    public int numMagicSquaresInside(int[][] grid) {
+        int rows = grid.length, cols = grid[0].length;
+        int magicSqrCnt = 0;
+        for(int r = 0; r < rows-2; r++){
+            for(int c = 0; c < cols-2; c++){
+                if(isMagicSqr(grid, r, c))magicSqrCnt++;
+            }
+        }
+        return magicSqrCnt;
+    }
+    private boolean isMagicSqr(int grid[][], int startR, int startC){
+        boolean valSeen[] = new boolean[9];
+        for(int rInc = 0; rInc < 3; rInc++){
+            for(int cInc = 0; cInc < 3; cInc++){
+                int currVal = grid[startR + rInc][startC + cInc];
+                if(currVal < 1 || currVal > 9 || valSeen[currVal-1]){
+                    return false;
+                }
+                valSeen[currVal-1] = true;
+            }
+        }
+        int sampleRSum = grid[startR][startC] + grid[startR][startC + 1] + grid[startR][startC+2];
+        for(int rInc = 0; rInc < 3; rInc++){
+           int rowSum = 0, colSum = 0;
+           for(int cInc = 0; cInc < 3; cInc++){
+              rowSum += grid[startR + rInc][startC + cInc];
+              colSum += grid[startR + cInc][startC + rInc];
+           }
+           if(rowSum != sampleRSum || colSum != sampleRSum)return false;
+        } 
+        int dia1Sum = 0, dia2Sum = 0;
+        for(int inc = 0; inc < 3; inc++){
+            dia1Sum += grid[startR+inc][startC+inc];
+            dia2Sum += grid[startR+inc][startC+2-inc];
+        }
+        if(dia1Sum != sampleRSum || dia2Sum != sampleRSum)return false;
+        return true;
+    }
+}
+---------------------------------------C++--------------------------------------------------------------------------
+class Solution {
+public:
+    int numMagicSquaresInside(vector<vector<int>>& grid) {
+        int rows = grid.size(), cols = grid[0].size();
+        int magicSqrCnt = 0;
+        for(int r = 0; r < rows-2; r++){
+            for(int c = 0; c < cols-2; c++){
+                if(isMagicSqr(grid, r, c))magicSqrCnt++;
+            }
+        }
+        return magicSqrCnt;
+    }
+
+private:
+    bool isMagicSqr(vector<vector<int>>& grid, int startR, int startC){
+        bool valSeen[9] = {false};
+        for(int rInc = 0; rInc < 3; rInc++){
+            for(int cInc = 0; cInc < 3; cInc++){
+                int currVal = grid[startR + rInc][startC + cInc];
+                if(currVal < 1 || currVal > 9 || valSeen[currVal-1]){
+                    return false;
+                }
+                valSeen[currVal-1] = true;
+            }
+        }
+        int sampleRSum = grid[startR][startC] + grid[startR][startC + 1] + grid[startR][startC+2];
+        for(int rInc = 0; rInc < 3; rInc++){
+           int rowSum = 0, colSum = 0;
+           for(int cInc = 0; cInc < 3; cInc++){
+              rowSum += grid[startR + rInc][startC + cInc];
+              colSum += grid[startR + cInc][startC + rInc];
+           }
+           if(rowSum != sampleRSum || colSum != sampleRSum) return false;
+        } 
+        int dia1Sum = 0, dia2Sum = 0;
+        for(int inc = 0; inc < 3; inc++){
+            dia1Sum += grid[startR+inc][startC+inc];
+            dia2Sum += grid[startR+inc][startC+2-inc];
+        }
+        if(dia1Sum != sampleRSum || dia2Sum != sampleRSum) return false;
+        return true;
+    }
+};
+
