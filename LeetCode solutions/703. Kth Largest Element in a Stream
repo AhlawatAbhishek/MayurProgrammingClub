@@ -1,0 +1,61 @@
+--------------------------------------------------Java--------------------------------------------------------------
+class KthLargest {
+    private int k;
+    private PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    public KthLargest(int k, int[] nums) {
+        for(var num : nums){
+            if(minHeap.size() < k)minHeap.offer(num);
+            else{
+                if(minHeap.peek() < num){
+                   minHeap.poll();
+                   minHeap.offer(num);
+                }   
+            }
+        }
+        this.k = k;
+    }
+    
+    public int add(int val) {
+        if(minHeap.size() < k)minHeap.offer(val);
+        else{
+            if(minHeap.peek() < val){
+                   minHeap.poll();
+                   minHeap.offer(val);
+            }   
+        }
+        return minHeap.peek();
+    }
+}
+--------------------------------------------C++----------------------------------------------------------------------
+class KthLargest {
+private:
+    int k;
+    priority_queue<int, vector<int>, greater<int>> minHeap;
+
+public:
+    KthLargest(int k, vector<int>& nums) : k(k) {
+        for (int num : nums) {
+            if (minHeap.size() < k) {
+                minHeap.push(num);
+            } else {
+                if (minHeap.top() < num) {
+                    minHeap.pop();
+                    minHeap.push(num);
+                }
+            }
+        }
+    }
+    
+    int add(int val) {
+        if (minHeap.size() < k) {
+            minHeap.push(val);
+        } else {
+            if (minHeap.top() < val) {
+                minHeap.pop();
+                minHeap.push(val);
+            }
+        }
+        return minHeap.top();
+    }
+};
+
