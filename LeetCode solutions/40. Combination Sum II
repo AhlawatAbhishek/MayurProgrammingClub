@@ -1,0 +1,53 @@
+------------------------------------------------------Java---------------------------------------------------------------------
+class Solution {
+    private List<List<Integer>> combs = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        int size = candidates.length;
+        List<Integer> currComb = new ArrayList<>();
+        Arrays.sort(candidates);
+        findCombs(candidates, 0, 0, target, currComb);
+        return combs;
+    }
+    private void findCombs(int candidates[], int startIndx, int currSum, int target, List<Integer> currComb){
+        if(currSum == target){
+            combs.add(new ArrayList<>(currComb));
+        }
+        for(int indx = startIndx; indx < candidates.length; indx++){
+            int candidate = candidates[indx], prevCand = ((indx - 1 > -1) ? candidates[indx-1] : -1);
+            if(currSum + candidate <= target && (prevCand != candidate || indx == startIndx)){
+                currComb.add(candidate);
+                findCombs(candidates, indx+1, currSum + candidate, target, currComb);
+                currComb.remove(currComb.size() - 1);
+            }
+        }
+    }
+}
+----------------------------------------------C++------------------------------------------------------------------------------
+class Solution {
+private:
+    vector<vector<int>> combs;
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<int> currComb;
+        sort(candidates.begin(), candidates.end());
+        findCombs(candidates, 0, 0, target, currComb);
+        return combs;
+    }
+
+private:
+    void findCombs(vector<int>& candidates, int startIndx, int currSum, int target, vector<int>& currComb) {
+        if (currSum == target) {
+            combs.push_back(currComb);
+        }
+        for (int indx = startIndx; indx < candidates.size(); indx++) {
+            int candidate = candidates[indx];
+            int prevCand = (indx - 1 > -1) ? candidates[indx - 1] : -1;
+            if (currSum + candidate <= target && (prevCand != candidate || indx == startIndx)) {
+                currComb.push_back(candidate);
+                findCombs(candidates, indx + 1, currSum + candidate, target, currComb);
+                currComb.pop_back();
+            }
+        }
+    }
+};
+
