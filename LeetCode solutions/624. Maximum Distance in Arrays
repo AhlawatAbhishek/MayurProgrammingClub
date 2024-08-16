@@ -1,0 +1,54 @@
+624. Maximum Distance in Arrays
+---------------------------------------------------------------Java------------------------------------------------------------
+class Solution {
+    public int maxDistance(List<List<Integer>> arrays) {
+        int maxTillNow = Integer.MIN_VALUE, minTillNow = Integer.MAX_VALUE;
+        int maxDistTillNow = 0;
+        for(var array : arrays){
+            int len = array.size();
+            int firstEle = array.get(0), lastEle = array.get(len - 1);
+            if(maxTillNow == Integer.MIN_VALUE){
+                maxTillNow = Math.max(maxTillNow, lastEle);
+                minTillNow = Math.min(minTillNow, firstEle);
+                continue;
+            }
+            int firstEleDist = Math.max(Math.abs(maxTillNow - firstEle), Math.abs(minTillNow - firstEle));
+            int lastEleDist = Math.max(Math.abs(maxTillNow - lastEle), Math.abs(minTillNow - lastEle));
+            int currDist = Math.max(firstEleDist, lastEleDist);
+            maxDistTillNow = Math.max(currDist, maxDistTillNow);
+            maxTillNow = Math.max(maxTillNow, lastEle);
+            minTillNow = Math.min(minTillNow, firstEle);
+        } 
+        return maxDistTillNow;
+    }
+}
+--------------------------------------------------------C++--------------------------------------------------------------------
+class Solution {
+public:
+    int maxDistance(vector<vector<int>>& arrays) {
+        int maxTillNow = INT_MIN, minTillNow = INT_MAX;
+        int maxDistTillNow = 0;
+
+        for (const auto& array : arrays) {
+            int len = array.size();
+            int firstEle = array[0], lastEle = array[len - 1];
+
+            if (maxTillNow == INT_MIN) {
+                maxTillNow = max(maxTillNow, lastEle);
+                minTillNow = min(minTillNow, firstEle);
+                continue;
+            }
+
+            int firstEleDist = max(abs(maxTillNow - firstEle), abs(minTillNow - firstEle));
+            int lastEleDist = max(abs(maxTillNow - lastEle), abs(minTillNow - lastEle));
+            int currDist = max(firstEleDist, lastEleDist);
+
+            maxDistTillNow = max(currDist, maxDistTillNow);
+            maxTillNow = max(maxTillNow, lastEle);
+            minTillNow = min(minTillNow, firstEle);
+        }
+
+        return maxDistTillNow;
+    }
+};
+
