@@ -1,0 +1,69 @@
+----------------------------------------------------Java----------------------------------------------------------------------
+class Solution {
+    public int stoneGameII(int[] piles) {
+        int size = piles.length;
+        int sufPileSum[] = new int[size];
+    
+        for(int indx = size - 1; indx >= 0; indx--) {
+            sufPileSum[indx] = ((indx == size - 1) ? piles[indx] : (piles[indx] + sufPileSum[indx+1]));
+        }
+        
+        // Current state is dependent on 2 variables:
+        // 1. Current index (indx)
+        // 2. Current value of M (mVal)
+        // Therefore, a 2-D DP array is needed.
+        // Each entry represents how many stones Alice can take if she is at a particular index and
+        // has a particular value of M.
+        int stateMat[][] = new int[size + 1][size + 1];
+
+        //M's value is sufficiently large to Alice be able to take all the remaining piles of stones.
+        for(int indx = 0; indx < size; indx++){
+            int mVal = size;
+            stateMat[indx][mVal] = sufPileSum[indx];  
+        }
+
+        for(int indx = size - 1; indx >= 0; indx--){
+            for(int mVal = 1; mVal <= size; mVal++){
+                for(int xVal = 1; xVal <= 2 * mVal && indx + xVal <= size; xVal++){  
+                    // future stones Alice could collect if both she and Bob play optimally
+                    int futureAliceCollection = sufPileSum[indx] - stateMat[indx + xVal][Math.max(mVal, xVal)];
+                    
+                    // updating the current state with the best possible outcome considering future states
+                    stateMat[indx][mVal] = Math.max(stateMat[indx][mVal], futureAliceCollection);  
+                }
+            }
+        }
+        //starting index and inital value of M.
+        return stateMat[0][1];
+    }
+}
+
+
+------------------------------------------------------C++---------------------------------------------------------------------
+class Solution {
+public:
+    int stoneGameII(vector<int>& piles) {
+        int size = piles.size();
+        vector<int> sufPileSum(size);
+        for(int indx = size - 1; indx >= 0; indx--) {
+            sufPileSum[indx] = (indx == size - 1) ? piles[indx] : (piles[indx] + sufPileSum[indx+1]);
+        }
+        
+        vector<vector<int>> stateMat(size + 1, vector<int>(size + 1, 0));
+        for(int indx = 0; indx < size; indx++){
+            int mVal = size;
+            stateMat[indx][mVal] = sufPileSum[indx];  
+        }
+
+        for(int indx = size - 1; indx >= 0; indx--){
+            for(int mVal = 1; mVal <= size; mVal++){
+                for(int xVal = 1; xVal <= 2 * mVal && indx + xVal <= size; xVal++){  
+                    int futureAliceCollection = sufPileSum[indx] - stateMat[indx + xVal][max(mVal, xVal)];
+                    stateMat[indx][mVal] = max(stateMat[indx][mVal], futureAliceCollection);  
+                }
+            }
+        }
+        return stateMat[0][1];
+    }
+};
+
