@@ -1,0 +1,41 @@
+-----------------------------------------------------Java--------------------------------------------------------------
+class Solution {
+    public int chalkReplacer(int[] chalk, int k) {
+        long totalChkNeed = 0l;
+        for(var chkNeed : chalk){
+            totalChkNeed += chkNeed;
+        }
+        long chlkRem = k * 1l;
+        chlkRem %= totalChkNeed;
+        for(int indx = 0; indx < chalk.length; indx++){
+             long chkNeed = chalk[indx] * 1l;
+             if(chlkRem - chkNeed >= 0){
+                chlkRem -= chkNeed;
+             }else{
+                return indx;
+             }
+        }
+        return -1;
+    }
+}
+-----------------------------------------------------C++---------------------------------------------------------------
+class Solution {
+public:
+    int chalkReplacer(vector<int>& chalk, int k) {
+        long long totalChkNeed = 0ll;
+        for(auto & chkNeed : chalk){
+            totalChkNeed += chkNeed;
+        }
+        long long chlkRem = k * 1ll;
+        chlkRem %= totalChkNeed;
+        for(int indx = 0; indx < chalk.size(); indx++){
+             long long chkNeed = chalk[indx] * 1ll;
+             if(chlkRem - chkNeed >= 0){
+                chlkRem -= chkNeed;
+             }else{
+                return indx;
+             }
+        }
+        return -1;
+    }
+};
