@@ -1,0 +1,52 @@
+--------------------------------------------------------Java--------------------------------------------------------------------------------
+class Solution {
+    public String largestNumber(int[] nums) {
+        StringBuilder res = new StringBuilder();
+        PriorityQueue<Integer> prefHeap = new PriorityQueue<>((a, b)->{
+            StringBuilder ab = new StringBuilder();
+            StringBuilder ba = new StringBuilder();
+            ab.append(a); ab.append(b);
+            ba.append(b); ba.append(a);
+            return ba.compareTo(ab);
+        });
+        for(var num : nums){
+            prefHeap.offer(num);
+        }
+        if(prefHeap.peek() == 0)return "0";
+        while(!prefHeap.isEmpty()){
+            res.append(prefHeap.poll() + "");
+        }
+        return res.toString();
+    }
+}
+-------------------------------------------------------C++----------------------------------------------------------------------------------
+struct CustomComparator {
+    bool operator()(int a, int b) const {
+        string ab = to_string(a) + to_string(b);
+        string ba = to_string(b) + to_string(a);
+        return ba > ab;
+    }
+};
+
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        string res = "";
+        priority_queue<int, vector<int>, CustomComparator> prefHeap;
+
+        for (int num : nums) {
+            prefHeap.push(num);
+        }
+
+        if (prefHeap.top() == 0) {
+            return "0";
+        }
+
+        while (!prefHeap.empty()) {
+            res += to_string(prefHeap.top());
+            prefHeap.pop();
+        }
+
+        return res;
+    }
+};
