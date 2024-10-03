@@ -1,0 +1,28 @@
+class Solution {
+    public int minSubarray(int[] nums, int p) {
+        long totalSum = 0;
+        int size = nums.length;
+        for (var num : nums) totalSum += num;
+        long extraSum = totalSum % p;
+        if (extraSum == 0) return 0;
+
+        Map<Long, Integer> lastOccIndxMp = new HashMap<>();
+        long prefixSum = 0;
+        int minLen = size;
+        lastOccIndxMp.put(prefixSum, -1);
+        
+        for (int right = 0; right < size; right++) {
+            prefixSum = (prefixSum + nums[right]) % p;
+            long searchPrefSum = ((prefixSum - extraSum) + p) % p;
+            
+            if (lastOccIndxMp.containsKey(searchPrefSum)) {
+                int left = lastOccIndxMp.get(searchPrefSum);
+                int subArrLen = right - left;
+                minLen = Math.min(minLen, subArrLen); 
+            }
+            lastOccIndxMp.put(prefixSum, right);
+        }
+        return minLen == size ? -1 : minLen;
+    }
+}
+
