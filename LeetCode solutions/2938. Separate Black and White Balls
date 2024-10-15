@@ -1,0 +1,33 @@
+-------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+class Solution {
+    public long minimumSteps(String s) {
+        int size = s.length();
+        long steps = 0l;
+        int sumFrmRight = 0;
+        for(int indx = size - 1; indx > -1; indx--){
+            char chr = s.charAt(indx);
+            if(chr == '1'){
+                steps += size - 1 - indx - sumFrmRight;
+            }
+            sumFrmRight += (int)(chr - '0');
+        }
+        return steps;
+    }
+}
+----------------------------------------------------------C++--------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    long long minimumSteps(string s) {
+        int size = s.size();
+        long long steps = 0ll;
+        int sumFrmRight = 0;
+        for(int indx = size - 1; indx > -1; indx--){
+            char chr = s[indx];
+            if(chr == '1'){
+                steps += size - 1 - indx - sumFrmRight;
+            }
+            sumFrmRight += (int)(chr - '0');
+        }
+        return steps;
+    }
+};
