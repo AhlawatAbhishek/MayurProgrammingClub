@@ -25,23 +25,24 @@ class Solution {
 public:
     int maximumSwap(int num) {
         vector<int> lastOcc(10, 0);
-        string numStr = to_string(num);
-        int size = numStr.size();
+        string numChrs = to_string(num);
+        int size = numChrs.size();
         
         for(int indx = 0; indx < size; indx++) {
-            lastOcc[numStr[indx] - '0'] = indx;
+            lastOcc[numChrs[indx] - '0'] = indx;
         }
         
         for(int indx = 0; indx < size; indx++) {
-            char currDig = numStr[indx];
+            char currDig = numChrs[indx];
             for(char dig = '9'; dig > currDig; dig--) {
                 if(indx < lastOcc[dig - '0']) {
-                    swap(numStr[indx], numStr[lastOcc[dig - '0']]);
-                    return stoi(numStr);
+                    swap(numChrs[indx], numChrs[lastOcc[dig - '0']]);
+                    return stoi(numChrs);
                 }
             }
         }
         
-        return stoi(numStr);
+        return stoi(numChrs);
     }
 };
+
