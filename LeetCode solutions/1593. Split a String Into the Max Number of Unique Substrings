@@ -1,0 +1,53 @@
+-------------------------------------------Java----------------------------------------------------------------------
+class Solution {
+    private int maxSS = 0;
+    public int maxUniqueSplit(String s) {
+        Set<String> unqStrings = new HashSet<>();
+        mkUnqStr(0, s, unqStrings);
+        return maxSS;
+    }
+    private void mkUnqStr(int startendIndx, String s, Set<String>unqStrings){
+        int size = s.length();
+        if(startendIndx == size){
+            maxSS = Math.max(maxSS, unqStrings.size());
+        }  
+        for(int endIndx = startendIndx + 1; endIndx <= size; endIndx++){
+            String currStr = s.substring(startendIndx, endIndx);
+            if(!unqStrings.contains(currStr)){
+                 unqStrings.add(currStr);
+                 mkUnqStr(endIndx, s, unqStrings);
+                 unqStrings.remove(currStr);
+            }
+        }
+    }
+}
+--------------------------------------------------C++------------------------------------------------------------------
+class Solution {
+private:
+    int maxSS = 0;
+
+public:
+    int maxUniqueSplit(string s) {
+        unordered_set<string> unqStrings;
+        mkUnqStr(0, s, unqStrings);
+        return maxSS;
+    }
+
+private:
+    void mkUnqStr(int startEndIndx, const string& s, unordered_set<string>& unqStrings) {
+        int size = s.length();
+        if (startEndIndx == size) {
+            maxSS = max(maxSS, (int)unqStrings.size());
+            return;
+        }
+
+        for (int endIndx = startEndIndx + 1; endIndx <= size; endIndx++) {
+            string currStr = s.substr(startEndIndx, endIndx - startEndIndx);
+            if (unqStrings.find(currStr) == unqStrings.end()) {
+                unqStrings.insert(currStr);
+                mkUnqStr(endIndx, s, unqStrings);
+                unqStrings.erase(currStr);
+            }
+        }
+    }
+};
