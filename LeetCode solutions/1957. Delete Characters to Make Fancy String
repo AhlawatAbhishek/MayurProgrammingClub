@@ -1,0 +1,51 @@
+--------------------------------------------Java----------------------------------------------------------
+class Solution {
+    public String makeFancyString(String s) {
+        char prevChr = s.charAt(0);
+        int size = s.length();
+        int chrCnt = 1; 
+        StringBuilder res = new StringBuilder();
+        res.append(s.charAt(0));
+        for(int indx = 1; indx < size; indx++){
+            char currChr = s.charAt(indx);
+            if(currChr == prevChr)chrCnt++;
+            else{
+                prevChr = currChr;
+                chrCnt = 1;
+            }
+            if(chrCnt == 3){
+                chrCnt--;
+            }else{
+                res.append(currChr);
+            }
+            
+        }
+        return res.toString();
+    }
+}
+-------------------------------------------------C++-----------------------------------------------------------
+class Solution {
+public:
+    string makeFancyString(string s) {
+        char prevChr = s[0];
+        int size = s.length();
+        int chrCnt = 1; 
+        string res;
+        res.push_back(s[0]);
+        for (int indx = 1; indx < size; indx++) {
+            char currChr = s[indx];
+            if (currChr == prevChr) chrCnt++;
+            else {
+                prevChr = currChr;
+                chrCnt = 1;
+            }
+            if (chrCnt == 3) {
+                chrCnt--;
+            } else {
+                res.push_back(currChr);
+            }
+        }
+        return res;
+    }
+};
+
