@@ -1,0 +1,37 @@
+----------------------------------Java----------------------------------------------------------------------
+class Solution {
+    public boolean isCircularSentence(String sentence) {
+        String strs[] = sentence.split(" ");
+        int size = strs.length;
+        for(int indx = 0; indx < size; indx++){
+            String prevWord = strs[(indx - 1 + size) % size];
+            String currWord = strs[indx];
+            if(currWord.charAt(0) != prevWord.charAt(prevWord.length() - 1))return false;
+        }
+        return true;
+    }
+}
+-------------------------------------------C++---------------------------------------------------------------
+class Solution {
+public:
+    bool isCircularSentence(string sentence) {
+        vector<string> strs;
+        stringstream ss(sentence);
+        string word;
+
+        while (ss >> word) {
+            strs.push_back(word);
+        }
+
+        int size = strs.size();
+        for (int indx = 0; indx < size; indx++) {
+            string prevWord = strs[(indx - 1 + size) % size];
+            string currWord = strs[indx];
+            if (currWord[0] != prevWord[prevWord.length() - 1]) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+--------------------------------TC - O(n) and SC - O(n), (could be brought down to O(1))-------------------------
