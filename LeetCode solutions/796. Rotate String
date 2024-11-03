@@ -1,0 +1,22 @@
+--------------------------------------------------Java-----------------------------------------------------------
+class Solution {
+    public boolean rotateString(String s, String goal) {
+        String doubleStr = s + s;
+        int sSize = s.length();
+        int goalSize = goal.length();
+        if(sSize != goalSize)return false;
+        return doubleStr.indexOf(goal) != -1;
+    }
+}
+--------------------------------------------------C++------------------------------------------------------------
+class Solution {
+public:
+    bool rotateString(string s, string goal) {
+        string doubleStr = s + s;
+        int sSize = s.size();
+        int goalSize = goal.size();
+        if (sSize != goalSize) return false;
+        return doubleStr.find(goal) != string::npos;
+    }
+};
+
