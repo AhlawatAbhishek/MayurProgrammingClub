@@ -1,0 +1,48 @@
+------------------------------------------Java--------------------------------------------------------------------
+class Solution {
+    public String compressedString(String word) {
+        int count = 1, size = word.length();
+        char prevChr = word.charAt(0);
+        StringBuilder compStr = new StringBuilder();
+        for(int indx = 1; indx < size; indx++){
+            char currChr = word.charAt(indx);
+            if(prevChr != currChr || count == 9){
+                compStr.append(Integer.toString(count));
+                compStr.append(prevChr);
+                prevChr = currChr;
+                count = 1;
+            }else count++;
+        }
+        compStr.append(Integer.toString(count));
+        compStr.append(prevChr);
+        return compStr.toString();
+    }
+}
+-----------------------------------------------C++----------------------------------------------------------------
+class Solution {
+public:
+    string compressedString(const string& word) {
+        int count = 1;
+        int size = word.size();
+        char prevChr = word[0];
+        string compStr;
+        
+        for (int indx = 1; indx < size; indx++) {
+            char currChr = word[indx];
+            if (prevChr != currChr || count == 9) {
+                compStr += to_string(count);
+                compStr += prevChr;
+                prevChr = currChr;
+                count = 1;
+            } else {
+                count++;
+            }
+        }
+        
+        compStr += to_string(count);
+        compStr += prevChr;
+        
+        return compStr;
+    }
+};
+
