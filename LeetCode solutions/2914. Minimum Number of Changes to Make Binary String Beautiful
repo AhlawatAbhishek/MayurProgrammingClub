@@ -1,0 +1,25 @@
+-------------------------------------------Java------------------------------------------------------------------
+class Solution {
+    public int minChanges(String s) {
+        int chngsCnt = 0, size = s.length();
+        for(int indx = 0; indx < size; indx+=2){
+           char currChr = s.charAt(indx),
+           nextChr = s.charAt(indx + 1);
+           if(currChr != nextChr)chngsCnt++;
+        }
+        return chngsCnt;
+    }
+}
+------------------------------------------C++---------------------------------------------------------------------
+class Solution {
+public:
+    int minChanges(string s) {
+        int chngsCnt = 0, size = s.size();
+        for(int indx = 0; indx < size; indx+=2){
+           char currChr = s[indx],
+           nextChr = s[indx+1];
+           if(currChr != nextChr)chngsCnt++;
+        }
+        return chngsCnt;
+    }
+};
