@@ -1,0 +1,107 @@
+-------------------------------------------------Java------------------------------------------------------------
+-----------------------------Initial Approach//--------------------------
+class Solution {
+    public boolean canSortArray(int[] nums) {
+        int size = nums.length;
+        List<Integer> bitSortList = new ArrayList<>();
+        for(int indx = 0; indx < size;){
+            List<Integer> currList = new ArrayList<>();
+            int currNum = nums[indx++], currBitCnt = setBitCnt(currNum);
+            currList.add(currNum);
+            while(indx < size && currBitCnt == setBitCnt(nums[indx])){
+               currList.add(nums[indx++]);
+            }
+            Collections.sort(currList);
+            for(var num : currList)bitSortList.add(num);
+        }
+        Arrays.sort(nums);
+        for(int indx = 0; indx < size; indx++){
+            if(bitSortList.get(indx) != nums[indx])return false;
+        }
+        return true;
+    }
+    private int setBitCnt(int num){
+        int bitCount = 0;
+        while(num > 0){
+            bitCount++;
+            num = (num & (num - 1));
+        }
+        return bitCount;
+    }
+}
+---------------------Optimized Apporach----------------------------------------
+class Solution {
+    public boolean canSortArray(int[] nums) {
+        int size = nums.length;
+        int currSegMin = nums[0], currSegMax = nums[0], currBitCnt = setBitCnt(nums[0]);
+        int prevSegMax = 0;
+        for(int indx = 1; indx < size;indx++){
+           int currNum = nums[indx];
+           if(currBitCnt == setBitCnt(currNum)){
+              currSegMin = Math.min(currSegMin, currNum);
+              currSegMax = Math.max(currSegMax, currNum);
+           }else{
+              if(prevSegMax > currSegMin){
+                return false;
+              }
+              prevSegMax = currSegMax;
+              currSegMin = nums[indx];
+              currSegMax = nums[indx];
+              currBitCnt = setBitCnt(currNum);
+           }   
+        }
+        if(prevSegMax > currSegMin){
+                return false;
+        }
+        return true;
+    }
+    private int setBitCnt(int num){
+        int bitCount = 0;
+        while(num > 0){
+            bitCount++;
+            num = (num & (num - 1));
+        }
+        return bitCount;
+    }
+}
+-------------------------------------------C++-------------------------------------------------------------------
+class Solution {
+public:
+    bool canSortArray(vector<int>& nums) {
+        int size = nums.size();
+        int currSegMin = nums[0], currSegMax = nums[0], currBitCnt = setBitCnt(nums[0]);
+        int prevSegMax = 0;
+        
+        for (int indx = 1; indx < size; indx++) {
+            int currNum = nums[indx];
+            if (currBitCnt == setBitCnt(currNum)) {
+                currSegMin = min(currSegMin, currNum);
+                currSegMax = max(currSegMax, currNum);
+            } else {
+                if (prevSegMax > currSegMin) {
+                    return false;
+                }
+                prevSegMax = currSegMax;
+                currSegMin = nums[indx];
+                currSegMax = nums[indx];
+                currBitCnt = setBitCnt(currNum);
+            }
+        }
+        
+        if (prevSegMax > currSegMin) {
+            return false;
+        }
+        return true;
+    }
+
+private:
+    int setBitCnt(int num) {
+        int bitCount = 0;
+        while (num > 0) {
+            bitCount++;
+            num = (num & (num - 1));
+        }
+        return bitCount;
+    }
+};
+
