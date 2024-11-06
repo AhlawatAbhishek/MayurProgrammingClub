@@ -104,4 +104,43 @@ private:
         return bitCount;
     }
 };
+----------------------------------------Javascript---------------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+const canSortArray = function(nums) {
+        const size = nums.length;
+        let currSegMin = nums[0], currSegMax = nums[0], currBitCnt = setBitCnt(nums[0]);
+        let prevSegMax = 0;
+        for(let indx = 1; indx < size;indx++){
+           let currNum = nums[indx];
+           if(currBitCnt == setBitCnt(currNum)){
+              currSegMin = Math.min(currSegMin, currNum);
+              currSegMax = Math.max(currSegMax, currNum);
+           }else{
+              if(prevSegMax > currSegMin){
+                return false;
+              }
+              prevSegMax = currSegMax;
+              currSegMin = nums[indx];
+              currSegMax = nums[indx];
+              currBitCnt = setBitCnt(currNum);
+           }   
+        }
+        if(prevSegMax > currSegMin){
+                return false;
+        }
+        return true;
+};
+
+const setBitCnt = function(num){
+        let bitCount = 0;
+        while(num > 0){
+            bitCount++;
+            num = (num & (num - 1));
+        }
+        return bitCount;
+    }
+
 
