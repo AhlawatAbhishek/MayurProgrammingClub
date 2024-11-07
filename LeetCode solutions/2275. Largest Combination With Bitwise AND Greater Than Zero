@@ -1,0 +1,70 @@
+--------------------------------------------------C++-------------------------------------------------------------
+class Solution {
+public:
+    int largestCombination(vector<int>& candidates) {
+        vector<int> bitPosCnt(31);
+        for (int num : candidates) {
+            processNum(num, bitPosCnt);
+        }
+        int maxCombLen = 0;
+        for (int cnt : bitPosCnt) {
+            maxCombLen = max(maxCombLen, cnt);
+        }
+        return maxCombLen;
+    }
+
+private:
+    void processNum(int num, vector<int> & bitPosCnt) {
+        for (int bitPos = 0; bitPos < 31; bitPos++) {
+            if ((num & (1 << bitPos)) != 0) {
+                bitPosCnt[bitPos]++;
+            }
+        }
+    }
+};
+
+----------------------------------------------------Java----------------------------------------------------------
+class Solution {
+    public int largestCombination(int[] candidates) {
+        int bitPosCnt[] = new int[31];
+        for(var num : candidates){
+            processNum(num, bitPosCnt);
+        }
+        int maxCombLen = 0;
+        for(var cnt : bitPosCnt){
+            maxCombLen = Math.max(maxCombLen, cnt);
+        }
+        return maxCombLen;
+    }
+    private void processNum(int num, int bitPosCnt[]){
+        for(int bitPos = 0; bitPos < 31; bitPos++){
+            if((num & (1 << bitPos)) != 0){
+                bitPosCnt[bitPos]++;
+            }
+        }
+    }
+}
+----------------------------------------------------Javascript----------------------------------------------------
+/**
+ * @param {number[]} candidates
+ * @return {number}
+ */
+const largestCombination = function(candidates) {
+        let bitPosCnt = new Array(31).fill(0);
+        for(num of candidates){
+            processNum(num, bitPosCnt);
+        }
+        let maxCombLen = 0;
+        for(cnt of bitPosCnt){
+            maxCombLen = Math.max(maxCombLen, cnt);
+        }
+        return maxCombLen;
+};
+
+const processNum = function(num, bitPosCnt){
+    for(let bitPos = 0; bitPos < 31; bitPos++){
+        if((num & (1 << bitPos)) !== 0){
+            bitPosCnt[bitPos]++;
+        }
+    }
+}
