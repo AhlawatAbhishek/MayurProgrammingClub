@@ -1,0 +1,59 @@
+-----------------------------------------------------Java---------------------------------------------------------
+class Solution {
+    public int[] getMaximumXor(int[] nums, int maximumBit) {
+        int size = nums.length;
+        int revRunXor = 0, compXor = 0;
+        for(var num : nums)compXor ^= num;
+        int delIndx = size - 1, kMask = (1 << maximumBit) - 1;
+        int answer[]  = new int[size];
+        for(int indx = 0; indx < size; indx++){
+            if(indx != 0)
+                revRunXor = revRunXor ^ nums[delIndx--];
+            answer[indx] = ((~(revRunXor ^ compXor)) & kMask); 
+        }
+        return answer;
+    }
+}
+-------------------------------------------------C++--------------------------------------------------------------
+class Solution {
+public:
+    vector<int> getMaximumXor(vector<int>& nums, int maximumBit) {
+        int size = nums.size();
+        int revRunXor = 0, compXor = 0;
+        for (int num : nums) {
+            compXor ^= num;
+        }
+        
+        int delIndx = size - 1, kMask = (1 << maximumBit) - 1;
+        vector<int> answer(size);
+        
+        for (int indx = 0; indx < size; indx++) {
+            if (indx != 0)
+                revRunXor = revRunXor ^ nums[delIndx--];
+            answer[indx] = (~(revRunXor ^ compXor)) & kMask;
+        }
+        
+        return answer;
+    }
+};
+
+---------------------------------------------Javascript-----------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @param {number} maximumBit
+ * @return {number[]}
+ */
+const getMaximumXor = function(nums, maximumBit) {
+    const size = nums.length;
+        let revRunXor = 0, compXor = 0;
+        for( num of nums)compXor ^= num;
+        let delIndx = size - 1, kMask = (1 << maximumBit) - 1;
+        let answer  = new Array(size);
+        for(let indx = 0; indx < size; indx++){
+            if(indx != 0)
+                revRunXor = revRunXor ^ nums[delIndx--];
+            answer[indx] = ((~(revRunXor ^ compXor)) & kMask); 
+        }
+        return answer;
+};
+------------------------------------------------------------------------------------------------------------------
