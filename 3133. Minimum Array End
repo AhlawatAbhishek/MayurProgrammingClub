@@ -1,0 +1,12 @@
+-------------------------------------Java-----------------------------------------------------------------------
+class Solution {
+    public long minEnd(int n, int x) {
+        long ans = x * 1l;
+        while(--n > 0){
+            ans = ((ans + 1l) | x); 
+        }
+        return ans;
+    }
+}
+--------------------------------------------------------------------------------------------------------------
+The complexity can be brought down to O(log n) but right now not having enough gas in the tank to do that. :)
