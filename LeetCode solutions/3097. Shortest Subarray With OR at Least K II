@@ -1,0 +1,138 @@
+----------------------------------------Javascript---------------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var minimumSubarrayLength = function(nums, k) {
+    let bitPosFreq = new Array(31).fill(0);
+        let size = nums.length;
+        let left = 0, right = 0;
+        let minSubLen = size + 1;
+        let currOR = 0;
+        while(right < size){
+           const currNum = nums[right];
+           currOR |= currNum;
+           processFreq(bitPosFreq, currNum);
+           while(currOR >= k && left < right){
+               minSubLen = Math.min(minSubLen, right - left + 1);
+               currOR =  processRemoval(nums[left], bitPosFreq, currOR);
+               left++;
+           }
+           if(currOR >= k){
+             minSubLen = Math.min(minSubLen, right - left + 1);
+           }
+           right++;
+        }
+        return minSubLen == (size + 1) ? -1 : minSubLen;
+};
+
+const processFreq = function(bitPosFreq, currNum){
+        for(let bitPos = 0; bitPos < 31; bitPos++){
+            if(((1<<bitPos) & currNum) != 0){
+                bitPosFreq[bitPos]++;
+            }
+        }
+    }
+
+const processRemoval = function(currNum, bitPosFreq, currOR){
+        for(let bitPos = 0; bitPos < 31; bitPos++){
+            if(((1<<bitPos) & currNum) != 0){
+                if(--bitPosFreq[bitPos] == 0)currOR ^= (1<<bitPos);
+            }
+        }
+        return currOR;
+    }
+
+---------------------------------------------------Java-----------------------------------------------------------
+class Solution {
+    public int minimumSubarrayLength(int[] nums, int k) {
+        int bitPosFreq[] = new int[31];
+        int size = nums.length;
+        int left = 0, right = 0;
+        int minSubLen = size + 1;
+        int currOR = 0;
+        while(right < size){
+           int currNum = nums[right];
+           currOR |= currNum;
+           processFreq(bitPosFreq, currNum);
+           while(currOR >= k && left < right){
+               minSubLen = Math.min(minSubLen, right - left + 1);
+               currOR =  processRemoval(nums[left], bitPosFreq, currOR);
+               left++;
+           }
+           if(currOR >= k){
+             minSubLen = Math.min(minSubLen, right - left + 1);
+           }
+           right++;
+        }
+        return minSubLen == (size + 1) ? -1 : minSubLen;
+    }   
+    private void processFreq(int bitPosFreq[], int currNum){
+        for(int bitPos = 0; bitPos < 31; bitPos++){
+            if(((1<<bitPos) & currNum) != 0){
+                bitPosFreq[bitPos]++;
+            }
+        }
+    }
+    private int processRemoval(int currNum, int bitPosFreq[], int currOR){
+        for(int bitPos = 0; bitPos < 31; bitPos++){
+            if(((1<<bitPos) & currNum) != 0){
+                if(--bitPosFreq[bitPos] == 0)currOR ^= (1<<bitPos);
+            }
+        }
+        return currOR;
+    }
+}
+------------------------------------------C++---------------------------------------------------------------------
+class Solution {
+public:
+    int minimumSubarrayLength(vector<int>& nums, int k) {
+        vector<int> bitPosFreq(31, 0);
+        int size = nums.size();
+        int left = 0, right = 0;
+        int minSubLen = size + 1;
+        int currOR = 0;
+
+        while (right < size) {
+            int currNum = nums[right];
+            currOR |= currNum;
+            processFreq(bitPosFreq, currNum);
+
+            while (currOR >= k && left < right) {
+                minSubLen = min(minSubLen, right - left + 1);
+                currOR = processRemoval(nums[left], bitPosFreq, currOR);
+                left++;
+            }
+
+            if (currOR >= k) {
+                minSubLen = min(minSubLen, right - left + 1);
+            }
+
+            right++;
+        }
+
+        return minSubLen == (size + 1) ? -1 : minSubLen;
+    }
+
+private:
+    void processFreq(vector<int>& bitPosFreq, int currNum) {
+        for (int bitPos = 0; bitPos < 31; bitPos++) {
+            if (((1 << bitPos) & currNum) != 0) {
+                bitPosFreq[bitPos]++;
+            }
+        }
+    }
+
+    int processRemoval(int currNum, vector<int>& bitPosFreq, int currOR) {
+        for (int bitPos = 0; bitPos < 31; bitPos++) {
+            if (((1 << bitPos) & currNum) != 0) {
+                if (--bitPosFreq[bitPos] == 0) {
+                    currOR ^= (1 << bitPos);
+                }
+            }
+        }
+        return currOR;
+    }
+};
+------------------------------------------------------------------------------------------------------------------
