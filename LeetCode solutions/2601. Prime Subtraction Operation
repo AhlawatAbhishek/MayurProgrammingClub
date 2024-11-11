@@ -1,0 +1,97 @@
+---------------------------------Java-----------------------------------------------------------------------------class Solution {
+    public boolean primeSubOperation(int[] nums) {
+        int maxNum = nums[0];
+        for(var num : nums)maxNum = Math.max(maxNum, num);
+        boolean primes[] = new boolean[maxNum+1];
+        Arrays.fill(primes, true);
+        primes[1] = false;
+        primes[0] =false;
+        for(int pr = 2; pr * pr <= maxNum; pr++){
+           if(primes[pr]){
+            for(int mul = pr * pr; mul <= maxNum; mul+=pr){
+                primes[mul] = false;
+            }
+           } 
+        }
+        int size = nums.length;
+        int indx = 0, minPossNum = 1;
+        while(indx < size){
+            int currNum = nums[indx];
+            int diff = currNum - minPossNum;
+            if(diff < 0)return false;
+            if(diff == 0 || primes[diff] == true){
+                indx++;
+            }
+            minPossNum++;
+        }
+        return true;
+    }
+}
+---------------------------------------------Javascript-----------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var primeSubOperation = function(nums) {
+    let maxNum = nums[0];
+        for(num of nums)maxNum = Math.max(maxNum, num);
+        let primes = new Array(maxNum+1).fill(true);
+        primes[1] = false;
+        primes[0] =false;
+        for(let pr = 2; pr * pr <= maxNum; pr++){
+           if(primes[pr]){
+            for(let mul = pr * pr; mul <= maxNum; mul+=pr){
+                primes[mul] = false;
+            }
+           } 
+        }
+        let size = nums.length;
+        let indx = 0, minPossNum = 1;
+        while(indx < size){
+            let currNum = nums[indx];
+            let diff = currNum - minPossNum;
+            if(diff < 0)return false;
+            if(diff === 0 || primes[diff] === true){
+                indx++;
+            }
+            minPossNum++;
+        }
+        return true;
+};
+---------------------------------------------C++------------------------------------------------------------------
+class Solution {
+public:
+    bool primeSubOperation(vector<int>& nums) {
+        int maxNum = nums[0];
+        for (int num : nums) {
+            maxNum = max(maxNum, num);
+        }
+
+        vector<bool> primes(maxNum + 1, true);
+        primes[0] = false;
+        primes[1] = false;
+
+        for (int pr = 2; pr * pr <= maxNum; pr++) {
+            if (primes[pr]) {
+                for (int mul = pr * pr; mul <= maxNum; mul += pr) {
+                    primes[mul] = false;
+                }
+            }
+        }
+
+        int size = nums.size();
+        int indx = 0, minPossNum = 1;
+
+        while (indx < size) {
+            int currNum = nums[indx];
+            int diff = currNum - minPossNum;
+            if (diff < 0) return false;
+            if (diff == 0 || primes[diff]) {
+                indx++;
+            }
+            minPossNum++;
+        }
+
+        return true;
+    }
+};
