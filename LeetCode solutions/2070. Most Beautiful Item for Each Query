@@ -1,0 +1,41 @@
+----------------------------------------------Java----------------------------------------------------------------class Solution {
+    public int[] maximumBeauty(int[][] items, int[] queries) {
+        Map<Integer, Integer> priceMaxBeauMp = new HashMap<>();
+        for(var item : items){
+            int itemPrice = item[0], itemBeau = item[1];
+            priceMaxBeauMp.put(itemPrice, Math.max(priceMaxBeauMp.getOrDefault(itemPrice, 0), itemBeau));
+        }
+        int mpSize = priceMaxBeauMp.size();
+        int prices[] = new int[mpSize];
+        int index = 0;
+        for(var price : priceMaxBeauMp.keySet()){
+            prices[index++] = price;
+        }
+        Arrays.sort(prices);
+        int qSize = queries.length;
+        int maxBeauTillNow[] = new int[mpSize];
+        for(int indx = 0; indx < mpSize; indx++){
+            if(indx == 0){
+                maxBeauTillNow[indx] = priceMaxBeauMp.get(prices[indx]);
+            }else{
+                maxBeauTillNow[indx] = Math.max(priceMaxBeauMp.get(prices[indx]), maxBeauTillNow[indx-1]);
+            }
+        }
+        int answers[] = new int[qSize];
+        for(int indx = 0; indx < qSize; indx++){
+            int queryPrice = queries[indx];
+            int lessOrEqPriceIndx = Arrays.binarySearch(prices, queryPrice);
+            if(lessOrEqPriceIndx < 0){
+                lessOrEqPriceIndx += 1;
+                lessOrEqPriceIndx *= -1;
+                lessOrEqPriceIndx = Math.max(0, --lessOrEqPriceIndx);
+                // System.out.println("Not Found " + lessOrEqPriceIndx + " query Indx " + indx);
+            } 
+            if(lessOrEqPriceIndx >= mpSize)lessOrEqPriceIndx = mpSize - 1;
+            if(prices[lessOrEqPriceIndx] <= queryPrice)
+            answers[indx] = maxBeauTillNow[lessOrEqPriceIndx]; 
+        }
+        return answers;
+    }
+}
+-------------------------------------Javascript and C++ versions comming soon-------------------------------------
