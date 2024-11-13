@@ -1,0 +1,169 @@
+----------------------------------Java----------------------------------------------------------------------------class Solution {
+    public long countFairPairs(int[] nums, int lower, int upper) {
+        long fairPrCnt = 0l;
+        Arrays.sort(nums);
+        int size = nums.length;
+        for(int currIndx = 0; currIndx < size; currIndx++){
+            int num = nums[currIndx];
+            int minPairNum = lower - num;
+            int maxPairNum = upper - num;
+            int leftIndx = lowerBoundIndx(nums, minPairNum);
+            int rightIndx = upperBoundIndx(nums, maxPairNum);
+            if(leftIndx == -1 || rightIndx == -1)continue;
+            long currPairCnt = rightIndx - leftIndx + 1;
+            if(leftIndx <= currIndx && rightIndx >= currIndx){
+                currPairCnt--;
+            }
+            fairPrCnt += currPairCnt;
+        }
+        return fairPrCnt/2;
+    }
+    private int upperBoundIndx(int nums[], int target){
+        int left = 0, right = nums.length - 1;
+        int ans = -1;
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if(nums[mid] <= target){
+                ans = mid;
+                left = mid + 1;
+            }else{
+                right = mid - 1;
+            }
+        }
+        return ans;
+    }
+    private int lowerBoundIndx(int nums[], int target){
+        int left = 0, right = nums.length - 1;
+        int ans = -1;
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if(nums[mid] >= target){
+                ans = mid;
+                right = mid - 1;
+            }else{
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+}
+------------------------------------------Javascript--------------------------------------------------------------/**
+ * @param {number[]} nums
+ * @param {number} lower
+ * @param {number} upper
+ * @return {number}
+ */
+var countFairPairs = function(nums, lower, upper) {
+        let fairPrCnt = 0;
+        nums.sort((a, b)=>(a-b))
+        let size = nums.length;
+        for(let currIndx = 0; currIndx < size; currIndx++){
+            let num = nums[currIndx];
+            let minPairNum = lower - num;
+            let maxPairNum = upper - num;
+            let leftIndx = lowerBoundIndx(nums, minPairNum);
+            let rightIndx = upperBoundIndx(nums, maxPairNum);
+            if(leftIndx === -1 || rightIndx === -1)continue;
+            let currPairCnt = rightIndx - leftIndx + 1;
+            if(leftIndx <= currIndx && rightIndx >= currIndx){
+                currPairCnt--;
+            }
+            fairPrCnt += currPairCnt;
+        }
+        return (fairPrCnt/2);
+    };
+const upperBoundIndx = function(nums, target){
+        let left = 0, right = nums.length - 1;
+        let ans = -1;
+        while(left <= right){
+            let mid = left + Math.floor((right - left) / 2);
+            if(nums[mid] <= target){
+                ans = mid;
+                left = mid + 1;
+            }else{
+                right = mid - 1;
+            }
+        }
+        return ans;
+};
+const lowerBoundIndx = function(nums, target){
+        let left = 0, right = nums.length - 1;
+        let ans = -1;
+        while(left <= right){
+            let mid = left + Math.floor((right - left) / 2);
+            if(nums[mid] >= target){
+                ans = mid;
+                right = mid - 1;
+            }else{
+                left = mid + 1;
+            }
+        }
+        return ans;
+}
+----------------------------------------------C++-----------------------------------------------------------------
+class Solution {
+public:
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        long long fairPrCnt = 0;
+        sort(nums.begin(), nums.end());
+        int size = nums.size();
+
+        for (int currIndx = 0; currIndx < size; currIndx++) {
+            int num = nums[currIndx];
+            int minPairNum = lower - num;
+            int maxPairNum = upper - num;
+
+            int leftIndx = lowerBoundIndx(nums, minPairNum);
+            int rightIndx = upperBoundIndx(nums, maxPairNum);
+
+            if (leftIndx == -1 || rightIndx == -1) continue;
+
+            long long currPairCnt = rightIndx - leftIndx + 1;
+
+            if (leftIndx <= currIndx && rightIndx >= currIndx) {
+                currPairCnt--;
+            }
+
+            fairPrCnt += currPairCnt;
+        }
+
+        return fairPrCnt / 2;
+    }
+
+private:
+    int upperBoundIndx(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+        int ans = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] <= target) {
+                ans = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return ans;
+    }
+
+    int lowerBoundIndx(vector<int>& nums, int target) {
+        int left = 0, right = nums.size() - 1;
+        int ans = -1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] >= target) {
+                ans = mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+};
