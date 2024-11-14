@@ -1,0 +1,89 @@
+-----------------------------------------Javascript---------------------------------------------------------------
+/**
+ * @param {number} n
+ * @param {number[]} quantities
+ * @return {number}
+ */
+var minimizedMaximum = function(n, quantities) {
+     let maxProdQnt = 0;
+        for(prodQnt of quantities)maxProdQnt = Math.max(maxProdQnt, prodQnt);
+        let left = 1, right = maxProdQnt;
+        let minMaxProdQnt = maxProdQnt;
+        while(left <= right){
+           let prodQntPerStr = left + Math.floor((right - left) / 2);
+           if(isValid(prodQntPerStr, n, quantities)){
+            minMaxProdQnt = prodQntPerStr;
+            right = prodQntPerStr - 1;
+           }else{
+             left = prodQntPerStr + 1;
+           }  
+        }
+        return minMaxProdQnt;
+};
+const isValid = function(maxQntPerStr, storesAvl, quantities){
+        let totalStrsReq = 0;
+        for(prodQnt of quantities){
+            let strsReq = Math.floor((prodQnt + maxQntPerStr - 1) / maxQntPerStr);
+            totalStrsReq += strsReq;
+        }
+        return totalStrsReq <= storesAvl;
+};
+
+---------------------------------------------Java----------------------------------------------------------------------
+class Solution {
+    public int minimizedMaximum(int n, int[] quantities) {
+        int maxProdQnt = 0;
+        for(var prodQnt : quantities)maxProdQnt = Math.max(maxProdQnt, prodQnt);
+        int left = 1, right = maxProdQnt;
+        int minMaxProdQnt = maxProdQnt;
+        while(left <= right){
+           int prodQntPerStr = left + (right - left) / 2;
+           if(isValid(prodQntPerStr, n, quantities)){
+            minMaxProdQnt = prodQntPerStr;
+            right = prodQntPerStr - 1;
+           }else{
+             left = prodQntPerStr + 1;
+           }  
+        }
+        return minMaxProdQnt;
+    }
+    private boolean isValid(int maxQntPerStr, int storesAvl, int[] quantities){
+        int totalStrsReq = 0;
+        for(var prodQnt : quantities){
+            int strsReq = (prodQnt + maxQntPerStr - 1) / maxQntPerStr;
+            totalStrsReq += strsReq;
+        }
+        return totalStrsReq <= storesAvl;
+    }
+}
+---------------------------------------------C++-------------------------------------------------------------------------
+class Solution {
+public:
+    int minimizedMaximum(int n, vector<int>& quantities) {
+        int maxProdQnt = *max_element(quantities.begin(), quantities.end());
+        int left = 1, right = maxProdQnt;
+        int minMaxProdQnt = maxProdQnt;
+
+        while (left <= right) {
+            int prodQntPerStr = left + (right - left) / 2;
+            if (isValid(prodQntPerStr, n, quantities)) {
+                minMaxProdQnt = prodQntPerStr;
+                right = prodQntPerStr - 1;
+            } else {
+                left = prodQntPerStr + 1;
+            }
+        }
+
+        return minMaxProdQnt;
+    }
+
+private:
+    bool isValid(int maxQntPerStr, int storesAvl, vector<int>& quantities) {
+        int totalStrsReq = 0;
+        for (int prodQnt : quantities) {
+            int strsReq = (prodQnt + maxQntPerStr - 1) / maxQntPerStr; // Ceil division
+            totalStrsReq += strsReq;
+        }
+        return totalStrsReq <= storesAvl;
+    }
+};
