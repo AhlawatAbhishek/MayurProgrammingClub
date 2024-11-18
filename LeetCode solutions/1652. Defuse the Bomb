@@ -1,0 +1,123 @@
+---------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] decrypt(int[] code, int k) {
+        int size = code.length;
+        int res[] = new int[size];
+        if(k == 0)return res;
+        int prefSum[] = new int[size];
+        for(int indx = 0; indx < size; indx++){
+            if(indx == 0){
+                prefSum[indx] = code[indx];
+            }else{
+                prefSum[indx] = prefSum[indx- 1] + code[indx];
+            }
+        }
+        for(int indx = 0; indx < size; indx++){
+            int segEndIndx = (size + indx + k) % size;
+            // System.out.println("indx: " + indx + " SegEnd Indx: " + segEndIndx);
+            if(k < 0){
+                if(segEndIndx > indx){
+                    int sum = prefSum[size - 1] - ((segEndIndx == 0) ? 0 : prefSum[segEndIndx-1]);
+                    sum += ((indx == 0) ? 0 : prefSum[indx-1]);
+                    res[indx] = sum;
+                }else{
+                    int sum = ((indx == 0) ? 0 : prefSum[indx-1]) - ((segEndIndx == 0) ? 0 : prefSum[segEndIndx-1]);
+                    res[indx] = sum;
+                }
+            }else{
+                if(segEndIndx < indx){
+                    int sum = prefSum[size-1] - prefSum[indx];
+                    sum += prefSum[segEndIndx];
+                    res[indx] = sum;
+                }else{
+                    int sum = prefSum[segEndIndx] - prefSum[indx];
+                    res[indx] = sum;
+                }
+            }
+        }
+        return res;
+    }
+}
+-------------------------------------------------------------Javascript---------------------------------------------------------------------------------------------------------------
+/**
+ * @param {number[]} code
+ * @param {number} k
+ * @return {number[]}
+ */
+var decrypt = function(code, k) {
+    let size = code.length;
+        let res = new Array(size).fill(0);
+        if(k == 0)return res;
+        let prefSum = new Array(size).fill(0);
+        for(let indx = 0; indx < size; indx++){
+            if(indx == 0){
+                prefSum[indx] = code[indx];
+            }else{
+                prefSum[indx] = prefSum[indx- 1] + code[indx];
+            }
+        }
+        for(let indx = 0; indx < size; indx++){
+            let segEndIndx = (size + indx + k) % size;
+
+            if(k < 0){
+                if(segEndIndx > indx){
+                    let sum = prefSum[size - 1] - ((segEndIndx == 0) ? 0 : prefSum[segEndIndx-1]);
+                    sum += ((indx == 0) ? 0 : prefSum[indx-1]);
+                    res[indx] = sum;
+                }else{
+                    let sum = ((indx == 0) ? 0 : prefSum[indx-1]) - ((segEndIndx == 0) ? 0 : prefSum[segEndIndx-1]);
+                    res[indx] = sum;
+                }
+            }else{
+                if(segEndIndx < indx){
+                    let sum = prefSum[size-1] - prefSum[indx];
+                    sum += prefSum[segEndIndx];
+                    res[indx] = sum;
+                }else{
+                    let sum = prefSum[segEndIndx] - prefSum[indx];
+                    res[indx] = sum;
+                }
+            }
+        }
+        return res;
+};
+--------------------------------------------------------------------C++--------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    vector<int> decrypt(vector<int>& code, int k) {
+        int size = code.size();
+        vector<int> res(size);
+        if(k == 0)return res;
+        vector<int> prefSum(size);
+        for(int indx = 0; indx < size; indx++){
+            if(indx == 0){
+                prefSum[indx] = code[indx];
+            }else{
+                prefSum[indx] = prefSum[indx- 1] + code[indx];
+            }
+        }
+        for(int indx = 0; indx < size; indx++){
+            int segEndIndx = (size + indx + k) % size;
+            if(k < 0){
+                if(segEndIndx > indx){
+                    int sum = prefSum[size - 1] - ((segEndIndx == 0) ? 0 : prefSum[segEndIndx-1]);
+                    sum += ((indx == 0) ? 0 : prefSum[indx-1]);
+                    res[indx] = sum;
+                }else{
+                    int sum = ((indx == 0) ? 0 : prefSum[indx-1]) - ((segEndIndx == 0) ? 0 : prefSum[segEndIndx-1]);
+                    res[indx] = sum;
+                }
+            }else{
+                if(segEndIndx < indx){
+                    int sum = prefSum[size-1] - prefSum[indx];
+                    sum += prefSum[segEndIndx];
+                    res[indx] = sum;
+                }else{
+                    int sum = prefSum[segEndIndx] - prefSum[indx];
+                    res[indx] = sum;
+                }
+            }
+        }
+        return res;
+    }
+};
