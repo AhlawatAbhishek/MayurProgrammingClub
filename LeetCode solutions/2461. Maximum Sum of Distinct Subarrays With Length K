@@ -1,0 +1,108 @@
+-----------------------------------------------------------------------Java----------------------------------------------------------------------------------------------------------class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        if(k == 1){
+            int maxNum = nums[0];
+            for(var num : nums)maxNum = Math.max(maxNum, num);
+            return maxNum;
+        }
+        int size = nums.length;
+        long prefixSum[] = new long[size];
+        for(int indx = 0; indx < nums.length; indx++){
+            if(indx == 0){
+                prefixSum[indx] = nums[indx];
+            }else{
+                prefixSum[indx] =  prefixSum[indx - 1] + nums[indx];
+            }
+        }
+        long maxSubSum = 0;
+        Set<Integer> seenNums = new HashSet<>();
+        int left = 0, right = 0;
+        while(right < size){
+            while(left < right && (right-left + 1 > k || seenNums.contains(nums[right]))){
+                seenNums.remove(nums[left++]);
+            }
+            if(right - left + 1 == k){
+                maxSubSum = Math.max(maxSubSum, (prefixSum[right] - ((left == 0) ? 0 : prefixSum[left - 1])));
+            }
+            seenNums.add(nums[right++]);
+        }
+        return maxSubSum;
+    }
+}
+--------------------------------------------------------Javascript-------------------------------------------------------------------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var maximumSubarraySum = function(nums, k) {
+    if(k == 1){
+            let maxNum = nums[0];
+            for(num of nums)maxNum = Math.max(maxNum, num);
+            return maxNum;
+        }
+        let size = nums.length;
+        let prefixSum = new Array(size);
+        for(let indx = 0; indx < size; indx++){
+            if(indx == 0){
+                prefixSum[indx] = nums[indx];
+            }else{
+                prefixSum[indx] =  prefixSum[indx - 1] + nums[indx];
+            }
+        }
+        let maxSubSum = 0;
+        const seenNums = new Set();
+        let left = 0, right = 0;
+        while(right < size){
+            while(left < right && (right-left + 1 > k || seenNums.has(nums[right]))){
+                seenNums.delete(nums[left++]);
+            }
+            if(right - left + 1 == k){
+                maxSubSum = Math.max(maxSubSum, (prefixSum[right] - ((left == 0) ? 0 : prefixSum[left - 1])));
+            }
+            seenNums.add(nums[right++]);
+        }
+        return maxSubSum;
+};
+------------------------------------------------------------C++---------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    long long maximumSubarraySum(vector<int>& nums, int k) {
+        if (k == 1) {
+            int maxNum = nums[0];
+            for (auto & num : nums) {
+                maxNum = max(maxNum, num);
+            }
+            return maxNum;
+        }
+
+        int size = nums.size();
+        vector<long long> prefixSum(size, 0);
+
+        for (int indx = 0; indx < size; indx++) {
+            if (indx == 0) {
+                prefixSum[indx] = nums[indx];
+            } else {
+                prefixSum[indx] = prefixSum[indx - 1] + nums[indx];
+            }
+        }
+
+        long long maxSubSum = 0;
+        unordered_set<int> seenNums;
+        int left = 0, right = 0;
+
+        while (right < size) {
+            while (left < right && (right - left + 1 > k || seenNums.count(nums[right]) > 0)) {
+                seenNums.erase(nums[left++]);
+            }
+
+            if (right - left + 1 == k) {
+                maxSubSum = max(maxSubSum, prefixSum[right] - (left == 0 ? 0 : prefixSum[left - 1]));
+            }
+
+            seenNums.insert(nums[right++]);
+        }
+
+        return maxSubSum;
+    }
+};
