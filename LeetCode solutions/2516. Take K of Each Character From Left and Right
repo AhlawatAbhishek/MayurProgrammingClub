@@ -1,0 +1,29 @@
+-------------------------------------------------------Java---------------------------------------------------------------------
+class Solution { 
+    public int takeCharacters(String s, int k) {
+        if(k == 0)return 0;
+        int totalCnt[] = new int[3];
+        int len = s.length();
+        for(var chr : s.toCharArray()){
+            totalCnt[chr - 'a']++;
+        }
+        for(var cnt : totalCnt)if(cnt < k)return -1;
+        int currWinCnt[] = new int[3];
+        int left = 0;
+        int maxSkipSize = 0;
+        for(int right = 0; right < len; right++){
+              char curChr = s.charAt(right);
+              currWinCnt[curChr - 'a']++;
+              while(left < right && ((totalCnt[0] - currWinCnt[0]) < k
+              || (totalCnt[1] - currWinCnt[1]) < k || (totalCnt[2] - currWinCnt[2]) < k)){
+                 currWinCnt[s.charAt(left++) -'a']--;
+              }
+              if(!(totalCnt[0] - currWinCnt[0] < k
+              || totalCnt[1] - currWinCnt[1] < k || totalCnt[2] - currWinCnt[2] < k)){
+                maxSkipSize = Math.max(maxSkipSize, right - left  + 1);
+              }
+
+        }
+        return len - maxSkipSize;
+    }
+}
