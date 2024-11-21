@@ -1,0 +1,50 @@
+-----------------------------------------------------------------------Java---------------------------------------------------------------------------------------------------------
+class Solution {
+    public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
+        int grid[][] = new int[m][n];
+        for(var gLoc : guards){
+            grid[gLoc[0]][gLoc[1]] = 1;
+        }
+        for(var wall : walls){
+            grid[wall[0]][wall[1]] = 2;
+        }
+        for(int r = 0; r<m; r++){
+            boolean gWatch = false;
+            for(int c = 0; c < n; c++){
+               if(grid[r][c] == 2)gWatch = false;
+               else if(grid[r][c] == 1)gWatch = true;
+               else if(gWatch)grid[r][c] = 3;
+            }
+            gWatch = false;
+            for(int c = n-1; c > -1; c--){
+               if(grid[r][c] == 2)gWatch = false;
+               else if(grid[r][c] == 1)gWatch = true;
+               else if(gWatch)grid[r][c] = 3;
+            }
+        }
+        for(int c = 0; c<n; c++){
+            boolean gWatch =false;
+            for(int r =0; r<m; r++){
+               if(grid[r][c] == 2)gWatch = false;
+               else if(grid[r][c] == 1)gWatch = true;
+               else if(gWatch)grid[r][c] = 3;
+            }
+            gWatch = false;
+            for(int r = m-1; r>-1; r--){
+               if(grid[r][c] == 2)gWatch = false;
+               else if(grid[r][c] == 1)gWatch = true;
+               else if(gWatch)grid[r][c] = 3;
+            }
+        }
+        int freeCells = 0; 
+        for(int r = 0; r < m; r++){
+            for(int c = 0; c < n; c++){
+                if(grid[r][c] == 0){
+                    freeCells++;
+                }
+            }
+        }
+        return freeCells;
+    }
+}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
