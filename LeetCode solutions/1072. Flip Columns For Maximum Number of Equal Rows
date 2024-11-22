@@ -36,5 +36,47 @@ class Solution {
         return Math.max(maxOppRowPairs, initialEqCnt);
     }
 }
+
 ---------------------------------------------This Time Complexity Can be brought down further by trading it with space--------------------------
 HashMap For fast looks ups can be used.
+
+---------------------------------------------------Javascript--------------------------------------------------------------------------------------------------------------
+/**
+ * @param {number[][]} matrix
+ * @return {number}
+ */
+var maxEqualRowsAfterFlips = function(matrix) {
+    let initialEqCnt = 0;
+        const rows = matrix.length;
+        const cols = matrix[0].length;
+        for(let r = 0; r < rows; r++){
+            let rowVal = matrix[r][0];
+            for(let c = 0; c < cols; c++){
+               if(rowVal != matrix[r][c]){
+                rowVal = -1;
+                break;
+               }
+            }
+            if(rowVal != -1)initialEqCnt++;
+        }
+        let maxOppRowPairs = 0;
+        for(let currRow = 0; currRow < rows; currRow++){
+            let currOppRowPairs = 1;
+            for(let oppRow = 0; oppRow < rows; oppRow++){
+                if(currRow == oppRow)continue;
+                let isOppRow = true;
+                let targetXOR = (matrix[currRow][0] ^ matrix[oppRow][0]);
+                for(let c = 0; c < cols; c++){
+                    if((matrix[currRow][c] ^ matrix[oppRow][c]) != targetXOR){
+                        isOppRow = false;
+                        break;
+                    }
+                }
+                if(isOppRow){
+                    currOppRowPairs++;
+                }
+            }
+            maxOppRowPairs = Math.max(maxOppRowPairs, currOppRowPairs);
+        }
+        return Math.max(maxOppRowPairs, initialEqCnt);
+};
