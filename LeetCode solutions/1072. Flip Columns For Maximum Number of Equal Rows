@@ -1,0 +1,40 @@
+-----------------------------------------------------Java-------------------------------------------------------------------------------
+class Solution {
+    public int maxEqualRowsAfterFlips(int[][] matrix) {
+        int initialEqCnt = 0;
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        for(int r = 0; r < rows; r++){
+            int rowVal = matrix[r][0];
+            for(int c = 0; c < cols; c++){
+               if(rowVal != matrix[r][c]){
+                rowVal = -1;
+                break;
+               }
+            }
+            if(rowVal != -1)initialEqCnt++;
+        }
+        int maxOppRowPairs = 0;
+        for(int currRow = 0; currRow < rows; currRow++){
+            int currOppRowPairs = 1;
+            for(int oppRow = 0; oppRow < rows; oppRow++){
+                if(currRow == oppRow)continue;
+                boolean isOppRow = true;
+                int targetXOR = (matrix[currRow][0] ^ matrix[oppRow][0]);
+                for(int c = 0; c < cols; c++){
+                    if((matrix[currRow][c] ^ matrix[oppRow][c]) != targetXOR){
+                        isOppRow = false;
+                        break;
+                    }
+                }
+                if(isOppRow){
+                    currOppRowPairs++;
+                }
+            }
+            maxOppRowPairs = Math.max(maxOppRowPairs, currOppRowPairs);
+        }
+        return Math.max(maxOppRowPairs, initialEqCnt);
+    }
+}
+---------------------------------------------This Time Complexity Can be brought down further by trading it with space--------------------------
+HashMap For fast looks ups can be used.
