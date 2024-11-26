@@ -1,0 +1,54 @@
+-----------------------------------------------------------------Java----------------------------------------------------------------------------------------------------------------class Solution {
+    public int findChampion(int n, int[][] edges) {
+        int looseCnt[] =  new int[n];
+        for(var edg : edges){
+           looseCnt[edg[1]]--;
+        }
+        int winnerIndx = -1;
+        for(int teamIndx = 0; teamIndx < n; teamIndx++){
+           if(looseCnt[teamIndx] == 0){
+            if(winnerIndx != -1)return -1;
+            winnerIndx = teamIndx;
+           } 
+        }
+        return winnerIndx;
+    }
+}
+------------------------------------------------------------C++-----------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int findChampion(int n, vector<vector<int>>& edges) {
+        vector<int> looseCnt(n);
+        for(auto  & edg : edges){
+           looseCnt[edg[1]]--;
+        }
+        int winnerIndx = -1;
+        for(int teamIndx = 0; teamIndx < n; teamIndx++){
+           if(looseCnt[teamIndx] == 0){
+            if(winnerIndx != -1)return -1;
+            winnerIndx = teamIndx;
+           } 
+        }
+        return winnerIndx;
+    }
+};
+-----------------------------------------------------------------Javascript-----------------------------------------------------------------------------------------------------------
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @return {number}
+ */
+var findChampion = function(n, edges) {
+    let looseCnt = new Array(n).fill(0);
+        for( edg of edges){
+           looseCnt[edg[1]]--;
+        }
+        let winnerIndx = -1;
+        for(let teamIndx = 0; teamIndx < n; teamIndx++){
+           if(looseCnt[teamIndx] == 0){
+            if(winnerIndx != -1)return -1;
+            winnerIndx = teamIndx;
+           } 
+        }
+        return winnerIndx;
+};
