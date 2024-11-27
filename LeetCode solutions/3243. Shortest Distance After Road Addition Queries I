@@ -1,0 +1,43 @@
+--------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
+        int distFrmSrc[] = new int[n];
+        Arrays.fill(distFrmSrc, n + 1);
+        distFrmSrc[0] = 0;
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for(int node = 0; node < n-1; node++){
+            int currNode = node, nextNode = currNode + 1;
+            graph.putIfAbsent(currNode, new ArrayList<>());
+            graph.get(currNode).add(nextNode);
+        }
+        calDistFrmSrc(graph, distFrmSrc, 0);
+        int qSize = queries.length;
+        int res[] = new int[qSize];
+        for(int indx = 0; indx < qSize; indx++){
+             int currNode = queries[indx][0], nextNode = queries[indx][1];
+            // distFrmSrc[nextNode] = distFrmSrc[currNode] + 1;
+            // calDistFrmSrc(graph, distFrmSrc, 0);
+             graph.get(currNode).add(nextNode);
+             calDistFrmSrc(graph, distFrmSrc, currNode);
+             res[indx] = distFrmSrc[n-1];
+        }
+        return res;
+    }
+    private void calDistFrmSrc(Map<Integer, List<Integer>> graph, int distFrmSrc[], int src){
+        PriorityQueue<Integer> minDistQue = new PriorityQueue<Integer>((a,b)->(distFrmSrc[a] - distFrmSrc[b]));
+        minDistQue.offer(src);
+        while(!minDistQue.isEmpty()){
+            int currNode = minDistQue.poll();
+            if(!graph.containsKey(currNode))continue;
+            for(var neigh : graph.get(currNode)){
+                // System.out.println("Befor Entering " + " currNode: " + currNode + " neigh" + neigh);
+                if(distFrmSrc[currNode] + 1 < distFrmSrc[neigh]){
+                    // System.out.println("currNode: " + currNode + " neigh " + neigh);
+                    distFrmSrc[neigh] = distFrmSrc[currNode] + 1;
+                    minDistQue.offer(neigh);
+                }
+            }
+        }
+        // System.out.println(distFrmSrc[distFrmSrc.length - 1] + "-----------");
+    }
+}
