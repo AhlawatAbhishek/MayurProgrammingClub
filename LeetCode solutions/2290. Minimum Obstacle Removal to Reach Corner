@@ -1,0 +1,35 @@
+--------------------------------------------Java--------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int minimumObstacles(int[][] grid) {
+        int rows = grid.length, cols = grid[0].length;
+        Deque<int[]> cellQueue = new ArrayDeque<>();
+        int dirs[][] = {{0, -1}, {-1, 0}, {0, 1}, {1, 0}};
+        cellQueue.offerFirst(new int[]{0, 0});
+        int distFrmSrc[][] = new int[rows][cols];
+        for(var distRow : distFrmSrc){
+            Arrays.fill(distRow, Integer.MAX_VALUE);
+        }
+        distFrmSrc[0][0] = 0;
+        while(!cellQueue.isEmpty()){
+           var currCell = cellQueue.pollFirst();
+           int currR = currCell[0], currC = currCell[1];
+        //    System.out.println(currR + ", " + currC);
+        //    if(currR == rows - 1 && currC == cols - 1)break;
+           for(var dir : dirs){
+              int newR = currR + dir[0], newC = currC + dir[1];
+              if(newR == rows || newC == cols || newR < 0 || newC < 0 )continue;
+              if(distFrmSrc[newR][newC] > distFrmSrc[currR][currC] + grid[newR][newC]){
+                distFrmSrc[newR][newC] = distFrmSrc[currR][currC] + grid[newR][newC];
+                if(grid[newR][newC] == 1){
+                    cellQueue.offerLast(new int[]{newR, newC});
+                }else{
+                    cellQueue.offerFirst(new int[]{newR, newC});
+                }
+              }
+           }   
+        }
+        return distFrmSrc[rows-1][cols-1];
+
+    }
+}
+
