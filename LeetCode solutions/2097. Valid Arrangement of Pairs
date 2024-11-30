@@ -1,0 +1,45 @@
+------------------------------------------------------Java--------------------------------------------------------------------------------------
+class Solution {
+    public int[][] validArrangement(int[][] pairs) {
+        Deque<int[]> resDeq = new ArrayDeque<>();
+        Map<Integer, Stack<int[]>> startEndMap = new HashMap<>();
+        Map<Integer, Integer> inDegree = new HashMap<>();
+        Map<Integer, Integer> outDegree = new HashMap<>();
+
+        for (int i = 0; i < pairs.length; i++) {
+            int start = pairs[i][0];
+            int end = pairs[i][1];
+            startEndMap.putIfAbsent(start, new Stack<>());
+            startEndMap.get(start).push(pairs[i]);
+            outDegree.put(start, outDegree.getOrDefault(start, 0) + 1);
+            inDegree.put(end, inDegree.getOrDefault(end, 0) + 1);
+        }
+
+        int startPoint = pairs[0][0];
+        for (int key : startEndMap.keySet()) {
+            if (outDegree.getOrDefault(key, 0) > inDegree.getOrDefault(key, 0)) {
+                startPoint = key;
+                break;
+            }
+        }
+
+        dfs(startPoint, startEndMap, resDeq);
+
+        int[][] result = new int[pairs.length][2];
+        int index = 0;
+        while (!resDeq.isEmpty()) {
+            result[index++] = resDeq.pollFirst();
+        }
+        return result;
+    }
+
+    private void dfs(int node, Map<Integer, Stack<int[]>> startEndMap, Deque<int[]> resDeq) {
+        Stack<int[]> edges = startEndMap.get(node);
+        while (edges != null && !edges.isEmpty()) {
+            int[] nextPair = edges.pop();
+            dfs(nextPair[1], startEndMap, resDeq);
+            resDeq.offerFirst(nextPair);
+        }
+    }
+}
+
