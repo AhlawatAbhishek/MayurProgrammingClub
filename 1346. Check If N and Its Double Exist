@@ -1,0 +1,27 @@
+------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean checkIfExist(int[] arr) {
+         Arrays.sort(arr);
+        //  for(var num : arr){
+        //     System.out.print(num + " ");
+        //  }
+        //  System.out.println();
+         int size = arr.length;
+         int left = 0, right = size-1;
+         for(int indx = 0; indx < size; indx++){
+            for(int indx1 = indx + 1; indx1 < size; indx1++){
+                if(arr[indx] >= 0){
+                    if(arr[indx1] == (2 *arr[indx]))return true;
+                }else{
+                    // System.out.println(arr[indx] + " "  + arr[indx1]);
+                   if((2 * arr[indx1]) == arr[indx]){
+
+                //     System.out.println("entered");
+                   return true;
+                   }    
+                }
+            }
+         }
+         return false;
+    }
+}
