@@ -12,3 +12,18 @@ class Solution {
     }
 }
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * @param {string} sentence
+ * @param {string} searchWord
+ * @return {number}
+ */
+var isPrefixOfWord = function(sentence, searchWord) {
+    let words = sentence.split(" ");
+        let len = words.length;
+        for(let indx = 0; indx < len; indx++){
+            if(words[indx].indexOf(searchWord) == 0){
+                return indx + 1;
+            }
+        }
+        return -1;
+};
