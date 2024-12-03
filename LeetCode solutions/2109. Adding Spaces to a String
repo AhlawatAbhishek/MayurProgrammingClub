@@ -1,0 +1,37 @@
+--------------------------------------------------Javascript-----------------------------------------------------------------------------------
+/**
+ * @param {string} s
+ * @param {number[]} spaces
+ * @return {string}
+ */
+var addSpaces = function(s, spaces) {
+        let res = "";
+        let size = s.length;
+        let spIndx = 0;
+        let spSize = spaces.length;
+        for(let indx = 0; indx < size; indx++){
+             if(spIndx < spSize &&  indx == spaces[spIndx]){
+                res += " "
+                spIndx++;
+             }
+             res += s[indx]
+        }
+        return res;
+};
+---------------------------------------------------------Java----------------------------------------------------------------------------------
+class Solution {
+    public String addSpaces(String s, int[] spaces) {
+        StringBuilder res = new StringBuilder();
+        int size = s.length();
+        int spIndx = 0;
+        int spSize = spaces.length;
+        for(int indx = 0; indx < size; indx++){
+             if(spIndx < spSize &&  indx == spaces[spIndx]){
+                res.append(" ");
+                spIndx++;
+             }
+             res.append(s.charAt(indx));
+        }
+        return res.toString();
+    }
+}
