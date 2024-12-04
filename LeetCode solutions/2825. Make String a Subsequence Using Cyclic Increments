@@ -1,0 +1,33 @@
+------------------------------Javascript------------------------------------------------------------------------------------
+/**
+ * @param {string} str1
+ * @param {string} str2
+ * @return {boolean}
+ */
+var canMakeSubsequence = function(str1, str2) {
+    let len1 = str1.length, len2 = str2.length, indx2 = 0;
+    for(let indx = 0; indx < len1 && indx2 < len2; indx++){
+            let currChar = str1[indx];
+            let nextChar = String.fromCharCode((currChar.charCodeAt(0) - 'a'.charCodeAt(0) + 1) % 26 + 'a'.charCodeAt(0));
+            let patChar  = str2[indx2];    
+            if(patChar === currChar || patChar === nextChar){
+                indx2++;
+            }           
+        }
+        return indx2 === len2;
+};
+------------------------------Java------------------------------------------------------------------------------------------
+class Solution {
+    public boolean canMakeSubsequence(String str1, String str2) {
+        int len1 = str1.length(), len2 = str2.length(), indx2 = 0;
+        for(int indx = 0; indx < len1 && indx2 < len2; indx++){
+            char currChar = str1.charAt(indx);
+            char nextChar = (char)((currChar - 'a' + 1) % 26 + 'a');
+            char patChar  = str2.charAt(indx2);    
+            if(patChar == currChar || patChar == nextChar){
+                indx2++;
+            }           
+        }
+        return indx2 == len2;
+    }
+}
