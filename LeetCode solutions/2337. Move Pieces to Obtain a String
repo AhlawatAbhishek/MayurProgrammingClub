@@ -1,0 +1,61 @@
+-------------------------------------------------------------------Javascript--------------------------------------------------------------------------------------------------
+/**
+ * @param {string} start
+ * @param {string} target
+ * @return {boolean}
+ */
+var canChange = function(start, target) {
+    let size = start.length;
+        let sIndx = 0, tIndx = 0;
+        while(sIndx < size || tIndx < size){
+           while(sIndx < size && start.charAt(sIndx) === '_'){
+            sIndx++;
+           }
+           while(tIndx < size && target.charAt(tIndx) === '_'){
+            tIndx++;
+           }
+           if(sIndx === size || tIndx === size)return sIndx === size && tIndx === size;
+           if(start.charAt(sIndx) != target.charAt(tIndx))return false;
+           if(start.charAt(sIndx) === 'L' && sIndx < tIndx){
+            //System.out.prletln("First false");
+            return false;
+      }
+           if(start.charAt(sIndx) === 'R' && sIndx > tIndx){
+           //System.out.prletln("Second False");
+           return false;
+           }
+           sIndx++;
+           tIndx++;
+           //System.out.prletln(sIndx + " " + tIndx); 
+        }
+        return true;
+};
+---------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean canChange(String start, String target) {
+        int size = start.length();
+        int sIndx = 0, tIndx = 0;
+        while(sIndx < size || tIndx < size){
+           while(sIndx < size && start.charAt(sIndx) == '_'){
+            sIndx++;
+           }
+           while(tIndx < size && target.charAt(tIndx) == '_'){
+            tIndx++;
+           }
+           if(sIndx == size || tIndx == size)return sIndx == size && tIndx == size;
+           if(start.charAt(sIndx) != target.charAt(tIndx))return false;
+           if(start.charAt(sIndx) == 'L' && sIndx < tIndx){
+            //System.out.println("First false");
+            return false;
+      }
+           if(start.charAt(sIndx) == 'R' && sIndx > tIndx){
+           //System.out.println("Second False");
+           return false;
+           }
+           sIndx++;
+           tIndx++;
+           //System.out.println(sIndx + " " + tIndx); 
+        }
+        return true;
+    }
+}
