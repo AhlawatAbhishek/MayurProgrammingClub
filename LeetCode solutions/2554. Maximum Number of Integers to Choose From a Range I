@@ -1,0 +1,57 @@
+--------------------------------------------------------Javascript--------------------------------------------------------------------------------------------------------------
+/**
+ * @param {number[]} banned
+ * @param {number} n
+ * @param {number} maxSum
+ * @return {number}
+ */
+var maxCount = function(banned, n, maxSum) {
+        let banNums = new Set(banned);
+        let currSum = 0;
+        let currNum = 1, numCnt = 0;
+        while(currNum <= n && currSum + currNum <= maxSum){
+           if(!banNums.has(currNum)){
+            currSum += currNum;
+            numCnt++;
+           } 
+            currNum++;
+        }
+        return numCnt;
+};
+--------------------------------------------------------Java--------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public int maxCount(int[] banned, int n, int maxSum) {
+        Set<Integer> banNums = new HashSet<>();
+        for(var bNum : banned)banNums.add(bNum);
+        long currSum = 0l;
+        int currNum = 1, numCnt = 0;
+        while(currNum <= n && currSum + currNum <= maxSum){
+           if(!banNums.contains(currNum)){
+            // System.out.println("entered");
+            currSum += currNum;
+            numCnt++;
+           } 
+            currNum++;
+        }
+        return numCnt;
+    }
+}
+---------------------------------------------------------C++--------------------------------------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int maxCount(vector<int>& banned, int n, int maxSum) {
+        unordered_set<int> banNums;
+        for(auto & bNum : banned)banNums.insert(bNum);
+        long long currSum = 0ll;
+        int currNum = 1, numCnt = 0;
+        while(currNum <= n && currSum + currNum <= maxSum){
+           if(!banNums.count(currNum)){
+            // System.out.println("entered");
+            currSum += currNum;
+            numCnt++;
+           } 
+            currNum++;
+        }
+        return numCnt;
+    }
+};
