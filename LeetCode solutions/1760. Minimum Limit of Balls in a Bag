@@ -1,0 +1,62 @@
+----------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+class Solution {
+    public int minimumSize(int[] nums, int maxOperations) {
+        int maxBalls = Integer.MIN_VALUE;
+        for(var ballCnt : nums){
+            maxBalls = Math.max(ballCnt, maxBalls);
+        }
+        int penalty = maxBalls;
+        int left = 1, right = maxBalls;
+        while(left <= right){
+            int maxBallsAllowed = left + (right - left) / 2;
+            if(isValid(maxBallsAllowed, nums, maxOperations)){
+                 penalty = maxBallsAllowed;
+                 right = maxBallsAllowed - 1;
+            }else{
+                left = maxBallsAllowed + 1;
+            }
+        }
+        return penalty;
+    }
+    private boolean isValid(int maxBallsAllowed, int nums[], int maxOperations){
+        int opsReq = 0, bagSize = maxBallsAllowed;
+        for(var ballCnt : nums){
+            opsReq += ((ballCnt + bagSize - 1)/bagSize) - 1;
+        }
+        return maxOperations >= opsReq;
+    }
+}
+----------------------------------------------------------------------------Javascript-----------------------------------------------------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @param {number} maxOperations
+ * @return {number}
+ */
+var minimumSize = function(nums, maxOperations) {
+    // let maxBalls = Number.MIN_VALUE;
+    //     for(ballCnt of nums){
+    //         maxBalls = Math.max(ballCnt, maxBalls);
+    //     }
+        //either use above way. or this one
+        let maxBalls = Math.max(...nums);
+        let penalty = maxBalls;
+        let left = 1, right = maxBalls;
+        while(left <= right){
+            let maxBallsAllowed = left + Math.floor((right - left) / 2);
+            if(isValid(maxBallsAllowed, nums, maxOperations)){
+                 penalty = maxBallsAllowed;
+                 right = maxBallsAllowed - 1;
+            }else{
+                left = maxBallsAllowed + 1;
+            }
+        }
+        return penalty;
+};
+
+const isValid = (maxBallsAllowed, nums, maxOperations)=>{
+     let opsReq = 0, bagSize = maxBallsAllowed;
+        for(var ballCnt of nums){
+            opsReq += Math.floor((ballCnt + bagSize - 1)/bagSize) - 1;
+        }
+        return maxOperations >= opsReq;
+}
