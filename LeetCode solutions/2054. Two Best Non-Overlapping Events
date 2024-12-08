@@ -1,0 +1,17 @@
+-------------------------------------------------------------Java-----------------------------------------------------------------------------------
+class Solution {
+    public int maxTwoEvents(int[][] events) {
+        PriorityQueue<Pair<Integer, Integer>> minEndTimeHeap = new PriorityQueue<Pair<Integer, Integer>>((a, b)-> (a.getKey() - b.getKey()));
+        int maxValUntilNow = 0, maxPairSum = 0;
+        Arrays.sort(events, (a, b)->(a[0]-b[0]));
+        for(var event : events){
+            int currStart = event[0], currEnd = event[1], currVal = event[2];
+            while(!minEndTimeHeap.isEmpty() && minEndTimeHeap.peek().getKey() < currStart){
+                maxValUntilNow = Math.max(maxValUntilNow, minEndTimeHeap.poll().getValue());
+            }
+            maxPairSum = Math.max(maxPairSum, maxValUntilNow + currVal);
+            minEndTimeHeap.offer(new Pair<Integer, Integer>(currEnd, currVal));
+        }
+        return maxPairSum;
+    }
+}
