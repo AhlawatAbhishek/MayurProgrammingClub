@@ -1,0 +1,47 @@
+-------------------------------------------------------------------------Java---------------------------------------------------------------------------------------
+class Solution {
+    public boolean[] isArraySpecial(int[] nums, int[][] queries) {
+        int size = nums.length;
+        int prefSum[] = new int[size];
+        prefSum[0] = 0;
+        for(int indx = 1; indx < size; indx++){
+                if((nums[indx - 1] % 2)==(nums[indx] % 2)){
+                    prefSum[indx] = prefSum[indx-1] + 1;
+                }else{
+                    prefSum[indx] = prefSum[indx-1];
+                }
+        }
+        int qSize = queries.length;
+        boolean res[] = new boolean[qSize];
+        for(int qIndx = 0; qIndx < qSize; qIndx++){
+            int startIndx = queries[qIndx][0], endIndx = queries[qIndx][1];
+            res[qIndx] = (prefSum[endIndx] == prefSum[startIndx]);
+        }
+        return res;
+    }
+}
+-------------------------------------------------------------------------Javascript---------------------------------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @param {number[][]} queries
+ * @return {boolean[]}
+ */
+var isArraySpecial = function(nums, queries) {
+    let size = nums.length;
+        let prefSum = new Array(size).fill(0);
+        prefSum[0] = 0;
+        for(let indx = 1; indx < size; indx++){
+                if((nums[indx - 1] % 2)==(nums[indx] % 2)){
+                    prefSum[indx] = prefSum[indx-1] + 1;
+                }else{
+                    prefSum[indx] = prefSum[indx-1];
+                }
+        }
+        let qSize = queries.length;
+        let res = new Array(qSize);
+        for(let qIndx = 0; qIndx < qSize; qIndx++){
+            let startIndx = queries[qIndx][0], endIndx = queries[qIndx][1];
+            res[qIndx] = (prefSum[endIndx] == prefSum[startIndx]);
+        }
+        return res;
+};
