@@ -1,0 +1,51 @@
+------------------------------------------------------------------------------Javascript---------------------------------------------------------
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var maximumLength = function(s) {
+    let freqMp = new Map();
+        let size = s.length;
+        for(let leftIndx = 0; leftIndx < size; leftIndx++){
+            let firstChr = s[leftIndx];
+            let subLen = 0;
+            for(let rightIndx = leftIndx; rightIndx < size && s[rightIndx] === firstChr; rightIndx++){
+                subLen++;
+                const key = `${firstChr},${subLen}`
+                freqMp.set(key, (freqMp.get(key) ||  0) + 1);
+            }
+        }
+        let maxSpcLen = 0;
+        for(const [key, freq] of freqMp.entries()){
+             const keyLen = key.split(",")[1];
+             if(freq >= 3){
+                maxSpcLen = Math.max(maxSpcLen, keyLen);
+             }
+        }
+        return maxSpcLen == 0 ? -1 : maxSpcLen;
+};
+----------------------------------------------Java-----------------------------------------------------------------------------------------------
+class Solution {
+    public int maximumLength(String s) {
+        Map<Pair<Character, Integer>, Integer> freqMp = new HashMap<>();
+        int size = s.length();
+        for(int leftIndx = 0; leftIndx < size; leftIndx++){
+            char firstChr = s.charAt(leftIndx);
+            int subLen = 0;
+            for(int rightIndx = leftIndx; rightIndx < size && s.charAt(rightIndx) == firstChr; rightIndx++){
+                subLen++;
+                Pair<Character, Integer> newPair = new Pair<Character, Integer>(firstChr, subLen);
+                freqMp.put(newPair, freqMp.getOrDefault(newPair, 0) + 1);
+            }
+        }
+        int maxSpcLen = 0;
+        for(var entry : freqMp.entrySet()){
+             int freq = entry.getValue();
+             Pair<Character, Integer> currPr = entry.getKey();
+             if(freq >= 3){
+                maxSpcLen = Math.max(maxSpcLen, currPr.getValue());
+             }
+        }
+        return maxSpcLen == 0 ? -1 : maxSpcLen;
+    }
+}
