@@ -1,0 +1,20 @@
+------------------------------------------------------------------Java---------------------------------------------------------------------------------------------------------
+class Solution {
+    public long pickGifts(int[] gifts, int k) {
+        PriorityQueue<Integer> maxNumHeap = new PriorityQueue<Integer>((a, b)->(b-a));
+        for(var num : gifts){
+            maxNumHeap.offer(num);
+        }
+        while(k-->0 && !maxNumHeap.isEmpty()){
+            int maxPile = maxNumHeap.poll();
+            int leftOfPile = (int)Math.sqrt(maxPile);
+            if(leftOfPile > 0)
+            maxNumHeap.offer(leftOfPile);
+        }
+        long totalGiftsRem = 0l;
+        while(!maxNumHeap.isEmpty()){
+            totalGiftsRem += maxNumHeap.poll();
+        }
+        return totalGiftsRem;
+    }
+}
