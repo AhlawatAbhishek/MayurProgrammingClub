@@ -26,4 +26,33 @@ class Solution {
         return sum;
     }
 }
+-----------------------------------------------------------------------Java----------------------------------------------------------------------------------------------------------
+class Solution {
+    public long findScore(int[] nums) {
+        int size = nums.length;
+        Set<Integer> visitedIndicies = new HashSet<>();
+        PriorityQueue<Pair<Integer, Integer>> minNumHeap = new PriorityQueue<>((a, b) -> {
+    if (!a.getKey().equals(b.getKey())) {
+        return a.getKey() - b.getKey();
+    }
+    return a.getValue() - b.getValue();
+});
 
+        for(int indx = 0; indx < size; indx++){
+            minNumHeap.offer(new Pair<Integer, Integer>(nums[indx], indx));
+        }
+        long sum = 0l;
+        while(!minNumHeap.isEmpty()){
+            var numPrRmvd = minNumHeap.poll();
+            int currIndx = numPrRmvd.getValue();
+            int currValue = numPrRmvd.getKey();
+            if(visitedIndicies.contains(currIndx)){
+                continue;
+            }
+            if((currIndx - 1) > -1)visitedIndicies.add((currIndx - 1));
+            if((currIndx + 1) < size)visitedIndicies.add((currIndx + 1));
+            sum += (currValue * 1l);
+        }
+        return sum;
+    }
+}
