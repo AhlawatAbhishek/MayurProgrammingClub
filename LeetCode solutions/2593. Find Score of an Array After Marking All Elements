@@ -1,0 +1,29 @@
+----------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------------------
+class Solution {
+    public long findScore(int[] nums) {
+        int size = nums.length;
+        Set<Integer> visitedIndicies = new HashSet<>();
+        PriorityQueue<int[]> minNumHeap = new PriorityQueue<>((a, b)->{
+            if(a[0] != b[0])return a[0] - b[0];
+            else return a[1] - b[1];
+        });
+        for(int indx = 0; indx < size; indx++){
+            minNumHeap.offer(new int[]{nums[indx], indx});
+        }
+        long sum = 0l;
+        while(!minNumHeap.isEmpty()){
+            var numPrRmvd = minNumHeap.poll();
+            int currIndx = numPrRmvd[1];
+            int currValue = numPrRmvd[0];
+            if(visitedIndicies.contains(currIndx)){
+                continue;
+            }
+            visitedIndicies.add(currIndx);
+            if((currIndx - 1) > -1)visitedIndicies.add((currIndx - 1));
+            if((currIndx + 1) < size)visitedIndicies.add((currIndx + 1));
+            sum += (currValue);
+        }
+        return sum;
+    }
+}
+
