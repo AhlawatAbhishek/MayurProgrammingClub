@@ -1,0 +1,26 @@
+-------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------------------
+class Solution {
+    public long continuousSubarrays(int[] nums) {
+        TreeMap<Integer, Integer> numFreqMp = new TreeMap<>();
+        int leftIndx = 0, rightIndx = 0;
+        int size = nums.length;
+        long contSubCnt = 0l;
+        while(rightIndx < size){
+           int currNum = nums[rightIndx];
+           numFreqMp.put(currNum, numFreqMp.getOrDefault(currNum, 0) + 1);
+           while(leftIndx < rightIndx && (numFreqMp.lastKey() - numFreqMp.firstKey()) > 2){
+               int removedNum = nums[leftIndx++];
+               if(numFreqMp.containsKey(removedNum) && numFreqMp.get(removedNum) - 1 < 1){
+                  numFreqMp.remove(removedNum);
+               }else numFreqMp.put(removedNum, numFreqMp.get(removedNum) - 1);
+           } 
+           if(numFreqMp.firstKey() - numFreqMp.lastKey() <= 2){
+            int windSize = rightIndx - leftIndx + 1;
+            // System.out.println("leftIndx " + leftIndx + " rightIndx " + rightIndx + " subCnt: " + subCnt + " windSize "+ windSize);
+            contSubCnt+= windSize;
+           }
+           rightIndx++;
+        }
+        return contSubCnt;
+    }
+}
