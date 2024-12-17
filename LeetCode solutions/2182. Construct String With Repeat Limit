@@ -1,0 +1,29 @@
+-----------------------------------------------------Java------------------------------------------------------------------------------------------------------------------------
+class Solution {
+    public String repeatLimitedString(String s, int repeatLimit) {
+        Map<Character, Integer> freq = new HashMap<>();
+        for(char currChr : s.toCharArray()){
+            freq.put(currChr, freq.getOrDefault(currChr, 0)+1);
+        }
+        PriorityQueue<Character> maxChrHeap = new PriorityQueue<>((a,b)->b-a);
+        for(var chr : freq.keySet()){
+            maxChrHeap.offer(chr);
+        }
+        StringBuilder res = new StringBuilder();
+        while(!maxChrHeap.isEmpty()){
+            char currChr = maxChrHeap.poll();
+            int insFreq = Math.min(repeatLimit, freq.get(currChr));
+            while(insFreq-->0)res.append(currChr);
+            freq.put(currChr, freq.get(currChr)-repeatLimit);
+            if(freq.get(currChr) > 0 && !maxChrHeap.isEmpty()){
+                 var nextChr = maxChrHeap.poll();
+                 freq.put(nextChr, freq.get(nextChr) - 1);
+                 res.append(nextChr);
+                 if(freq.get(nextChr) > 0)
+                     maxChrHeap.offer(nextChr);
+                 maxChrHeap.offer(currChr);
+            }
+        }
+        return res.toString();
+    }
+}
