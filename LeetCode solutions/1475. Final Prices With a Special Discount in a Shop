@@ -1,0 +1,46 @@
+---------------------------------Java------------------------------------------------------------------
+class Solution {
+    public int[] finalPrices(int[] prices) {
+        Deque<int[]> pricesStack = new ArrayDeque<>();
+        int size = prices.length;
+        for(int indx = 0; indx < size; indx++){
+            if(pricesStack.isEmpty()){
+               pricesStack.offerLast(new int[]{prices[indx], indx});         
+            }else{
+                while(!pricesStack.isEmpty() && prices[pricesStack.peekLast()[1]] >= prices[indx]){
+                    var pricePr = pricesStack.pollLast();
+                    prices[pricePr[1]] = pricePr[0] - prices[indx];
+                }
+                pricesStack.offerLast(new int[]{
+                    prices[indx],
+                    indx
+                });
+            }
+        }
+        return prices;
+    }
+}
+--------------------------------------------Javascript--------------------------------------------------
+/**
+ * @param {number[]} prices
+ * @return {number[]}
+ */
+var finalPrices = function(prices) {
+    const pricesStack = [];
+        let size = prices.length;
+        for(let indx = 0; indx < size; indx++){
+            if(pricesStack.length === 0){
+               pricesStack.push([prices[indx], indx]);         
+            }else{
+                while(pricesStack.length > 0 && prices[pricesStack[pricesStack.length-1][1]] >= prices[indx]){
+                    const pricePr = pricesStack.pop();
+                    prices[pricePr[1]] = pricePr[0] - prices[indx];
+                }
+                pricesStack.push([
+                    prices[indx],
+                    indx
+                ]);
+            }
+        }
+        return prices;    
+};
