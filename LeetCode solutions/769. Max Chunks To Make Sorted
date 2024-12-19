@@ -1,0 +1,39 @@
+
+--------------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------------
+class Solution {
+    public int maxChunksToSorted(int[] arr) {
+        int size = arr.length;
+        int currNum = 0, partCnt = 0;
+        Set<Integer> visited = new HashSet<>();
+        for(int indx = 0; indx < size; indx++){
+           visited.add(arr[indx]);
+           while(visited.contains(currNum)){
+             currNum++;
+           }
+           if(currNum == indx + 1){
+            partCnt++;
+           }
+        }
+        return partCnt;
+    }
+}
+----------------------------------------------------------------------------Javascript---------------------------------------------------------------------------------------------
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+var maxChunksToSorted = function(arr) {
+    let size = arr.length;
+        let currNum = 0, partCnt = 0;
+        let visited = new Set();
+        for(let indx = 0; indx < size; indx++){
+           visited.add(arr[indx]);
+           while(visited.has(currNum)){
+             currNum++;
+           }
+           if(currNum == indx + 1){
+            partCnt++;
+           }
+        }
+        return partCnt;
+};
