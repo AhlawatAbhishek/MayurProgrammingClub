@@ -1,0 +1,46 @@
+----------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode reverseOddLevels(TreeNode root) {
+        Deque<TreeNode> deque = new ArrayDeque<>();
+        deque.offerLast(root);
+        int level = 0;
+        Deque<Integer> valueQue = new ArrayDeque<>();
+        deque.offer(root);           
+        while(!deque.isEmpty()){
+            int size = deque.size();
+            while(size -- > 0){
+                TreeNode currNode = deque.pollFirst();
+                
+                if(currNode.left != null){
+                   if(level % 2 == 0)valueQue.offer(currNode.left.val);
+                   deque.offer(currNode.left);
+                }
+
+                if(currNode.right != null){
+                   if(level % 2 == 0) valueQue.offer(currNode.right.val);
+                   deque.offer(currNode.right);
+                }
+                if(level % 2 != 0){
+                    currNode.val = valueQue.pollLast();
+                }
+            }
+            level++;
+        }
+        return root;
+    }
+}
