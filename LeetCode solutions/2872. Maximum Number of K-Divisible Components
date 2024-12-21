@@ -1,0 +1,42 @@
+=========================================================================Java------------------------------------------------------------------------------------------------------
+class Solution {
+    private int compCount = 0;
+    private Map<Integer, List<Integer>> graph = new HashMap<>();
+    public int maxKDivisibleComponents(int n, int[][] edges, int[] values, int k) {
+        for(var edge : edges){
+            graph.putIfAbsent(edge[0], new ArrayList<>());
+            graph.putIfAbsent(edge[1], new ArrayList<>());
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
+        }
+        long treeSum = makeComps(0, values, k); 
+        if(treeSum % k == 0)compCount++; 
+        return compCount;    
+    }
+    private long makeComps(int srcNode, int values[], int k){
+        long currSubTreeSum = 0l;
+        long srcValue = values[srcNode] * 1l;
+        values[srcNode] = -1;
+        if(!graph.containsKey(srcNode))return srcValue % k;
+        for(var neigh : graph.get(srcNode)){
+            if(values[neigh] != -1){
+                long neighTreeSum = (makeComps(neigh, values, k) % k);
+                // System.out.println("srcNode: " + srcNode + " neighNode " + neigh + 
+                // " neighTreeSum: " + neighTreeSum);
+                if(neighTreeSum == 0){
+                    // System.out.println("found comp");
+                    compCount++;
+                }
+                currSubTreeSum = ((currSubTreeSum % k) + neighTreeSum)%k;
+            }   
+        }
+        if(currSubTreeSum != 0 && (currSubTreeSum % k) == 0){
+            long returnVal = srcValue % k;
+           return returnVal;
+        }else{
+            return (srcValue % k + currSubTreeSum % k)%k;
+        } 
+    }   
+}
+====================================================================javascript--------------------------------------------------------------------------------------------------
+comming soon
