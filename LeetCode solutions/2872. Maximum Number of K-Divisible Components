@@ -39,4 +39,46 @@ class Solution {
     }   
 }
 ====================================================================javascript--------------------------------------------------------------------------------------------------
-comming soon
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @param {number[]} values
+ * @param {number} k
+ * @return {number}
+ */
+var maxKDivisibleComponents = function(n, edges, values, k) {
+    let compCount = 0;
+    let graph = new Map();
+    for(edge of edges){
+            if(!graph.has(edge[0]))graph.set(edge[0], new Array());
+            if(!graph.has(edge[1]))graph.set(edge[1], new Array());
+            graph.get(edge[0]).push(edge[1]);
+            graph.get(edge[1]).push(edge[0]);
+        }
+        const makeComps = (srcNode, values, k)=>{
+            let currSubTreeSum = 0;
+            let srcValue = values[srcNode];
+            values[srcNode] = -1;
+            if(!graph.has(srcNode))return srcValue % k;
+            for(neigh of graph.get(srcNode)){
+                if(values[neigh] != -1){
+                    let neighTreeSum = (makeComps(neigh, values, k) % k);
+                    if(neighTreeSum == 0){
+                        compCount++;
+                    }
+                    currSubTreeSum = ((currSubTreeSum % k) + neighTreeSum)%k;
+                }   
+            }
+            if(currSubTreeSum != 0 && (currSubTreeSum % k) == 0){
+                let returnVal = srcValue % k;
+            return returnVal;
+            }else{
+                return (srcValue % k + currSubTreeSum % k)%k;
+            }
+        }         
+        
+        let treeSum = makeComps(0, values, k); 
+        if(treeSum % k == 0)compCount++; 
+        return compCount;   
+        
+};
