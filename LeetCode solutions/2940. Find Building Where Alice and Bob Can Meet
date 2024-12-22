@@ -1,0 +1,62 @@
+---------------------------------------------------------------------------Java----------------------------------------------------------------------------------------------------
+class Solution {
+    public int[] leftmostBuildingQueries(int[] heights, int[][] queries) {
+        List<Pair<Integer, Integer>> decreasingHStack = new ArrayList<>();
+        int qLen = queries.length, hLen = heights.length;
+        int[] res = new int[qLen];
+        Arrays.fill(res, -1);
+        List<List<Pair<Integer, Integer>>> groupedQueries = new ArrayList<>();
+        
+        for (int hIndx = 0; hIndx < hLen; hIndx++) {
+            groupedQueries.add(new ArrayList<>());
+        }
+        
+        for (int qIndx = 0; qIndx < qLen; qIndx++) {
+            int startB = queries[qIndx][0], endB = queries[qIndx][1];
+            if (startB > endB) {
+                int temp = startB;
+                startB = endB;
+                endB = temp;
+            }
+            if (heights[endB] > heights[startB] || startB == endB) {
+                res[qIndx] = endB;
+            } else {
+                groupedQueries.get(endB).add(new Pair<>(heights[startB], qIndx));
+            }
+        }
+        
+        for (int hIndx = hLen - 1; hIndx >= 0; hIndx--) {
+            int currHStackSz = decreasingHStack.size();
+            for (var qry : groupedQueries.get(hIndx)) {
+                int pos = binarySearch(qry.getKey(), decreasingHStack);
+                if (pos < currHStackSz && pos >= 0) {
+                    res[qry.getValue()] = decreasingHStack.get(pos).getValue();
+                }
+            }
+            
+            while (!decreasingHStack.isEmpty() &&
+                   decreasingHStack.get(decreasingHStack.size() - 1).getKey() <= heights[hIndx]) {
+                decreasingHStack.remove(decreasingHStack.size() - 1);
+            }
+            
+            decreasingHStack.add(new Pair<>(heights[hIndx], hIndx));
+        }
+        
+        return res;
+    }
+    
+    private int binarySearch(int height, List<Pair<Integer, Integer>> decreasingHStack) {
+        int left = 0, right = decreasingHStack.size() - 1, ans = -1;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (decreasingHStack.get(mid).getKey() > height) {
+                ans = Math.max(ans, mid);
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return ans;
+    }
+}
+
