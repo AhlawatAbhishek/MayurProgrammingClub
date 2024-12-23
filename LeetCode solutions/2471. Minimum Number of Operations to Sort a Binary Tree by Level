@@ -1,0 +1,52 @@
+------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+class Solution {
+    public int minimumOperations(TreeNode root) {
+        Deque<TreeNode> levelQ = new ArrayDeque<>();
+        int minOps = 0, level = 0;
+        levelQ.offerLast(root);
+        while(!levelQ.isEmpty()){
+            int levelSize = levelQ.size();
+            ArrayList<Integer> nextLevel = new ArrayList<>();
+            ArrayList<Integer> sortedNextLevel = new ArrayList<>();
+            while(levelSize-->0){
+                var currNode = levelQ.pollFirst();
+                if(currNode.left != null){
+                    levelQ.offerLast(currNode.left);
+                    nextLevel.add(currNode.left.val);
+                    sortedNextLevel.add(currNode.left.val);
+                }
+                if(currNode.right != null){
+                    levelQ.offerLast(currNode.right);
+                    nextLevel.add(currNode.right.val);
+                    sortedNextLevel.add(currNode.right.val);
+                } 
+            }
+            int swaps = countOps(nextLevel, sortedNextLevel);
+            // System.out.println(swaps + " level: " + level);
+            level++;
+            minOps += swaps;
+        }
+        return minOps;
+    }
+    private int countOps(List<Integer> nextLevel, List<Integer> sortedNextLevel){
+        int swaps = 0;
+        Collections.sort(sortedNextLevel);
+        HashMap<Integer, Integer> indxMp = new HashMap<>();
+        int size = nextLevel.size();
+        for(int indx = 0; indx < size; indx++){
+            indxMp.put(nextLevel.get(indx), indx);
+        }
+        for(int indx = 0; indx < size; indx++){
+            int srtNum =sortedNextLevel.get(indx), currNum = nextLevel.get(indx);
+            if(currNum !=  srtNum){
+                int corIndx = indxMp.get(srtNum);
+                nextLevel.set(indx, srtNum);
+                nextLevel.set(corIndx, currNum);
+                indxMp.put(srtNum, indx);
+                indxMp.put(currNum, corIndx);
+                swaps++;
+            }
+        }
+        return swaps;
+    }
+}
