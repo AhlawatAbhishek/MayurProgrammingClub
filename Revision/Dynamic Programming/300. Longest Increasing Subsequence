@@ -1,0 +1,46 @@
+----------------------------------------------------------------------------------Java---------------------------------------------------------------------------
+ public int lengthOfLIS(int[] nums) {
+        int len = nums.length;
+        //problem follows properties of 1. overlapping subproblems 2. optimal substructure so instead of brute forcing all possible subsequencies we can apply dynamic programming here.
+
+        //since only 1 state state variable involved therefore 1D DP structure to store / cache state results
+        int lisLenAt[] = new int[len];
+        Arrays.fill(lisLenAt, 1); 
+        int maxLisLen = 0;
+        for(int currIndx = 0; currIndx < len; currIndx++){
+            //take contributions from previous states
+            int maxPrevStateContri = 0;
+            for(int prevIndx = currIndx - 1; prevIndx > -1; prevIndx--){
+                if(nums[currIndx] > nums[prevIndx]){
+                    maxPrevStateContri = Math.max(maxPrevStateContri, lisLenAt[prevIndx]);
+                    }
+            }
+            lisLenAt[currIndx] = 1 + maxPrevStateContri;
+            maxLisLen = Math.max(maxLisLen, lisLenAt[currIndx]);
+        }
+        return maxLisLen;
+------------------------------------------------------------------------------Javascript--------------------------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function(nums) {
+     let len = nums.length;
+        //problem follows properties of 1. overlapping subproblems 2. optimal substructure so instead of brute forcing all possible subsequencies we can apply dynamic programming here.
+
+        //since only 1 state state variable involved therefore 1D DP structure to store / cache state results
+        let lisLenAt = new Array(len).fill(1);
+        let maxLisLen = 0;
+        for(let currIndx = 0; currIndx < len; currIndx++){
+            //take contributions from previous states
+            let maxPrevStateContri = 0;
+            for(let prevIndx = currIndx - 1; prevIndx > -1; prevIndx--){
+                if(nums[currIndx] > nums[prevIndx]){
+                    maxPrevStateContri = Math.max(maxPrevStateContri, lisLenAt[prevIndx]);
+                    }
+            }
+            lisLenAt[currIndx] = 1 + maxPrevStateContri;
+            maxLisLen = Math.max(maxLisLen, lisLenAt[currIndx]);
+        }
+        return maxLisLen;
+};
