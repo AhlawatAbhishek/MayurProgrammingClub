@@ -1,0 +1,28 @@
+-------------------------------------------------------------------------------------Java-------------------------------------------------------------------------------------------
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        //3 choices for min(len1, len2) number of times, so exponential time compelxity if done using brute force >> O(10 ^ 8) ops limit.
+        //Problem have 2 properties 1. overlapping sub problems(leading to extra computations during brute force)
+        //2. optimal sub structure. Solution of a bigger sub problem can be dervied by combining solns of smaller ones.
+        //2 State variables -> 2D Dp
+
+        //lcs ending at current indices indx1 and indx2 of strings text1 and text2
+        int len1 = text1.length(), len2 = text2.length();
+        int lcsLen[][] = new int[len1+1][len2+1];
+        for(int indx1 = 1; indx1 <= len1; indx1++){
+            for(int indx2 = 1; indx2 <= len2; indx2++){
+                lcsLen[indx1][indx2] = 0;
+                if(text1.charAt(indx1-1) == text2.charAt(indx2-1)){
+                   int prevStateContri =lcsLen[indx1-1][indx2-1];
+                   lcsLen[indx1][indx2] = 1 + prevStateContri;
+                }else{
+                 int maxPrevStateContri = Math.max(lcsLen[indx1-1][indx2], lcsLen[indx1][indx2-1]);
+                  lcsLen[indx1][indx2] = maxPrevStateContri;
+                }
+            }
+        }
+        return lcsLen[len1][len2];
+    }
+}
+-----------------------------------------------------------------------------------Javascript-----------------------------------------------------------------------------------------
+tba//
