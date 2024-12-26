@@ -1,0 +1,25 @@
+--------------------------------------------Java---------------------------------------------------------------------------
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null)return res;
+        Deque<TreeNode> lvlQ = new ArrayDeque<>();
+        lvlQ.offerLast(root);
+        while(!lvlQ.isEmpty()){
+            List<Integer> currLvl = new ArrayList<>();
+            int lvlSize = lvlQ.size();
+            while(lvlSize -- > 0){
+                var currNode = lvlQ.pollFirst();
+                currLvl.add(currNode.val);
+                if(currNode.left != null){
+                    lvlQ.offerLast(currNode.left);
+                }
+                if(currNode.right != null){
+                    lvlQ.offerLast(currNode.right);
+                }
+            }
+            res.add(currLvl);
+        }
+        return res;
+    }
+}
