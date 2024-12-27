@@ -1,0 +1,34 @@
+------------------------------------------------------------------------Java------------------------------------------------------------------------------------
+//------------------------DFS version---------------------------------------------------------------
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        int totalNodes = graph.length;
+        HashMap<Integer, Integer> nodeClrMp = new HashMap<>();
+         
+        for(int node = 0; node < totalNodes; node++){
+              if(!nodeClrMp.containsKey(node)){
+                    nodeClrMp.put(node, 1);
+                 if(!isFine(graph, node, nodeClrMp)){
+                    return false;
+                 }
+              }
+        }
+        return true;
+    }
+    private boolean isFine(int graph[][], int src, HashMap<Integer, Integer> nodeClrMp){
+       for(var neigh : graph[src]){
+          int neighClr = nodeClrMp.get(src) == 0  ? 1 : 0;
+          if(nodeClrMp.containsKey(neigh)){
+            if(nodeClrMp.get(neigh) != neighClr)
+             return false;
+          }else{
+            nodeClrMp.put(neigh, neighClr);
+            if(!isFine(graph, neigh, nodeClrMp))return false;
+            
+          }
+       }
+       return true;
+    }
+
+}
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
