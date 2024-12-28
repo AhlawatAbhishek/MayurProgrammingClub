@@ -1,0 +1,55 @@
+------------------------------------------------Java---------------------------------------------------------------------
+class Solution {
+    public int minDistance(String word1, String word2) {
+        int len1  = word1.length(), len2 = word2.length();
+        int edAt[][] = new int[len1 + 1][len2 + 1];
+        for(int indx1 = 1; indx1 <= len1; indx1++){
+          edAt[indx1][0] = indx1;     
+        }
+        for(int indx2 = 1; indx2 <= len2; indx2++){
+           edAt[0][indx2] = indx2;     
+        }
+        for(int indx1 = 1; indx1 <= len1; indx1++){
+            for(int indx2 = 1; indx2 <= len2; indx2++){
+               if(word1.charAt(indx1-1) == word2.charAt(indx2-1)){
+                  edAt[indx1][indx2] = edAt[indx1-1][indx2-1];
+               }else{
+                  int deleteOp = edAt[indx1-1][indx2];
+                  int insertOp = edAt[indx1][indx2-1];
+                  int repOp = edAt[indx1-1][indx2-1];
+                  edAt[indx1][indx2] = 1 + Math.min(deleteOp, Math.min(insertOp, repOp));
+               }
+            }
+        }
+        return edAt[len1][len2];
+    }
+}
+------------------------------------------------Javascript---------------------------------------------------------------
+/**
+ * @param {string} word1
+ * @param {string} word2
+ * @return {number}
+ */
+var minDistance = function(word1, word2) {
+    let len1  = word1.length, len2 = word2.length;
+        let edAt = Array.from({length : len1 + 1}, ()=>Array(len2 + 1).fill(0));
+        for(let indx1 = 1; indx1 <= len1; indx1++){
+          edAt[indx1][0] = indx1;     
+        }
+        for(let indx2 = 1; indx2 <= len2; indx2++){
+           edAt[0][indx2] = indx2;     
+        }
+        for(let indx1 = 1; indx1 <= len1; indx1++){
+            for(let indx2 = 1; indx2 <= len2; indx2++){
+               if(word1.charAt(indx1-1) == word2.charAt(indx2-1)){
+                  edAt[indx1][indx2] = edAt[indx1-1][indx2-1];
+               }else{
+                  let deleteOp = edAt[indx1-1][indx2];
+                  let insertOp = edAt[indx1][indx2-1];
+                  let repOp = edAt[indx1-1][indx2-1];
+                  edAt[indx1][indx2] = 1 + Math.min(deleteOp, Math.min(insertOp, repOp));
+               }
+            }
+        }
+        return edAt[len1][len2];
+};
