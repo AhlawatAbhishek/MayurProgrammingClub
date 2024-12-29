@@ -1,0 +1,36 @@
+-----------------------------------------------------------------Java----------------------------------------------------------------------------------------------------
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        int depen[] = new int[numCourses];
+        for(var prereq : prerequisites){
+            int preCourse = prereq[1], nextCourse = prereq[0];
+            graph.putIfAbsent(preCourse, new ArrayList<>());
+            graph.get(preCourse).add(nextCourse);
+            depen[nextCourse]--;
+        }
+        int compCount = 0;
+        Deque<Integer> courseQ  = new ArrayDeque<>();
+        for(int course = 0; course < numCourses; course++){
+           if(depen[course] == 0){
+            compCount++;
+            courseQ.offerLast(course);
+           }
+        }
+        while(!courseQ.isEmpty()){
+            int size = courseQ.size();
+            while(size-->0){
+               int currCourse = courseQ.pollFirst();
+            //    System.out.println(currCourse);
+               if(!graph.containsKey(currCourse))continue;
+               for(var depCourse : graph.get(currCourse)){
+                  if(++depen[depCourse] == 0){
+                     courseQ.offer(depCourse);
+                     compCount++;
+                  }
+               }
+            } 
+        }
+        return compCount == numCourses;
+    }
+}
