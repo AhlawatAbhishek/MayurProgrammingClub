@@ -1,0 +1,21 @@
+==============================================================================Java---------------------------------------------------------------------------------------------------
+class Solution {
+    int maxDpth = 0;
+    public int maxDepth(TreeNode root) {
+        if(root == null)return 0;
+        findMaxDepth(root, 0);
+        return maxDpth;
+    }
+    private void findMaxDepth(TreeNode currRoot, int depth){
+        if(currRoot.left == null && currRoot.right == null){
+            maxDpth = Math.max(maxDpth, depth+1);
+        }else{
+            if(currRoot.left != null){
+                findMaxDepth(currRoot.left, depth + 1);
+            }
+            if(currRoot.right != null){
+                findMaxDepth(currRoot.right, depth + 1);
+            }
+        }
+    }
+}
