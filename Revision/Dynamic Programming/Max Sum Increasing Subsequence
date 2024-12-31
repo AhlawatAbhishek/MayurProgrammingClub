@@ -1,0 +1,21 @@
+Max Sum Increasing Subsequence ( by GFG)
+Link: 
+https://leetcode.com/problems/maximum-product-subarray/
+
+---------------------------------------------------------------------------------------Java------------------------------------------------------------------------------------------
+public int maxSumIS(int arr[]) {
+        int len = arr.length;
+        int res[] = new int[len];
+        int maxSum = 0;
+        for(int indx = 0; indx < len; indx++){
+            int maxPrevStateContri = 0;
+            for(int prevIndx = indx - 1; prevIndx > -1; prevIndx--){
+                if(arr[prevIndx] < arr[indx]){
+                    maxPrevStateContri = Math.max(res[prevIndx], maxPrevStateContri);
+                }
+            }
+            res[indx] = arr[indx] + maxPrevStateContri;
+            maxSum = Math.max(maxSum, res[indx]);
+        }
+        return maxSum; 
+    }
