@@ -1,0 +1,30 @@
+------------------------------------------------------------Java------------------------------------------------------------------
+class Solution {
+    public int numIslands(char[][] grid) {
+        int rows = grid.length, cols = grid[0].length;
+        int numOfIslands = 0;
+        for(int r = 0; r < rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(grid[r][c] == '1'){
+                    numOfIslands++;
+                    discoverIsland(grid, r, c);
+                }
+            }
+        }
+        return numOfIslands++;
+    }
+    private void discoverIsland(char grid[][], int r, int c){
+        int dirs[][] = {{1, 0},  {0, 1}, {-1, 0}, {0, -1}};
+        grid[r][c] = '0';
+        for(var dir : dirs){
+            int nRow = r + dir[0], nCol = c + dir[1];
+            if(isSafe(grid, nRow, nCol)){
+               discoverIsland(grid, nRow, nCol);
+            }
+        }
+    }
+    private boolean isSafe(char grid[][], int nRow, int nCol){
+        int rows = grid.length, cols = grid[0].length;
+        return nRow > -1 && nCol > -1 && nRow < rows && nCol < cols && grid[nRow][nCol] == '1';
+    }
+}
