@@ -1,0 +1,57 @@
+----------------------------------------------------------------------------------------------Java------------------------------------------------------------------------
+class Solution { 
+    //TC : O(N)
+    //SC : O(N), N is number of nodes, in worst case the tree can be skewed
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        return findLca(root, p, q);
+    }
+    private TreeNode findLca(TreeNode root, TreeNode p, TreeNode q){
+        if(root == null)return null;
+        if(root == q || root == p){
+            return root;
+        }
+        TreeNode leftRes = findLca(root.left, p, q);
+        TreeNode rightRes = findLca(root.right, p, q);
+        if(leftRes != null && rightRes != null){
+            return root;//current root is the lca
+        }else if(leftRes == null && rightRes == null){
+            return null; //neither lca found nor the node hit
+        }else{
+            return (leftRes != null) ? leftRes : rightRes; //lca could have been found or atleast a targeted not is for sure hit.
+        }
+
+    }
+}
+--------------------------------------------------------------------------------Javascript----------------------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} p
+ * @param {TreeNode} q
+ * @return {TreeNode}
+ */
+var lowestCommonAncestor = function(root, p, q) {
+            return findLca(root, p, q);
+    };
+    const findLca = (root, p, q)=>{
+        if(root === null)return null;
+        if(root === q || root === p){
+            return root;
+        }
+        const leftRes = findLca(root.left, p, q);
+        const rightRes = findLca(root.right, p, q);
+        if(leftRes !== null && rightRes !== null){
+            return root;//current root is the lca
+        }else if(leftRes === null && rightRes === null){
+            return null; //neither lca found nor the node hit
+        }else{
+            return (leftRes !== null) ? leftRes : rightRes; //lca could have been found or atleast a targeted not is for sure hit.
+        }
+
+    };
