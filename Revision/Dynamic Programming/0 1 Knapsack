@@ -1,0 +1,34 @@
+Link to problem: 
+https://www.naukri.com/code360/problems/1072980?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website
+
+import java.util.ArrayList;
+
+public class Solution {
+    public static int maxProfit(ArrayList<Integer> values, ArrayList<Integer> weights, int n, int w) {
+        Integer[][] gTN = new Integer[n][w + 1];
+        return gainMaxProfit(0, gTN, n, values, weights, w);
+    }
+
+    private static int gainMaxProfit(int startIndx, Integer[][] gTN, int n, ArrayList<Integer> values, ArrayList<Integer> weights, int weightAllowed) {
+        if (startIndx == n || weightAllowed == 0) {
+            return 0;
+        }
+
+        if (gTN[startIndx][weightAllowed] != null) {
+            return gTN[startIndx][weightAllowed];
+        }
+
+        int exclude = gainMaxProfit(startIndx + 1, gTN, n, values, weights, weightAllowed);
+
+        int include = 0;
+        if (weights.get(startIndx) <= weightAllowed) {
+            include = values.get(startIndx) + gainMaxProfit(startIndx + 1, gTN, n, values, weights, weightAllowed - weights.get(startIndx));
+        }
+
+        gTN[startIndx][weightAllowed] = Math.max(include, exclude);
+        return gTN[startIndx][weightAllowed];
+    }
+}
+
+
+-------------------------Javascript version and iterative Dp version to be added, today for a change went for the memoization solution as I rarely use memoization. Just for the sake of practice.-----------------------------------------
