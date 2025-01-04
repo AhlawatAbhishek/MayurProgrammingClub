@@ -1,0 +1,37 @@
+Link: https://www.geeksforgeeks.org/problems/topological-sort/1
+
+
+-----------------------------------------------------------------------------------------Java----------------------------------------------------------------------------------------------------
+class Solution {
+    // Function to return list containing vertices in Topological order.
+    static ArrayList<Integer> topologicalSort(ArrayList<ArrayList<Integer>> adj) {
+        ArrayList<Integer> res = new ArrayList<>();
+        Deque<Integer> nodeQ = new ArrayDeque();
+        Map<Integer, Integer> inDegMp = new HashMap<>();
+        for(int nIndx = 0; nIndx < adj.size(); nIndx++){
+            for(int neigh : adj.get(nIndx)){
+                inDegMp.put(neigh, inDegMp.getOrDefault(neigh, 0)-1);
+            }
+        }
+        for(int nIndx = 0; nIndx < adj.size(); nIndx++){
+            if(!inDegMp.containsKey(nIndx)){
+                nodeQ.offerLast(nIndx);
+            }
+        }
+        while(!nodeQ.isEmpty()){
+            int qSize = nodeQ.size();
+            while(qSize-->0){
+                int currNode = nodeQ.pollFirst();
+                res.add(currNode);
+                for(int neigh : adj.get(currNode)){
+                    inDegMp.put(neigh, inDegMp.get(neigh) + 1);
+                    if(inDegMp.get(neigh) == 0){
+                        nodeQ.offerLast(neigh);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
+
