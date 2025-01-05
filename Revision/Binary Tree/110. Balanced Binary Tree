@@ -1,0 +1,32 @@
+--------------------------------------Java------------------------------------------------------------------
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private boolean isBal = true;
+    public boolean isBalanced(TreeNode root) {
+        isBalHelper(root);
+        return isBal;
+    }
+    private int isBalHelper(TreeNode root){
+        if(root == null)return 0;
+        if(root.left == null && root.right == null)return 1;
+        int leftSubHeight = isBalHelper(root.left);
+        int rightSubHeight = isBalHelper(root.right);
+        boolean isValidHDiff = Math.abs((rightSubHeight - leftSubHeight)) <= 1;
+        isBal &= isValidHDiff;
+        return 1 + Math.max(leftSubHeight, rightSubHeight);
+    } 
+}
