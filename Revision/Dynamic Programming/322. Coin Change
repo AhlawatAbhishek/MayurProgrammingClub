@@ -1,0 +1,26 @@
+------------------------------------------------Java-------------------------------------------------------------------
+class Solution {
+    public int coinChange(int[] coins, int amount) {
+        int len = coins.length;
+        Integer memo[][] = new Integer[len][amount+1];
+        int minCoinsReq = findMinCoins(coins, 0, amount, memo);
+        if(minCoinsReq == Integer.MAX_VALUE) minCoinsReq = -1;
+        return  minCoinsReq;
+    }
+    private int findMinCoins(int coins[], int indx, int amount, Integer memo[][]){
+        if(amount == 0)return 0;
+        if(indx == coins.length){
+             return Integer.MAX_VALUE;
+        }
+        if(memo[indx][amount] != null)return memo[indx][amount];
+        int takeCoin = Integer.MAX_VALUE;
+        if(amount >= coins[indx]){
+            int res = findMinCoins(coins, indx, amount - coins[indx], memo);
+            if(res != Integer.MAX_VALUE)
+                takeCoin =  1 + res; 
+        }
+        int notTakeCoin = findMinCoins(coins, indx + 1, amount, memo);
+        return memo[indx][amount] = Math.min(takeCoin,  notTakeCoin);
+    }
+}
+------------------------------------Will be adding iterative version soon------------------------------------------------------------------
