@@ -1,0 +1,26 @@
+DFS of Graph(GFG): https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1
+
+
+--------------------------------------------Java-------------------------------------------------------------------------
+class Solution {
+    // Function to return a list containing the DFS traversal of the graph.
+    public ArrayList<Integer> dfsOfGraph(ArrayList<ArrayList<Integer>> adj) {
+        ArrayList<Integer> res = new ArrayList<>();
+        int len = adj.size();
+        Set<Integer> visited = new HashSet<>();
+        for(int vert = 0; vert < len; vert++){
+            if(!visited.contains(vert)){
+                dfs(vert, visited, adj, res);
+            }
+        }
+        return res;
+    }
+    private void dfs(int src, Set<Integer> visited, ArrayList<ArrayList<Integer>> adj, ArrayList<Integer> res){
+         if(visited.contains(src))return;
+         visited.add(src);
+         res.add(src);
+         for(int neigh : adj.get(src)){
+             dfs(neigh, visited, adj, res);
+         }
+    }
+}
