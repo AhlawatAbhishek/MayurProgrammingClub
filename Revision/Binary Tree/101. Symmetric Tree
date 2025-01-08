@@ -1,0 +1,16 @@
+------------------------------------------------------------------------Java---------------------------------------------------------------------------------------------
+
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root.left == null & root.right == null)return true;
+        return isSymHelper(root.left, root.right);
+    }
+    private boolean isSymHelper(TreeNode root1, TreeNode root2){
+        //    System.out.println(root1 + " " + root2);
+           if((root1 != null && root2 == null) || (root1 == null && root2 != null)){
+            return false;
+           }
+           if(root1 == null && root2 == null)return true;
+           return root1.val == root2.val && isSymHelper(root1.left, root2.right) && isSymHelper(root1.right, root2.left);
+    }
+}

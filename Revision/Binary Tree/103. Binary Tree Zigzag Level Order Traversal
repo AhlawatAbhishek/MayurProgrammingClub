@@ -1,0 +1,42 @@
+-------------------------------------------------------------------------------------Java------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null)return res;
+        Queue<TreeNode> currLvlQ = new LinkedList();
+        Deque<TreeNode> nextLvlQ = new ArrayDeque();
+        currLvlQ.offer(root);
+        int level = 0;
+        while(!currLvlQ.isEmpty()){
+           int currLvlSize = currLvlQ.size();
+           List<Integer> currLvlList = new ArrayList<>();
+           while(currLvlSize-->0){
+             TreeNode currNode = currLvlQ.poll();
+            //  System.out.println(currNode.val);
+             currLvlList.add(currNode.val);
+             if(level % 2 == 0){//children being visited left to right but added from front on nextLvlQ;
+                if(currNode.left != null){
+                    nextLvlQ.offerFirst(currNode.left);
+                }
+                if(currNode.right != null){
+                    nextLvlQ.offerFirst(currNode.right);
+                }
+             }else{//children being visited right to left but added from front on nextLvlQ;
+                if(currNode.right != null){
+                    nextLvlQ.offerFirst(currNode.right);
+                }
+                if(currNode.left != null){
+                    nextLvlQ.offerFirst(currNode.left);
+                } 
+             }
+           }
+           res.add(currLvlList);
+           while(!nextLvlQ.isEmpty()){
+              currLvlQ.offer(nextLvlQ.pollFirst());
+           }
+           level++;
+        } 
+        return res;
+    }
+}
