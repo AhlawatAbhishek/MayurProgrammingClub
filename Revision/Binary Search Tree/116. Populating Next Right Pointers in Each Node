@@ -1,0 +1,28 @@
+---------------------------------Java--------------------------------------
+class Solution {
+    public Node connect(Node root) {
+        if(root == null)return null;
+        Queue<Node> lvlQ = new LinkedList<>();
+        lvlQ.offer(root);
+        root.next = null;
+        while(!lvlQ.isEmpty()){
+            int lvlSize = lvlQ.size();
+            while(lvlSize-->0){
+                Node currNode = lvlQ.poll();
+                if(currNode.left != null){
+                    lvlQ.offer(currNode.left);
+                }
+                if(currNode.right != null){
+                    lvlQ.offer(currNode.right);
+                }
+            }
+            int nextLvlSize = lvlQ.size();
+            while(nextLvlSize-->0){
+                Node currNode = lvlQ.poll();
+                currNode.next = nextLvlSize == 0 ? null : lvlQ.peek();
+                lvlQ.offer(currNode);
+            }
+        }
+        return root;
+    }
+}
