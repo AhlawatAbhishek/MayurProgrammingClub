@@ -1,0 +1,24 @@
+--------------------------------------------------Java-------------------------------------------------------------------
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        //if we make fast cover 2 twice the distance as compared to slow and even then they meet at a certain node then this verifies existence of a cycle.
+        ListNode fast = head, slow = head;
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(fast == slow)return true;
+        }
+        return false;
+    }
+}
