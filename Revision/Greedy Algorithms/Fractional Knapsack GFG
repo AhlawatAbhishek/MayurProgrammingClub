@@ -1,0 +1,27 @@
+Problem Link: https://www.geeksforgeeks.org/problems/fractional-knapsack-1587115620/1
+
+--------------------------------------------------------------------Java------------------------------------------------------------------------------------
+class Solution {
+    // Function to get the maximum total value in the knapsack.
+    double fractionalKnapsack(List<Integer> val, List<Integer> wt, int capacity) {
+        int itemsCnt = val.size();
+        int valWtArr[][] = new int[itemsCnt][2];
+        for(int indx = 0; indx < itemsCnt; indx++){
+            valWtArr[indx] = new int[]{val.get(indx), wt.get(indx)};
+        }
+        double finalProfit = 0.0;
+        Arrays.sort(valWtArr, (a, b)->(b[0] * a[1] - a[0] * b[1]));
+        for(int indx = 0; indx < itemsCnt && capacity > 0; indx++){
+            int itemVal = valWtArr[indx][0], itemWt = valWtArr[indx][1];
+            // System.out.println(itemVal + " " + itemWt);
+            if(capacity >= itemWt){
+                finalProfit += itemVal;
+                capacity -= itemWt;
+            }else{
+                finalProfit += ((itemVal*capacity * 1.0)/itemWt);//note that multiplication by 1.0 is necessary because it enforces floating-point division instead of integer division
+                capacity = 0;
+            }
+        }
+        return finalProfit;
+    }
+}
