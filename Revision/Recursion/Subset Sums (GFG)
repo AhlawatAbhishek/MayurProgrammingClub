@@ -1,0 +1,26 @@
+Problem Link: https://www.geeksforgeeks.org/problems/subset-sums2234/1
+
+-----------------------------------------------------------------------Java--------------------------------------------------------------------------------
+class Solution {
+    public ArrayList<Integer> subsetSums(int[] arr) {
+        // code here
+        //subset and subequence are same except the fact that in subset order doesn't matters
+        //subsequence order does matter.
+        ArrayList<Integer> subSumList = new ArrayList<>();
+        findSubSum(arr, 0, 0, subSumList);
+        return subSumList;
+    }
+    private void findSubSum(int arr[],  int indx, int sum, ArrayList<Integer> subSumList){
+        if(indx == arr.length){
+            subSumList.add(sum);
+            return;
+        }
+        
+        //inclusion
+        findSubSum(arr, indx+1, sum + arr[indx], subSumList);
+        
+        //exclusion
+        findSubSum(arr, indx+1, sum, subSumList);
+        
+    }
+}
