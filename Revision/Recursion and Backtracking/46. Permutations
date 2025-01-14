@@ -1,0 +1,28 @@
+---------------------------------------------------Java---------------------------------------------------------------------------
+TC : O(n * n!)
+SC: O(n), recursion call stack ingnoring the result and currPemute
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> permutes = new ArrayList<>();
+        Set<Integer> unqNums = new HashSet<>();
+        findPermutes(nums, permutes, unqNums, new ArrayList<>());
+        return permutes;
+    }
+    private void findPermutes(int nums[], List<List<Integer>>permutes, Set<Integer> unqNums, List<Integer> currPermute){
+        int len = nums.length;
+        if(currPermute.size() == len){
+            permutes.add(new ArrayList<>(currPermute));
+            return;
+        }
+        for(var num : nums){
+           if(!unqNums.contains(num)){ 
+            currPermute.add(num);
+            unqNums.add(num);
+            findPermutes(nums, permutes, unqNums, currPermute);
+            currPermute.remove(currPermute.size() - 1);
+            unqNums.remove(num);
+           }
+        }
+    }
+}
