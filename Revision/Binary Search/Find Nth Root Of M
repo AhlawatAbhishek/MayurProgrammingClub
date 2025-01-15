@@ -1,0 +1,24 @@
+
+Problem Link: https://www.naukri.com/code360/problems/1062679?topList=striver-sde-sheet-problems&utm_source=striver&utm_medium=website&leftPanelTabValue=PROBLEM
+
+=======================================Java======================================================================
+TC: O( log m * log n)
+SC: O(1)
+public class Solution {
+    public static int NthRoot(int n, int m) {
+        int left = 1, right = m;
+        while(left <= right){
+            int midNum = (right - left)/2 + left;
+            int num = Math.min((int)Math.pow(midNum, n), 1000000000); //learnt that pow function complexity is O(logn)
+            if(num == m){
+                return midNum;
+            }else if(num > m){
+                right = midNum - 1;
+            }else{
+                left = midNum + 1;
+            } 
+        }
+        return -1;
+    }
+}
+
