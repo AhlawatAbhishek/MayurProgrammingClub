@@ -1,0 +1,23 @@
+-----------------------------------------------------------Java---------------------------------------------------------------------------------------------------
+class Solution {
+    public String longestPalindrome(String s) {
+        int length = s.length();
+        if(length == 1)return s;
+        int maxRight = 0, minLeft = 0, maxPLen = 0;
+        boolean isPalin[][] = new boolean[length][length];
+        for(int right = 0; right < length; right++){
+            isPalin[right][right] = true;
+            for(int left = 0; left < right; left++){
+               if(s.charAt(left) != s.charAt(right) || (left+ 1 < right - 1 && !isPalin[left+1][right - 1])){
+                 continue;
+               }
+               isPalin[left][right] = true;
+               if(right - left > maxRight - minLeft){
+                  maxRight = right;
+                  minLeft = left;
+               }
+            }
+        }
+        return s.substring(minLeft, maxRight+1);
+    }
+}
