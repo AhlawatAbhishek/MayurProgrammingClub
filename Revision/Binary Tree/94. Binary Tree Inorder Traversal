@@ -1,0 +1,38 @@
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> inorder = new ArrayList<>();
+        inorderHelper(root, inorder);
+        return inorder;
+    }
+    private void inorderHelper(TreeNode root, List<Integer> inorder){
+        if(root == null)return;
+        inorderHelper(root.left, inorder);
+        inorder.add(root.val);
+        inorderHelper(root.right, inorder);
+    }
+}
+------------------------------iterative approach-------------------------------------------------------------
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> inorder = new ArrayList<>();
+        while(root != null){
+            if(root.left != null){
+                TreeNode tempNode = root.left;
+                while(tempNode.right != null && tempNode.right != root)tempNode = tempNode.right;
+                if(tempNode.right != root){
+                    tempNode.right = root;
+                    root = root.left;
+                }else{
+                    tempNode.right = null;
+                    inorder.add(root.val);
+                    root = root.right;
+                }
+            }else{
+               inorder.add(root.val);
+               root = root.right;
+            }
+            
+        }    
+        return inorder;
+    }
+}
