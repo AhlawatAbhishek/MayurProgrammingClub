@@ -1,0 +1,25 @@
+Floor in BST: https://www.naukri.com/code360/problems/floor-from-bst_920457?source=youtube&campaign=Striver_Tree_Videos&utm_source=youtube&utm_medium=affiliate&utm_campaign=Striver_Tree_Videos&leftPanelTabValue=PROBLEM
+--------------------------------------------------------------------------------------------Java-------------------------------------------------------------------------------------------------------------------------------------
+public class Solution {
+    
+    private static int floorVal = -1;
+    public static int floorInBST(TreeNode<Integer> root, int X) {
+        floorVal = X + 1;
+        floorInBSTHelper(root, X);
+        return floorVal;
+    }
+    private static void floorInBSTHelper(TreeNode<Integer> root, int X){
+        if(root == null)return;
+        int currRootVal = root.data;
+        if(currRootVal == X){
+            floorVal = X;
+            return;
+        }
+        if(currRootVal < X){
+            floorVal = currRootVal;
+            floorInBSTHelper(root.right, X);
+        }else{
+            floorInBSTHelper(root.left, X);
+        }
+    }
+}
