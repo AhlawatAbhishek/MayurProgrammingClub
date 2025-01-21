@@ -1,0 +1,19 @@
+----------------------------------------------------------------------------Java-----------------------------------------------------------------------------------
+class Solution {
+    private Map<Node, Node> nodeMap = new HashMap<>();
+    public Node cloneGraph(Node node) {
+        if(node == null)return node;
+        return cloneHelper(node);
+    }
+    private Node cloneHelper(Node currNode){
+        if(nodeMap.containsKey(currNode)){
+            return nodeMap.get(currNode);
+        }
+        Node currNodeCopy = new Node(currNode.val);
+        nodeMap.put(currNode, currNodeCopy);
+        for(var neigh : currNode.neighbors){
+            currNodeCopy.neighbors.add(cloneHelper(neigh));
+        }
+        return currNodeCopy;
+    }
+}
