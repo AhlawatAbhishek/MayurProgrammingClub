@@ -1,0 +1,38 @@
+Link: https://www.geeksforgeeks.org/problems/job-sequencing-problem-1587115620/1
+--------------------------------------------------------------------------------------------------------Java----------------------------------------------------------------------------------------
+class Solution {
+
+    public ArrayList<Integer> JobSequencing(int[] id, int[] deadline, int[] profit) {
+        // code here..
+        int len = id.length;
+        int jobs[][] = new int[len][3];
+        for(int indx = 0; indx < len; indx++){
+            jobs[indx][0] = id[indx];
+            jobs[indx][1] = deadline[indx];
+            jobs[indx][2] = profit[indx];
+        }
+        Arrays.sort(jobs, (a, b)->(a[1] - b[1]));
+        PriorityQueue<Integer> minProfitJob = new PriorityQueue<>((a, b)->(a - b));
+        int currTime = 1;
+        for(int currIndx = 0; currIndx < len; currIndx++){
+           int currDeadline = jobs[currIndx][1];
+           if(currDeadline >= currTime){
+               minProfitJob.offer(jobs[currIndx][2]);
+               currTime++;
+           }else{
+               if(!minProfitJob.isEmpty() && minProfitJob.peek() < jobs[currIndx][2]){
+                   minProfitJob.poll();
+                   minProfitJob.offer(jobs[currIndx][2]);
+               }
+           }
+        }
+        int totalProfit = 0, totalJobs = minProfitJob.size();
+        while(!minProfitJob.isEmpty()){
+            totalProfit += minProfitJob.poll();
+        }
+        ArrayList<Integer> res = new ArrayList<>();
+        res.add(totalJobs);
+        res.add(totalProfit);
+        return res;
+    }
+}
