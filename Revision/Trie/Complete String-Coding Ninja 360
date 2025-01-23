@@ -1,0 +1,60 @@
+Link: https://www.naukri.com/code360/problems/complete-string_2687860?utm_source=youtube&utm_medium=affiliate&utm_campaign=striver_tries_videos&leftPanelTabValue=PROBLEM
+----------------------------------------------------------------Java---------------------------------------------------------------------------------------
+class Solution {
+  static class TrieNode{
+    // char charVal
+    boolean isEnd;
+    TrieNode children[] = null;
+    public TrieNode(){
+      isEnd = false;
+      children = new TrieNode[26];
+    }
+    private void addString(TrieNode root, String word){
+        TrieNode currNode = root;
+        for(char chr : word.toCharArray()){
+           int index = (int)(chr - 'a');
+           if(currNode.children[index] == null){
+             currNode.children[index] = new TrieNode();
+           }
+           currNode = currNode.children[index];
+        } 
+        currNode.isEnd = true;
+    }
+    private boolean isStringComplete(TrieNode root, String word){
+        TrieNode currNode = root;
+        for(char chr : word.toCharArray()){
+           int index = (int)(chr - 'a');
+           //System.out.print(chr);
+           currNode = currNode.children[index];
+           if(currNode.isEnd == false)return false;
+        } 
+        return currNode.isEnd = true;
+    }
+  }
+  public static String completeString(int n, String[] a) {
+      TrieNode root = new TrieNode();
+      for(String str : a){
+        root.addString(root, str);
+      }
+      int maxLen = 0;
+      String currMaxStr = "";
+      for(String str : a){
+        if(root.isStringComplete(root, str)){
+          //System.out.println("Complete String");
+          int currLen = str.length();
+          if(maxLen < currLen){
+            maxLen = currLen;
+            currMaxStr = str;
+          }else if(maxLen == currLen && currMaxStr.compareTo(str) > 0){
+            //System.out.println("entered: " + maxLen);
+            currMaxStr = str;
+
+          }
+        }
+         //System.out.println();
+         //System.out.println("Incomplete String");
+      }
+      return currMaxStr == "" ? "None" : currMaxStr;
+
+  }
+}
