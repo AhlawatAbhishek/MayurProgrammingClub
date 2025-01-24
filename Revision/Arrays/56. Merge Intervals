@@ -1,0 +1,29 @@
+------------------------------------------------------------------------------------------------Java----------------------------------------------------------------------------------------------------------
+class Solution {
+    public int[][] merge(int[][] intervals) {
+       Deque<int[]> intrQ = new ArrayDeque<>();
+       Arrays.sort(intervals, (a, b)->{
+        if(a[1] == b[1])return a[0] - b[0];
+        else return a[1] - b[1];
+       });
+       for(var inter : intervals){
+           int minLeft = inter[0], maxRight = inter[1];
+           if(!intrQ.isEmpty()){
+              while(!intrQ.isEmpty() && intrQ.peekLast()[1] >= minLeft){
+                int [] popedInter = intrQ.pollLast();
+                minLeft = Math.min(minLeft, popedInter[0]);
+                maxRight = Math.max(maxRight, popedInter[1]);
+              }
+              intrQ.offerLast(new int[]{minLeft, maxRight});
+           }else{
+              intrQ.offerLast(inter);
+           }   
+       }
+       int res[][] = new int[intrQ.size()][2];
+       int indx = 0;
+       while(!intrQ.isEmpty()){
+         res[indx++] = intrQ.pollFirst();
+       }
+       return res;
+    }
+}
