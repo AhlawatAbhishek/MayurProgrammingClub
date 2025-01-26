@@ -1,0 +1,30 @@
+Link: https://www.geeksforgeeks.org/problems/n-meetings-in-one-room-1587115620/1
+
+-----------------------------------------------------------Java--------------------------------------------------------------------------------------------
+class Solution {
+    // Function to find the maximum number of meetings that can
+    // be performed in a meeting room.
+    public int maxMeetings(int start[], int end[]) {
+        int len = start.length;
+        int inter[][] = new int[len][2];
+        for(int indx = 0; indx < len; indx++){
+            inter[indx][0] = start[indx];
+            inter[indx][1] = end[indx];
+        }
+        Arrays.sort(inter, (a, b)->(a[1] - b[1]));
+        int lastTakenInter[] = inter[0];
+        int interCnt = 1;
+        for(int indx = 1; indx < len;  indx++){
+            int currStart = inter[indx][0], currEnd = inter[indx][1];
+            int prevInterEnd = lastTakenInter[1];
+            if(prevInterEnd >= currStart && prevInterEnd <= currEnd){
+                continue;
+            }else{
+                interCnt++;
+                lastTakenInter = inter[indx];
+            }
+        }
+        return interCnt;
+        
+    }
+}

@@ -1,0 +1,25 @@
+Link: https://www.geeksforgeeks.org/problems/number-of-coins1824/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=practice_card
+------------------------------------------------------------Java---------------------------------------------------------------------------
+class Solution {
+
+    public int minCoins(int coins[], int sum) {
+        // Your code goes here
+        int len = coins.length;
+        int coinReq[] = new int[sum+1];
+        Arrays.fill(coinReq, Integer.MAX_VALUE);
+        coinReq[0] = 0;
+        for(int currSum = 1; currSum <= sum; currSum++){
+            int minCoinsReq = Integer.MAX_VALUE;
+            for(int indx = 0; indx < len; indx++){
+                if(coins[indx] <= currSum){
+                    if(coinReq[currSum - coins[indx]] != Integer.MAX_VALUE)
+                    minCoinsReq = Math.min(minCoinsReq, 1 + coinReq[currSum - coins[indx]]);
+                }
+            }
+            if(minCoinsReq != Integer.MAX_VALUE){
+                coinReq[currSum] = minCoinsReq;
+            }
+        }
+        return coinReq[sum] == Integer.MAX_VALUE ? -1 : coinReq[sum];
+    }
+}
