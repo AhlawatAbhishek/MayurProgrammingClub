@@ -1,0 +1,83 @@
+------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------
+class Solution {
+    List<List<String>> res = new ArrayList<>();
+    public List<List<String>> solveNQueens(int n) {
+        char board[][] = new char[n][n];
+        for(var currRow : board){
+            Arrays.fill(currRow, '.');
+        }
+        placeQueens(board, 0, n);
+        return res;
+    }
+    private void placeQueens(char board[][], int col, int n){
+        // System.out.println(col);
+        if(n == col){
+        //    System.out.println("Reached end");
+           addBoard(board);
+           return;
+        }
+        for(int r = 0; r < n; r++){
+           if(isSafe(board, col, r, n)){
+             board[r][col] = 'Q';
+            //  printBoard(board);
+             placeQueens(board, col + 1, n);
+             board[r][col] = '.';
+           }
+        }
+    }
+    private void printBoard(char board[][]){
+        for(var row : board){
+            for(var c : row){
+                System.out.print(c + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+    private void addBoard(char board[][]){
+        List<String> currBoard = new ArrayList<>();
+        StringBuilder currRow = new StringBuilder();
+        for(var row : board){
+            currRow.setLength(0);
+            for(var chr : row){
+                currRow.append(chr);
+            }
+            currBoard.add(currRow.toString());
+        }
+        res.add(currBoard);
+        // for(var row : currBoard){
+        //     System.out.println(row);
+        // }
+
+        System.out.println();
+
+    }
+    private boolean isSafe(char board[][], int col, int row, int n){
+        // //column search
+        // for(int r = row; r > n; r++){
+        //    if(board[r][col] == 'Q')return false;
+        // }
+        //row search
+        for(int c = col; c > -1; c--){
+           if(board[row][c] == 'Q')return false;     
+        }
+        //upper left diagonal
+        int r = row, c = col;
+        while(r >= 0 && c  >= 0){
+            if(board[r][c] == 'Q'){
+                return false;
+            }
+            r--;
+            c--; 
+        }
+        //lower left diagonal;
+        r = row;
+        c = col;
+        while(r < n && c>-1){
+            if(board[r][c] == 'Q')return false;
+            r++;
+            c--;    
+        }
+        return true; 
+    }
+}
