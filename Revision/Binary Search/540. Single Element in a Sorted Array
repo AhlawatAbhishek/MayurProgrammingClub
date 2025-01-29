@@ -1,0 +1,29 @@
+-----------------------------------------------------Java------------------------------------------------------------------
+class Solution {
+    public int singleNonDuplicate(int[] nums) {
+        int len = nums.length;
+        int left = 0, right = len - 1;
+        while(left <= right){
+            //this is to prevent integer overflow.
+            int midIndx = left + (right - left)/2;
+            if((midIndx == 0 || nums[midIndx-1] != nums[midIndx]) && (midIndx == len-1 || nums[midIndx+1] != nums[midIndx])){
+                return nums[midIndx];
+            }else if((midIndx + 1 < len && nums[midIndx] == nums[midIndx + 1])){//first occurence
+                int leftNumsCnt = midIndx;
+                if(leftNumsCnt % 2 == 0){
+                    left = midIndx + 1;
+                }else{
+                    right = midIndx - 1;
+                }
+            }else{//second occurence
+                int leftNumsCnt = midIndx;
+                if(leftNumsCnt % 2 != 0){
+                    left = midIndx + 1;
+                }else{
+                    right = midIndx - 1;
+                } 
+            }
+        }
+        return -1;
+    }
+}
