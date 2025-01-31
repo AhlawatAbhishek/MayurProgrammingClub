@@ -1,0 +1,36 @@
+---------------------------------------------------------------------------------Java----------------------------------------------------------------------------------------------
+class Solution {
+    public boolean isValid(String s) {
+        Deque<Character> chrStack =  new ArrayDeque<>();
+        for(char currChr : s.toCharArray()){
+            if(chrStack.isEmpty()){
+                chrStack.offerLast(currChr);
+            }else{
+                if(currChr == '(' || currChr == '{' || currChr == '['){
+                    chrStack.offerLast(currChr);
+                }else{
+                    if(currChr == ')'){
+                        if(chrStack.peekLast() == '('){
+                            chrStack.pollLast();
+                        }else{
+                            chrStack.offerLast(currChr);
+                        }
+                    }else if(currChr == ']'){
+                        if(chrStack.peekLast() == '['){
+                            chrStack.pollLast();
+                        }else{
+                            chrStack.offerLast(currChr);
+                        }
+                    }else{
+                        if(chrStack.peekLast() == '{'){
+                            chrStack.pollLast();
+                        }else{
+                            chrStack.offerLast(currChr);
+                        }
+                    }
+                }
+            }
+        }
+        return chrStack.isEmpty();
+    }
+}
