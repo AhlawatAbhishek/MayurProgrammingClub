@@ -1,0 +1,39 @@
+----------------------------------------------------------------------------Java-----------------------------------------------------------------------------------------------------
+class Pair{
+    Node node;
+    int hd;
+    public Pair(Node node, int hd){
+        this.node = node;
+        this.hd = hd;
+    }
+}
+class Solution
+{
+    //Function to return a list containing the bottom view of the given tree.
+    public ArrayList <Integer> bottomView(Node root)
+    {
+        ArrayList<Integer> res = new ArrayList<>();
+        Deque<Pair> lvlQ = new ArrayDeque<>();
+        lvlQ.offer(new Pair(root, 0));
+        TreeMap<Integer, Node> hdNodeMp = new TreeMap<>();
+        while(!lvlQ.isEmpty()){
+            int lvlSize = lvlQ.size();
+            while(lvlSize-- > 0){
+                Pair currPair = lvlQ.poll();
+                Node currNode = currPair.node;
+                int currHD = currPair.hd;
+                hdNodeMp.put(currHD, currNode);
+                if(currNode.left != null){
+                    lvlQ.offer(new Pair(currNode.left, currHD-1));
+                }
+                if(currNode.right != null){
+                    lvlQ.offer(new Pair(currNode.right, currHD+1));
+                }
+            }
+        }
+        for(Map.Entry<Integer, Node> entry : hdNodeMp.entrySet()){
+            res.add(entry.getValue().data);
+        }
+        return res;
+    }
+}
