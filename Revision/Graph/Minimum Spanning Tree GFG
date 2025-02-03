@@ -1,0 +1,31 @@
+Link: https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1
+----------------------------------------------------------Java----------------------------------------------------------------------------------------------
+class Solution {
+    static int spanningTree(int V, int E, List<List<int[]>> adj) {
+        // Code Here.
+        Set<Integer> visitedVert = new HashSet<>();
+        PriorityQueue<int[]> minWtEdgQ = new PriorityQueue<>((a, b)->(a[1] - b[1]));
+        int mstWt = 0;
+        minWtEdgQ.offer(new int[]{0, 0});
+        while(!minWtEdgQ.isEmpty()){
+           int lvlSize = minWtEdgQ.size();
+           while(lvlSize-->0){
+               int []currVertPair = minWtEdgQ.poll();
+               int currSrc = currVertPair[0];
+               if(visitedVert.contains(currSrc))continue;
+            //   System.out.print(currSrc + ", ");
+               int wt = currVertPair[1];
+               mstWt += wt;
+               visitedVert.add(currSrc);
+               for(int neighPr[] : adj.get(currSrc)){
+                   int neigh = neighPr[0], neighSrcWt = neighPr[1];
+                   if(!visitedVert.contains(neigh)){
+                       minWtEdgQ.offer(new int[]{neigh, neighSrcWt});
+                   }
+               }
+           }
+        }
+        // System.out.println();
+        return mstWt;
+    }
+}
