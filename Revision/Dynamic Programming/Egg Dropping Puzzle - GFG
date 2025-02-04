@@ -1,0 +1,25 @@
+===========================================================Java============================================================================================
+class Solution {
+    // Function to find minimum number of attempts needed in
+    // order to find the critical floor.
+    static int eggDrop(int n, int k) {
+       int movesReq[][] = new int[n+1][k+1];
+       for(int egCnt = 1; egCnt <= n; egCnt++){
+           movesReq[egCnt][1] = 1;
+           movesReq[egCnt][0] = 0;
+       }
+       for(int flrNum = 1; flrNum <= k; flrNum++){
+           movesReq[1][flrNum] = flrNum;
+       }
+       for(int egCnt = 2; egCnt <= n; egCnt++){
+          for(int flrNum = 2; flrNum <= k; flrNum++){
+              int prevFlrContri = Integer.MAX_VALUE;
+              for(int prevFlr = 1; prevFlr <= flrNum; prevFlr++){
+                 prevFlrContri = Math.min(prevFlrContri, Math.max(movesReq[egCnt-1][prevFlr-1], movesReq[egCnt][flrNum - prevFlr]));
+              }
+              movesReq[egCnt][flrNum] = prevFlrContri == Integer.MAX_VALUE ? prevFlrContri : (prevFlrContri + 1);
+          }
+       }
+       return movesReq[n][k];
+    }
+}
