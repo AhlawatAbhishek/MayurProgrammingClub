@@ -1,0 +1,57 @@
+-------------------------------------------------------------------------------Java------------------------------------------------------------------------------------
+class Trie {
+    private Trie children[] = null;
+    private boolean isEnd = false;
+    // private Trie root = new Trie();
+    public Trie() {
+      children = new Trie[26];
+      isEnd = false;        
+    }
+    
+    public void insert(String word) {
+        Trie currNode = this;
+        for(var chr : word.toCharArray()){
+            int insrtIndx = chr - 'a';
+            if(currNode.children[insrtIndx] == null){
+                currNode.children[insrtIndx] = new Trie(); 
+            }
+            currNode = currNode.children[insrtIndx];
+        }
+        currNode.isEnd = true;
+    }
+    
+    public boolean search(String word) {
+        Trie currNode = this;
+        for(var chr : word.toCharArray()){
+            int childIndx = chr - 'a';
+            if(currNode.children[childIndx] == null){
+                return false; 
+            }
+            currNode = currNode.children[childIndx];
+        }
+        return currNode.isEnd == true;
+    }
+    
+    public boolean startsWith(String prefix) {
+        Trie currNode = this;
+        for(var chr : prefix.toCharArray()){
+            int childIndx = chr - 'a';
+            if(currNode.children[childIndx] == null){
+                return false; 
+            }
+            currNode = currNode.children[childIndx];
+        }
+        for(int childIndx = 0; childIndx < 26; childIndx++){
+            if(currNode.children[childIndx] != null)return true;
+        }
+        return currNode.isEnd == true;
+    }
+}
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * boolean param_2 = obj.search(word);
+ * boolean param_3 = obj.startsWith(prefix);
+ */
