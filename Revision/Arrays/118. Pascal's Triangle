@@ -1,0 +1,21 @@
+---------------------------------------------------------------Java-----------------------------------------------------------------------------------
+class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        for(int r = 1; r <= numRows; r++){
+            List<Integer> currRow = new ArrayList<>();
+            for(int c = 0; c < r; c++){
+                if(c == 0 || c == r-1){
+                   currRow.add(1);
+                }else if(r!=1){
+                    int currSize = res.size();
+                    List<Integer> lastInsrtdRow = res.get(currSize - 1);
+                    int currNum = lastInsrtdRow.get(c - 1) + lastInsrtdRow.get(c);
+                    currRow.add(currNum);
+                }
+            }
+            res.add(currRow);
+        }
+        return res;
+    }
+}
