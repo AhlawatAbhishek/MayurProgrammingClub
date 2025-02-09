@@ -21,4 +21,25 @@ class Solution {
          }
     }
 }
-
+-----------------------------------------------------------------------another approach-----------------------------------
+class Solution {
+    private List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        makeCombs(candidates, 0, new ArrayList<>(), 0, target);
+        return res;
+    }
+    private void makeCombs(int candidates[], int indx, List<Integer> currComb, int currSum, int target){
+         int len = candidates.length;
+         if(indx == len || currSum > target)return;
+         if(currSum == target){
+            res.add(new ArrayList<>(currComb));
+            return;
+         }
+         //either to include
+         currComb.add(candidates[indx]);
+         makeCombs(candidates, indx, currComb, currSum + candidates[indx], target);
+         currComb.remove(currComb.size()-1);
+         //or exclude it
+         makeCombs(candidates, indx+1, currComb, currSum, target);
+    }
+}
