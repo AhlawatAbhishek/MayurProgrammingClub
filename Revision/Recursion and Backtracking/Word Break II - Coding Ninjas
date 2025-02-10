@@ -1,0 +1,36 @@
+Problem Link: https://bit.ly/3FxgW92
+
+------------------------------------------------------Java---------------------------------------------------------------------------
+import java.util.* ;
+import java.io.*; 
+import java.util.ArrayList;
+
+public class Solution {
+    static ArrayList<String> res = null;
+	public static ArrayList<String> wordBreak(String s, ArrayList<String> dictionary) {
+		// Write your code here.
+		res = new ArrayList<>();
+		Set<String> dict = new HashSet<>();
+		for(String word : dictionary){
+			dict.add(word);
+		}
+		genSen(s, dict, 0, new ArrayList<>());
+		return res;
+	}
+	private static void genSen(String s, Set<String> dict, int startIndx, ArrayList<String> currSen){
+          if(startIndx == s.length()){
+			  if(currSen.size() > 0)
+			  res.add(String.join(" ", currSen));
+			  return;
+		  }
+		  for(int indx = startIndx; indx < s.length(); indx++){
+			  String currWord = s.substring(startIndx, indx + 1);
+			  if(dict.contains(currWord)){
+				  	currSen.add(currWord);
+		  			genSen(s, dict, indx + 1, currSen);
+		  			currSen.remove(currSen.size()-1);
+			  }
+		  }
+
+	}
+}
