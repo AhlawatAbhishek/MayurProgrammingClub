@@ -1,0 +1,40 @@
+Problem Link: https://www.geeksforgeeks.org/problems/aggressive-cows/0
+-----------------------------------------------------Java----------------------------------------------------------------------
+class Solution {
+    public static int aggressiveCows(int[] stalls, int k) {
+        // code here
+        Arrays.sort(stalls);
+        int len = stalls.length;
+        int res = 0;
+        int left = 0, right = stalls[len-1] - stalls[0];
+        while(left <= right){
+            int propDist = left + (right - left)/2;
+            if(isValid(propDist, stalls, k)){
+                res = propDist;
+                left = propDist + 1;
+            }else{
+                right = propDist - 1;
+            }
+        }
+        return res;
+    }
+    private static boolean isValid(int propDist, int stalls[], int k){
+        int cowCnt = 0;
+        int lastCowStall = -1;
+        for(int indx = 0; indx < stalls.length; indx++){
+            int stallPos = stalls[indx];
+            if(cowCnt == 0){
+                cowCnt++;
+                lastCowStall = stallPos;
+            }else{
+                int stallGap = stallPos - lastCowStall;
+                if(stallGap >= propDist){
+                    cowCnt++;
+                    lastCowStall = stallPos;
+                }
+            }
+            if(cowCnt == k)return true;
+        }
+        return false;
+    }
+}
