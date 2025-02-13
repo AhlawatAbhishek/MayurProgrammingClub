@@ -1,0 +1,30 @@
+Problem Link: https://www.naukri.com/code360/problems/merge-k-sorted-arrays_975379?leftPanelTabValue=PROBLEM
+-----------------------------------------------------------------------Java-------------------------------------------------------------------------------------
+import java.util.* ;
+import java.io.*; 
+import java.util.ArrayList;
+
+public class Solution 
+{
+	public static ArrayList<Integer> mergeKSortedArrays(ArrayList<ArrayList<Integer>> kArrays, int k)
+	{
+		PriorityQueue<int[]> minHeap = new PriorityQueue<>((a, b)-> {
+			return a[0]-b[0];
+		});
+		ArrayList<Integer> res = new ArrayList<>();
+		for(int indx = 0; indx < k; indx++){
+			ArrayList<Integer> currList = kArrays.get(indx);
+			minHeap.offer(new int[]{currList.get(0), 0, indx});
+		}
+		while(!minHeap.isEmpty()){
+           int[] currEntry = minHeap.poll();
+		   res.add(currEntry[0]);
+		   ArrayList currList = kArrays.get(currEntry[2]);
+		   if(currEntry[1] + 1 < currList.size()){
+			   minHeap.offer(new int[]{(int)currList.get(currEntry[1]+1), currEntry[1]+1, currEntry[2]});
+		   }
+		}
+        return res;
+	}
+}
+
