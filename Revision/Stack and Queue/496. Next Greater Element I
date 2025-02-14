@@ -1,0 +1,35 @@
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        int len1 = nums1.length, len2 = nums2.length;
+        Map<Integer, Integer> numIndxMp = new HashMap<>();
+        for(int indx = 0; indx < len2; indx++){ 
+             numIndxMp.put(nums2[indx], indx);
+        }
+        int nxg[] = new int[len2];
+        populateNxg(nums2, nxg);
+        int res[] = new int[len1];
+        Arrays.fill(res, -1);
+        for(int indx = 0; indx < len1; indx++){
+             int indx2 = numIndxMp.get(nums1[indx]);
+             int rIndx = nxg[indx2];
+             if(rIndx != -1)
+             res[indx] = nums2[rIndx];
+        }
+        return res;
+    }
+    private void populateNxg(int nums2[], int nxg[]){
+        Deque<Integer> indxStck = new ArrayDeque<>();
+        Arrays.fill(nxg, -1);
+        for(int indx = 0; indx < nums2.length; indx++){
+            int currEle = nums2[indx];
+            if(indxStck.isEmpty()){
+                indxStck.offerLast(indx);
+            }else{
+                while(!indxStck.isEmpty() && nums2[indxStck.peekLast()] < currEle){
+                    nxg[indxStck.pollLast()] = indx;
+                }
+                indxStck.offerLast(indx);
+            }
+        }
+    }
+}
