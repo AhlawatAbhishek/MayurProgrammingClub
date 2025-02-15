@@ -1,0 +1,25 @@
+------------------------------------------------------------------------------------------java--------------------------------------------------------------------------------
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+      int len = strs.length;
+      if(len == 1)return strs[0];
+      String res = "";
+      int minLen = 201;
+      for(int indx = 1; indx < len; indx++){
+        String commonPref = findCommonPref(strs[indx], strs[0]);
+        if(minLen > commonPref.length()){
+            minLen = commonPref.length();
+            res = commonPref;
+        }
+      }
+      return res;
+    }
+    private String findCommonPref(String str1, String str2){
+        int len = Math.min(str1.length(), str2.length());
+        StringBuilder res = new StringBuilder(); 
+        for(int indx = 0; indx < len && str1.charAt(indx) == str2.charAt(indx); indx++){
+           res.append(str1.charAt(indx));
+        }
+        return res.toString();
+    }
+}
