@@ -1,0 +1,19 @@
+--------------------------------------------------Java--------------------------------------------------------------------------------
+class Solution {
+    public int maxProduct(int[] nums) {
+        int maxTillNow = Integer.MIN_VALUE, len = nums.length;
+        int currProd = 1;
+        for(int indx = 0; indx < len; indx++){
+            currProd *= nums[indx];
+            maxTillNow = Math.max(maxTillNow, currProd);
+            if(currProd == 0)currProd = 1;
+        }
+        currProd = 1;
+        for(int indx=len-1; indx>=0; indx--){
+            currProd *= nums[indx];
+            maxTillNow = Math.max(maxTillNow, currProd);
+            if(currProd == 0)currProd = 1;
+        }
+        return maxTillNow;
+    }
+}
