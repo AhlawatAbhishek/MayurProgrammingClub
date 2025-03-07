@@ -1,0 +1,24 @@
+----------------------------------------Java------------------------------------------------------------------------------------
+Link: https://www.geeksforgeeks.org/problems/power-set4302/1
+class Solution {
+    public List<String> AllPossibleStrings(String s) {
+        List<String> ans = new ArrayList<>();
+        generateSubsequences(s, 0, "", ans);
+        Collections.sort(ans); // Sorting the subsequences lexicographically
+        return ans;
+    }
+
+    private void generateSubsequences(String s, int indx, String currStr, List<String> ans) {
+        if (indx == s.length()) {
+            if (!currStr.isEmpty()) ans.add(currStr);
+            return;
+        }
+
+        // Exclude current character
+        generateSubsequences(s, indx + 1, currStr, ans);
+
+        // Include current character
+        generateSubsequences(s, indx + 1, currStr + s.charAt(indx), ans);
+    }
+}
+
