@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------------------Java---------------------------------------------------------------------
+class Solution {
+    public int maxSubArray(int[] nums) {
+        int maxSumSoFar = nums[0], currSum = nums[0];
+        for(int indx = 1; indx < nums.length; indx++){
+           currSum = Math.max(currSum + nums[indx], nums[indx]);
+           maxSumSoFar = Math.max(maxSumSoFar, currSum);
+           if(currSum < 0){
+            currSum = 0;
+           }
+        }
+        return maxSumSoFar;
+    }
+}
