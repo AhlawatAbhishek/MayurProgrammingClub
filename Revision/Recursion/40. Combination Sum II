@@ -1,0 +1,24 @@
+------------------------Java--------------------------------------------------------------------------------------------
+class Solution {
+    private List<List<Integer>> combs = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        int size = candidates.length;
+        List<Integer> currComb = new ArrayList<>();
+        Arrays.sort(candidates);
+        findCombs(candidates, 0, 0, target, currComb);
+        return combs;
+    }
+    private void findCombs(int candidates[], int startIndx, int currSum, int target, List<Integer> currComb){
+        if(currSum == target){
+            combs.add(new ArrayList<>(currComb));
+        }
+        for(int indx = startIndx; indx < candidates.length; indx++){
+            int candidate = candidates[indx], prevCand = ((indx - 1 > -1) ? candidates[indx-1] : -1);
+            if(currSum + candidate <= target && (prevCand != candidate || indx == startIndx)){
+                currComb.add(candidate);
+                findCombs(candidates, indx+1, currSum + candidate, target, currComb);
+                currComb.remove(currComb.size() - 1);
+            }
+        }
+    }
+}
