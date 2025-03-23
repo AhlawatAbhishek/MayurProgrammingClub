@@ -1,0 +1,32 @@
+Problem Link: https://www.geeksforgeeks.org/problems/topological-sort/1
+
+class Solution {
+    // Function to return list containing vertices in Topological order.
+    static ArrayList<Integer> topologicalSort(ArrayList<ArrayList<Integer>> adj) {
+        int len = adj.size();
+        int deg[] = new int[len];
+        for(int vert = 0; vert < len; vert++){
+            for(int secndVert : adj.get(vert)){
+                deg[secndVert]--;
+            }
+        }
+        Deque<Integer> deq = new ArrayDeque<>();
+        for(int vert = 0; vert < len; vert++){
+            if(deg[vert] == 0)deq.offerLast(vert);
+        }
+        ArrayList<Integer> res = new ArrayList<>();
+        while(!deq.isEmpty()){
+            int size = deq.size();
+            while(size-->0){
+                int currVert = deq.pollFirst();
+                res.add(currVert);
+                for(int neigh : adj.get(currVert)){
+                    if(++deg[neigh] == 0){
+                        deq.offerLast(neigh);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+}
