@@ -1,0 +1,25 @@
+-------------------------------------------Java--------------------------------------------------------
+class Solution {
+    public boolean canPartition(int[] nums) {
+        int sum = 0;
+        for(var num : nums){
+            sum += num;
+        }
+        if(sum % 2 != 0)return false;
+        int hlfSum = sum/2;
+        int len = nums.length;
+        boolean canPart[][] = new boolean[len][hlfSum+1];
+        canPart[0][0] = true;
+        for(int indx = 1; indx < len; indx++){
+            int currEle = nums[indx-1];
+            for(sum = 0; sum <= hlfSum; sum++){
+                if(currEle > sum){
+                    canPart[indx][sum] = canPart[indx-1][sum];
+                }else{
+                    canPart[indx][sum] = canPart[indx-1][sum] || canPart[indx-1][sum-currEle];
+                }
+            }
+        }
+        return canPart[len-1][hlfSum];
+    }
+}
