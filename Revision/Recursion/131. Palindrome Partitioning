@@ -1,0 +1,31 @@
+---------------------------------------------------Java----------------------------------------------------
+class Solution {
+    public List<List<String>> partition(String s) {
+       List<List<String>> res = new ArrayList<>();
+       makePartitions(s, new ArrayList<>(), res);
+       return res;
+    }
+    public void makePartitions(String s, List<String> step, List<List<String>> result) {
+        if(s == null || s.length() == 0){
+            result.add(new ArrayList<>(step));
+            return;
+        }
+        for(int indx = 1; indx <= s.length(); indx++){
+            String sub = s.substring(0, indx);
+            if(!isPalindrome(sub))continue;
+            step.add(sub);
+            makePartitions(s.substring(indx), step, result);
+            step.remove(step.size()-1);
+        }
+        return;
+    }
+    private boolean isPalindrome(String s){
+        int left = 0, right = s.length()-1;
+        while(left <= right){
+            if(s.charAt(left) != s.charAt(right))return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+}
