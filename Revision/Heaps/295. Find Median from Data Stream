@@ -1,0 +1,30 @@
+-------------------------------------------------------Java--------------------------------------------------------
+class MedianFinder {
+    private PriorityQueue<Integer> maxArr = null;
+    private PriorityQueue<Integer> minArr = null;
+    public MedianFinder() {
+        minArr = new PriorityQueue<>();
+        maxArr = new PriorityQueue<>((a, b)->(b - a));
+    }
+    
+    public void addNum(int num) {
+        maxArr.offer(num);
+        if(maxArr.size() - minArr.size() > 1){
+            minArr.offer(maxArr.poll());
+        }
+        if(!maxArr.isEmpty() && !minArr.isEmpty() && maxArr.peek() > minArr.peek()){
+            int maxEle = maxArr.poll(), minEle = minArr.poll();
+            maxArr.offer(minEle);
+            minArr.offer(maxEle);
+        }
+    }
+    
+    public double findMedian() {
+        int size = maxArr.size() + minArr.size();
+        if(size % 2 == 0){
+            return ((maxArr.peek() + minArr.peek() * 1.0)/2);
+        }else{
+            return maxArr.peek();
+        }
+    }
+}
