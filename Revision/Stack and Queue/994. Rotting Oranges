@@ -1,0 +1,42 @@
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int rows = grid.length, cols = grid[0].length;
+        Deque<int[]> lvlQ = new ArrayDeque<>();
+        int freshOrng = 0;
+        for(int r = 0; r<rows; r++){
+            for(int c = 0; c < cols; c++){
+                if(grid[r][c] == 2){
+                    lvlQ.offer(new int[]{r, c});
+                }else if(grid[r][c] == 1){
+                    freshOrng++;
+                }
+            }
+        }
+        if(freshOrng == 0)return 0;
+        int dirs[][] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+        int timeSpent = 0;
+        while(!lvlQ.isEmpty()){
+            int lvlSize = lvlQ.size();
+            while(lvlSize-->0){
+               int []rO = lvlQ.poll();
+               grid[rO[0]][rO[1]] = 0;
+               for(int []dir : dirs){
+                  int rNew = dir[0] + rO[0], cNew = dir[1] + rO[1];
+                  if(isSafe(rNew, cNew, grid)){
+                    lvlQ.offer(new int[]{rNew, cNew});
+                    grid[rNew][cNew] = 2;
+                    freshOrng--;
+                    // System.out.println(rNew + " " + cNew);
+                    if(freshOrng == 0)return timeSpent+1;
+                  }
+               }
+            }
+            timeSpent++;
+        }
+        return -1;
+    }
+    private boolean isSafe(int r, int c, int grid[][]){
+        if(r < 0 || c < 0 || r == grid.length || c ==grid[0].length || grid[r][c] == 0)return false;
+        return grid[r][c] == 1;
+    }
+}
