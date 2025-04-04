@@ -1,0 +1,27 @@
+class Solution {
+    // Function to return list containing elements of left view of binary tree.
+    ArrayList<Integer> leftView(Node root) {
+        ArrayList<Integer> res = new ArrayList<>();
+        if(root == null)return res;
+        Queue<Node> lvlQ = new LinkedList<>();
+        lvlQ.offer(root);
+        while(!lvlQ.isEmpty()){
+            int lvlSize = lvlQ.size();
+            int size = lvlSize;
+            while(lvlSize-->0){
+                Node currNode = lvlQ.poll();
+                if(size-1 == lvlSize){
+                    res.add(currNode.data);
+                }
+                if(currNode.left != null){
+                    lvlQ.offer(currNode.left);
+                }
+                if(currNode.right != null){
+                    lvlQ.offer(currNode.right);
+                }
+            }
+        }
+        return res;
+        
+    }
+}
