@@ -1,0 +1,30 @@
+class Solution {
+    public boolean isBipartite(int[][] graph) {
+        int len = graph.length;
+        int[] graphClr = new int[len];
+        Arrays.fill(graphClr, -1); 
+        Deque<Integer> lvlQ = new ArrayDeque<>();
+
+        for (int start = 0; start < len; start++) {
+            if (graphClr[start] != -1) continue; 
+
+            lvlQ.offer(start);
+            graphClr[start] = 0; 
+
+            while (!lvlQ.isEmpty()) {
+                int currNode = lvlQ.poll();
+                for (int neigh : graph[currNode]) {
+                    if (graphClr[neigh] == -1) {
+                        graphClr[neigh] = 1 - graphClr[currNode]; 
+                        lvlQ.offer(neigh);
+                    } else if (graphClr[neigh] == graphClr[currNode]) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+}
+
