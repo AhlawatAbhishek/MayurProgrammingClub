@@ -1,0 +1,24 @@
+------------------------------------------Java------------------------------------------------------------
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int size = s.length();
+        HashSet<String> dict = new HashSet<>();
+        for(String word : wordDict){
+            dict.add(word);
+        }
+        boolean safeState[] = new boolean[size+1];
+        safeState[0] = true;
+        for(int len = 1; len<=size; len++){
+            for(int left = len - 1; left>-1; left--){
+               if(safeState[left]){
+                int right = len;
+                if(dict.contains(s.substring(left, right))){
+                    safeState[len] = true;
+                    break;
+                }
+               } 
+            }
+        }
+        return safeState[size];
+    }
+}
