@@ -1,0 +1,28 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int len = nums.length, indx = len - 1;
+        boolean chng = false;
+        for(; indx >= 1; indx--){
+            if(nums[indx-1] < nums[indx]){
+                chng = true;
+                break;
+            }
+        }
+        if(!chng){Arrays.sort(nums); return;}
+        int diff = Integer.MAX_VALUE, swInd = -1;
+        for(int ind = indx; ind < len; ind++){
+            if(nums[ind] > nums[indx-1]){
+                int df = nums[ind] - nums[indx-1];
+                if(diff > df){
+                    diff = df;
+                    swInd = ind;
+                }
+            }
+        }
+        int temp = nums[indx-1];
+        nums[indx-1] = nums[swInd];
+        nums[swInd] = temp;
+        int left = 0, right = len-1;
+        Arrays.sort(nums, indx, len);
+    }
+}
