@@ -1,0 +1,23 @@
+class Solution {
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int indx1 = 0, indx2 = 0, indx = m;
+        if(n == 0)return;
+        while(indx1 < m && indx2 < n){
+            if(nums1[indx1] < nums2[indx2]){
+               nums1[indx++] = nums1[indx1++];       
+            }else{
+                nums1[indx++] = nums2[indx2++]; 
+            }
+            indx = indx % (m + n);
+        }
+        while(indx1 < m){
+            nums1[indx] = nums1[indx1++];
+            indx = (indx + 1) % (m + n);
+        }
+        while(indx2 < n){
+            nums1[indx] = nums2[indx2++];
+            indx = (indx + 1) % (m + n);
+        }
+        Arrays.sort(nums1);
+    }
+}
