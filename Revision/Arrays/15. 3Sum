@@ -1,0 +1,30 @@
+------------------------------------------------Java--------------------------------------------------------
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        int len = nums.length;
+        for(int indx = 0; indx < len; indx++){
+            if(nums[indx] > 0)break;
+            if(indx == 0 || nums[indx-1] != nums[indx])
+                findTriplet(indx + 1, len-1, indx, res, nums);
+        }
+        return res;
+    }
+    private void findTriplet(int left, int right, int currIndx, List<List<Integer>> res, int nums[]){ 
+        while(left < right){
+          int sum = nums[currIndx] + nums[left] + nums[right];
+            if(sum < 0){
+                left++;
+            }else if (sum > 0){
+                right--;
+            }else{
+                res.add(Arrays.asList(nums[currIndx], nums[left++], nums[right--]));
+                while(nums[left] == nums[left-1] && left < right){
+                    left++;
+                }
+            }    
+        }
+        
+    }
+}
