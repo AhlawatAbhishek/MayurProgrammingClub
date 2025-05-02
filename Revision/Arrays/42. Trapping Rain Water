@@ -1,0 +1,27 @@
+-------------------------------Approach 1---------------------------
+class Solution {
+    public int trap(int[] height) {
+        int size = height.length;
+        int leftMax[] = new int[size], rightMax[] = new int[size];
+        for(int indx = 0; indx < size; indx++){
+            if(indx == 0){
+                leftMax[0] = height[indx];
+                continue;
+            }
+            leftMax[indx] = Math.max(height[indx], leftMax[indx-1]);
+        }
+        for(int indx = size - 1; indx > -1; indx--){
+            if(indx == size - 1){
+                rightMax[indx] = height[indx];
+            }else{
+                rightMax[indx] = Math.max(height[indx], rightMax[indx+1]);
+            }
+        }
+        int totalWater = 0;
+        for(int indx = 0; indx < size; indx++){
+            if(leftMax[indx] > height[indx] && rightMax[indx] > height[indx])
+            totalWater += Math.min(leftMax[indx], rightMax[indx]) - height[indx];
+        }
+        return totalWater;
+    }
+}
