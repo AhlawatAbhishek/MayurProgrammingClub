@@ -1,0 +1,17 @@
+-----------------------------------------Java--------------------------------------------------
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        int indx = 0;
+        int len = nums.length, unqNumCnt = 0, insrtIndx = 0;
+        while(indx < len){
+            int currNum = nums[indx];
+            while(indx + 1  < len && currNum == nums[indx+1]){
+                  indx++;
+            }
+            indx++;
+            nums[insrtIndx++] = currNum;
+            unqNumCnt++;
+        }
+        return unqNumCnt;
+    }
+}
