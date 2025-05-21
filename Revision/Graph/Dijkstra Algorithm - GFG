@@ -1,0 +1,32 @@
+-----------------------------------------------------------------Java----------------------------------------------------------------------------
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        HashMap<Integer, List<int[]>> graph = new HashMap<>();
+        for(int edg[] : edges){
+            graph.putIfAbsent(edg[0], new ArrayList<>());
+            graph.putIfAbsent(edg[1], new ArrayList<>());
+            graph.get(edg[0]).add(new int[]{edg[1], edg[2]});
+            graph.get(edg[1]).add(new int[]{edg[0], edg[2]});
+        }
+        int dist[] = new int[V];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        PriorityQueue<int[]> minDist = new PriorityQueue<>((a, b)->(a[1]-b[1]));
+        minDist.offer(new int[]{src, 0});
+        while(!minDist.isEmpty()){
+            int currNodePr[] = minDist.poll();
+            int currDist = currNodePr[1];
+            int currNode = currNodePr[0];
+            for(int neighPr[] : graph.get(currNode)){
+                int wt = neighPr[1];
+                int neigh = neighPr[0];
+                if(dist[neigh] > wt + currDist){
+                    dist[neigh] = wt + currDist;
+                    minDist.offer(new int[]{neigh, dist[neigh]});
+                }
+            }
+        }
+        return dist;
+    }
+}
