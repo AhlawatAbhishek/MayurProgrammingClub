@@ -1,0 +1,30 @@
+---------------------------------Java--------------------------------------
+-----------------approach 1--------------------------------------------------
+class Solution {
+    public int maximumDifference(int[] nums) {
+        int maxDiff = -1;
+        for(int indx = 0; indx < nums.length; indx++){
+            for(int indx2 = indx + 1; indx2 < nums.length; indx2++){
+                if(nums[indx] < nums[indx2]){
+                   maxDiff = Math.max(nums[indx2] - nums[indx], maxDiff);
+                }
+            }
+        }
+        return maxDiff;
+    }
+}
+----------------------------approach 2------------------------------------------
+class Solution {
+    public int maximumDifference(int[] nums) {
+        int maxDiff = -1;
+        int minTillNow = nums[0];
+        for(int indx = 1; indx < nums.length; indx++){
+            if(nums[indx] > minTillNow){
+                maxDiff = Math.max(maxDiff, nums[indx] - minTillNow);
+            }else{
+                minTillNow = nums[indx];
+            }
+        }
+        return maxDiff;
+    }
+}
