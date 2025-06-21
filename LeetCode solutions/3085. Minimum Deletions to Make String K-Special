@@ -1,0 +1,38 @@
+class Solution {
+    public int minimumDeletions(String word, int k) {
+        int[] freq = new int[26];
+        for (char c : word.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        
+        List<Integer> nonZeroFreq = new ArrayList<>();
+        for (int f : freq) {
+            if (f > 0) nonZeroFreq.add(f);
+        }
+        Collections.sort(nonZeroFreq);
+
+        int minDeletions = Integer.MAX_VALUE;
+
+        for (int i = 0; i < nonZeroFreq.size(); i++) {
+            int baseFreq = nonZeroFreq.get(i);
+            int deletions = 0;
+
+            for (int j = i + 1; j < nonZeroFreq.size(); j++) {
+                if (nonZeroFreq.get(j) > baseFreq + k) {
+                    deletions += nonZeroFreq.get(j) - (baseFreq + k);
+                }
+            }
+
+            
+            for (int j = 0; j < i; j++) {
+                deletions += nonZeroFreq.get(j);
+            }
+
+            minDeletions = Math.min(minDeletions, deletions);
+        }
+
+        return minDeletions;
+    }
+}
+
