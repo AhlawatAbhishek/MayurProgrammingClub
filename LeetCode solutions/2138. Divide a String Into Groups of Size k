@@ -1,0 +1,22 @@
+class Solution {
+    public String[] divideString(String s, int k, char fill) {
+        int indx = 0, len = s.length();
+        String res[] = new String[(len + k - 1)/k];
+        int insrtIndx = 0;
+        while(indx < len){
+            // System.out.println(indx);
+            StringBuilder currSeg = new StringBuilder();
+            int lastIndx = indx + k - 1;
+            while(indx <= lastIndx){
+              if(indx < len)
+               currSeg.append(s.charAt(indx++));
+              else{
+               indx++;
+               currSeg.append(fill); 
+              }
+            }
+            res[insrtIndx++] = currSeg.toString();
+        }
+        return res;
+    }
+}
