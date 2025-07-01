@@ -1,0 +1,15 @@
+class Solution {
+    public int possibleStringCount(String word) {
+        int possStrCnt = 1, len = word.length();
+        for(int indx = 0; indx < word.length(); indx++){
+           char currChr = word.charAt(indx);
+           while(indx + 1  < len && word.charAt(indx + 1) == currChr){
+              indx++;
+            //   System.out.println(currChr);
+              possStrCnt++;
+           }
+        //    System.out.println(indx);
+        }
+        return possStrCnt;
+    }
+}
