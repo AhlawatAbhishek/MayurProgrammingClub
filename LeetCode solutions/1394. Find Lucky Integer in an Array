@@ -1,0 +1,15 @@
+class Solution {
+    public int findLucky(int[] arr) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        for(var num : arr){
+            freq.put(num, freq.getOrDefault(num, 0)+1);
+        }
+        int maxNum = -1;
+        for(var fPair : freq.entrySet()){
+             if(fPair.getKey() == fPair.getValue()){
+                maxNum = Math.max(maxNum, fPair.getKey());
+             }
+        }
+        return maxNum;
+    }
+}
