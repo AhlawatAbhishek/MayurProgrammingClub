@@ -1,0 +1,21 @@
+class Solution {
+    public int maxSum(int[] nums) {
+        int len = nums.length;
+        int maxSum = nums[0];
+        for(var num : nums){
+            maxSum = Math.max(maxSum, num);
+        }
+        Set<Integer> seen = new HashSet<>();
+        int currSum = 0;
+        for(var num : nums){
+            if(num <= 0)continue;
+            seen.add(num);
+        }
+        if(seen.size() == 0)return maxSum;
+        for(var num : seen){
+            currSum += num;
+        }
+        return currSum;
+
+    }
+}
