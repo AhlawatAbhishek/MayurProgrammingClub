@@ -1,0 +1,23 @@
+class Solution {
+    public int countHillValley(int[] nums) {
+        int size = nums.length;
+        int hAndVCount = 0;
+        boolean smaller = false, greater = false;
+        for(int indx = 1; indx < size; indx++){
+            if(nums[indx-1] < nums[indx]){
+                if(smaller){
+                    hAndVCount++;
+                }
+                greater = true;
+                smaller = false;
+            }else if(nums[indx-1]>nums[indx]){
+                if(greater){
+                    hAndVCount++;
+                }
+                smaller = true;
+                greater =false;
+            }
+        }
+        return hAndVCount;
+    }
+}
